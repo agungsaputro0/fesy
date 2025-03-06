@@ -1,4 +1,3 @@
-import { useState } from "react";
 import bankList from "../../pseudo-db/bank.json"; // Pastikan path benar
 
 type PaymentPanelProps = {
@@ -6,10 +5,10 @@ type PaymentPanelProps = {
   setSelectedPayment: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const PaymentPanel: React.FC<PaymentPanelProps> = ({ selectedPayment, setSelectedPayment }) => {
+const PaymentPanel: React.FC<PaymentPanelProps> = ({ setSelectedPayment }) => {
 
   // Mencari data bank yang dipilih
-  const selectedBank = bankList.find((bank) => bank.name === selectedPayment);
+ 
 
   return (
     <div className="mt-8 p-6 border border-gray-300 rounded-lg shadow-md mb-10">

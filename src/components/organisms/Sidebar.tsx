@@ -81,10 +81,11 @@ const colors = [
 
 const Sidebar: React.FC<{ onFilterChange: (filters: any) => void }> = ({ onFilterChange }) => {
   const [collapsed, setCollapsed] = useState(true);
-  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
-  const [expandedSubcategories, setExpandedSubcategories] = useState<{ [key: string]: boolean }>({});
+  const [expandedCategories] = useState<string[]>([]);
+  const [expandedSubcategories] = useState<{ [key: string]: boolean }>({});
   const navigate = useNavigate();
-
+  console.log(expandedCategories);
+  console.log(expandedSubcategories);
   const [filters, setFilters] = useState<{
     category: string[];
     priceRange: [number, number];
@@ -96,19 +97,6 @@ const Sidebar: React.FC<{ onFilterChange: (filters: any) => void }> = ({ onFilte
     size: [],
     color: [],
   });
-
-  const toggleCategory = (categoryName: string) => {
-    setExpandedCategories((prev) =>
-      prev.includes(categoryName) ? prev.filter((c) => c !== categoryName) : [...prev, categoryName]
-    );
-  };
-
-  const toggleSubcategory = (parentCategory: string, subcategoryName: string) => {
-    setExpandedSubcategories((prev) => ({
-      ...prev,
-      [`${parentCategory}-${subcategoryName}`]: !prev[`${parentCategory}-${subcategoryName}`],
-    }));
-  };
 
   const handleFilterChange = (type: string, value: any) => {
     setFilters((prev) => ({ ...prev, [type]: value }));

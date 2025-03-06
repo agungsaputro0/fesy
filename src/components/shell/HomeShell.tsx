@@ -1,7 +1,6 @@
 // src/components/shell/HomeShell.tsx
 import React, { useState } from 'react';
 import HomeNavbar from '../organisms/HomeNavbar';
-import Sidebar from '../organisms/Sidebar';
 import { useAuth } from '../hooks/AuthContext';
 
 type AppShellProps = {
@@ -9,7 +8,7 @@ type AppShellProps = {
 }
 
 const HomeShell = (props: AppShellProps) => {
-    const [expanded, setExpanded] = useState(false);
+    const [expanded] = useState(false);
     const { userName, loading } = useAuth();
 
     return (

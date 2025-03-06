@@ -6,7 +6,7 @@ import { notification, Spin, Modal } from "antd";
 import { LoadingOutlined, EyeOutlined } from '@ant-design/icons'; 
 import { HandleSignUp } from "../hooks/HandleSignUp"; 
 import { useNavigate } from 'react-router-dom';
-import { useFetchKategori, useFetchProvinsi, useFetchKabupaten, useFetchKecamatan } from "../hooks/HandleSignUp";
+import { useFetchProvinsi, useFetchKabupaten, useFetchKecamatan } from "../hooks/HandleSignUp";
 import { Link } from "react-router-dom";
 // import dayjs from "dayjs";
 // import TimePickerElement from "../atoms/TimePickerElement";
@@ -19,8 +19,8 @@ const GOOGLE_MAPS_API_KEY = import.meta.env.GOOGLE_API_KEY;
 const SignUpForm: FC = () => {
   const [signUpError, setsignUpError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedKategori, setSelectedKategori] = useState<string>('');
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedKategori] = useState<string>('');
+  const [selectedIndex] = useState<number | null>(null);
   const [previewVisible, setPreviewVisible] = useState<boolean>(false); 
   const [selectedProvinsi, setSelectedProvinsi] = useState<string>('0');
   const [selectedKabupaten, setSelectedKabupaten] = useState<string>('0');
@@ -36,7 +36,7 @@ const SignUpForm: FC = () => {
   const [alamatLengkap, setAlamatLengkap] = useState<string>('');
   const [provinsi_id, set_provinsi_id] = useState<string>('');
   const [kabupaten_id, set_kabupaten_id] = useState<string>('');
-  const { kategori } = useFetchKategori();
+  //const { kategori } = useFetchKategori();
   const { provinsi } = useFetchProvinsi(provinsiSearchTerm);
   const { kabupaten } = useFetchKabupaten(provinsi_id, kabupatenSearchTerm);
   const { kecamatan } = useFetchKecamatan(kabupaten_id, kecamatanSearchTerm);
@@ -53,13 +53,6 @@ const SignUpForm: FC = () => {
 
   // State for the confirmation modal
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const kategoriOptions = [
-    { value: '', label: 'Klik Disini' }, // Default option
-      ...kategori.map((item) => ({
-      value: item.kategori_id,
-      label: item.nama,
-    })),
-  ];
 
   const handleProvinsiSearchChange = (newprovinsiSearchTerm: string) => {
     setprovinsiSearchTerm(newprovinsiSearchTerm);

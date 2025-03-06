@@ -1,10 +1,7 @@
-import Button from "../atoms/Button";
-import { useNavigate } from "react-router-dom";
 import Banner from "../organisms/Banner";
 
 
 const LandingLayouts = () => {
-    const navigate = useNavigate();
 
     const images = [
         '../../../assets/img/banner-1.jpg',

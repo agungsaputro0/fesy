@@ -40,7 +40,7 @@ const Checkout = () => {
   const [checkoutItems, setCheckoutItems] = useState<ProductProps[]>([]);
   const [groupedItems, setGroupedItems] = useState<Record<number, { seller: SellerProps | null; products: ProductProps[], shipping: ShippingOption, note: string }>>({});
   const [totalPrice, setTotalPrice] = useState(0);
-  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedAddress] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSeller, setCurrentSeller] = useState<number | null>(null);
   const [tempShipping, setTempShipping] = useState<ShippingOption | null>(null);
@@ -50,7 +50,7 @@ const Checkout = () => {
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
   const [checkoutCompleted, setCheckoutCompleted] = useState(false);
-
+  console.log(checkoutItems);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -171,6 +171,7 @@ const Checkout = () => {
       orderID, // Tambahkan orderID ke data pesanan
       userID,
       orders: Object.entries(groupedItems).map(([sellerId, { seller, products, shipping, note }]) => ({
+        sellerId,
         seller,
         products,
         shipping,
@@ -184,7 +185,6 @@ const Checkout = () => {
       grandTotal: grandTotal + 1000, // Termasuk biaya layanan
       orderDate: new Date().toISOString(),
     };
-  
     // Simpan pesanan ke localStorage
     const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     existingOrders.push(orderData);
