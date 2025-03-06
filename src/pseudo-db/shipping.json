@@ -1,0 +1,42 @@
+{
+    "shipping_options": [
+      {
+        "id": "regular",
+        "name": "Reguler",
+        "price": 9000,
+        "estimated_delivery": "1 - 2 Mar",
+        "guarantee": "Garansi Tepat Waktu",
+        "recommended": true
+      },
+      {
+        "id": "instant",
+        "name": "Instant",
+        "price": 53000,
+        "estimated_delivery": "hari ini",
+        "guarantee": "Garansi tiba: hari ini",
+        "icon": "🚀"
+      },
+      {
+        "id": "same_day",
+        "name": "Same Day",
+        "price": 17500,
+        "estimated_delivery": "hari ini",
+        "guarantee": "Garansi tiba: hari ini"
+      },
+      {
+        "id": "next_day",
+        "name": "Next Day",
+        "price": 18000,
+        "estimated_delivery": "besok",
+        "guarantee": "Garansi tiba: besok"
+      },
+      {
+        "id": "cargo",
+        "name": "Cargo",
+        "price": 40000,
+        "estimated_delivery": "besok",
+        "guarantee": "Garansi tiba: besok"
+      }
+    ]
+  }
+  

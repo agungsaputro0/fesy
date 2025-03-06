@@ -65,8 +65,8 @@ const ResendActivationForm: FC = () => {
   </Helmet>
   <div className="pt-24 sm:pt-24 sm:mb-20 md:pt-6 lg:pt-6 flex flex-col lg:flex-row justify-between items-center min-h-screen px-4 md:px-8">
     <div className="sm:pl-0 md:pl-0 lg:pl-10 pt-2 sm:pt-2 md:pt-16 lg:pt-6 mr-0 lg:mr-24 md:mr-0 sm:mr-0 text-center lg:text-left mb-8 lg:mb-0">
-      <h1 className="text-6xl font-bold text-white">Waste<span className="text-amber-400">Track</span></h1>
-      <h3 className="text-xl text-white">MENGUBAH SAMPAH MENJADI BERKAH</h3>
+      <h1 className="text-6xl font-bold text-[#7f0353]">FESY</h1>
+      <h3 className="text-xl text-[#5c595f]">Fashion - Exclusive - Secondhand - for You</h3>
     </div>
 
     {/* Bagian Kanan: Panel resendActivation */}
@@ -85,13 +85,13 @@ const ResendActivationForm: FC = () => {
           />
           <Button
             type="submit"
-            variant="bg-blue-700 w-full hover:bg-blue-900"
+            variant="bg-[#7f0353] w-full hover:bg-green-900"
             message="Resend Aktivasi"
             disabled={loading}
           />
         </form>
         <p className="text-slate-500 mt-4 text-center">Kembali ke Login ? silakan&nbsp;
-          <Link to="/Login" className="text-blue-700">
+          <Link to="/Login" className="text-[#7f0353]">
           <b>Klik Disini</b>
           </Link>
         </p>

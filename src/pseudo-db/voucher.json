@@ -1,0 +1,46 @@
+[
+    {
+        "id": 1,
+        "kode": "DISKON10",
+        "deskripsi": "Diskon 10% untuk semua produk",
+        "potongan": 10,
+        "tipe": "persen",
+        "berakhirDalam": 3
+    },
+    {
+        "id": 2,
+        "kode": "ONGKIRGRATIS",
+        "deskripsi": "Gratis ongkir hingga Rp 20.000",
+        "potongan": 20000,
+        "tipe": "nominal",
+        "berakhirDalam": 7,
+        "minimalBelanja": 50000
+    },
+    {
+        "id": 3,
+        "kode": "HEMAT50K",
+        "deskripsi": "Potongan langsung Rp 50.000",
+        "potongan": 50000,
+        "tipe": "nominal",
+        "berakhirDalam": 5,
+        "minimalBelanja": 200000
+    },
+    {
+        "id": 4,
+        "kode": "DISKON30",
+        "deskripsi": "Diskon 30% s.d. Rp 100.000 min. belanja Rp 250.000",
+        "potongan": 30,
+        "tipe": "persen",
+        "berakhirDalam": 10,
+        "minimalBelanja": 250000
+    },
+    {
+        "id": 5,
+        "kode": "DISKON50",
+        "deskripsi": "Diskon 50% s.d. Rp 150.000 min. belanja Rp 300.000",
+        "potongan": 50,
+        "tipe": "persen",
+        "berakhirDalam": 2,
+        "minimalBelanja": 300000
+    }
+]

@@ -1,0 +1,33 @@
+[
+    {
+      "id": "B001",
+      "name": "BCA",
+      "logo": "assets/img/bank/bca.png",
+      "virtualAccount": "1234567890"
+    },
+    {
+      "id": "B002",
+      "name": "Mandiri",
+      "logo": "assets/img/bank/mandiri.png",
+      "virtualAccount": "9876543210"
+    },
+    {
+      "id": "B003",
+      "name": "BNI",
+      "logo": "assets/img/bank/bni.png",
+      "virtualAccount": "1122334455"
+    },
+    {
+      "id": "B004",
+      "name": "BRI",
+      "logo": "assets/img/bank/bri.png",
+      "virtualAccount": "5566778899"
+    },
+    {
+        "id": "B005",
+        "name": "Bank Syariah Indonesia",
+        "logo": "assets/img/bank/bsi.png",
+        "virtualAccount": "991010223344"
+    }
+  ]
+  

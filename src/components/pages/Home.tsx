@@ -1,22 +1,31 @@
 import Homeshell from "../shell/HomeShell";
-import { Helmet } from "react-helmet";
-import { AreaChartOutlined } from "@ant-design/icons";
-const appName = import.meta.env.VITE_APP_NAME; 
+import PopularSection from "../organisms/PopularSection";
+import OurCommitment from "../molecules/OurCommitment";
+import OurAchievements from "../molecules/Achievements";
+import TabSection from "../organisms/TabSection";
+import Banner from "../organisms/Banner";
+import Footer from "../organisms/Footer";
+
 const Home = () => {
+    const images = [
+        '../../../assets/img/banner-1.jpg',
+        '../../../assets/img/banner-2.jpg',
+        '../../../assets/img/banner-3.jpg',
+      ];
     return (
             <Homeshell>
-                <div className="h-screen">
-                <Helmet>
-                    <title>{appName}</title>
-                </Helmet>
-                <div className="flex justify-center h-screen items-center">
-                    <div className="w-full pl-10 pr-10">
-                        <center>
-                            <h1 className="text-4xl  text-white"><AreaChartOutlined /> | Pre - Dashboard</h1>
-                        </center>
+                <div className="pt-[65px] pb-10 flex flex-col justify-between items-center min-h-screen">
+                    <div className="w-full">
+                        <div className="custom-slider-container">
+                            <Banner images={images} />
+                        </div>
                     </div>
                 </div>
-                </div>
+                <PopularSection />
+                <TabSection />
+                <OurCommitment />
+                <OurAchievements />
+                <Footer />
             </Homeshell>
     )
 }

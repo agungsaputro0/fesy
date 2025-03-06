@@ -1,6 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
 import InputElement from "../atoms/InputElement";
-import SelectElement from "../atoms/SelectElement"; 
 import Button from "../atoms/Button";
 import { Helmet } from "react-helmet";
 import { notification, Spin, Modal } from "antd"; 
@@ -9,8 +8,8 @@ import { HandleSignUp } from "../hooks/HandleSignUp";
 import { useNavigate } from 'react-router-dom';
 import { useFetchKategori, useFetchProvinsi, useFetchKabupaten, useFetchKecamatan } from "../hooks/HandleSignUp";
 import { Link } from "react-router-dom";
-import dayjs from "dayjs";
-import TimePickerElement from "../atoms/TimePickerElement";
+// import dayjs from "dayjs";
+// import TimePickerElement from "../atoms/TimePickerElement";
 import { useDropzone } from "react-dropzone";
 import SearchableSelect from "../atoms/SearchAbleSelectElement";
 
@@ -23,9 +22,9 @@ const SignUpForm: FC = () => {
   const [selectedKategori, setSelectedKategori] = useState<string>('');
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [previewVisible, setPreviewVisible] = useState<boolean>(false); 
-  const [selectedProvinsi, setSelectedProvinsi] = useState<string>('');
-  const [selectedKabupaten, setSelectedKabupaten] = useState<string>('');
-  const [selectedKecamatan, setSelectedKecamatan] = useState<string>('');
+  const [selectedProvinsi, setSelectedProvinsi] = useState<string>('0');
+  const [selectedKabupaten, setSelectedKabupaten] = useState<string>('0');
+  const [selectedKecamatan, setSelectedKecamatan] = useState<string>('0');
   const [wilProvinsi, setWilProvinsi] = useState<string>('');
   const [wilKabupaten, setWilKabupaten] = useState<string>('');
   const [wilKecamatan, setWilKecamatan] = useState<string>('');
@@ -63,7 +62,7 @@ const SignUpForm: FC = () => {
   ];
 
   const handleProvinsiSearchChange = (newprovinsiSearchTerm: string) => {
-    setprovinsiSearchTerm(newprovinsiSearchTerm); // Memperbarui state provinsiSearchTerm
+    setprovinsiSearchTerm(newprovinsiSearchTerm);
   };
 
   const handleKabupatenSearchChange = (newkabupatenSearchTerm: string) => {
@@ -80,6 +79,12 @@ const SignUpForm: FC = () => {
     setSelectedProvinsi(provinsiID);
     set_provinsi_id(provinsiID);
     setWilProvinsi(wilProvinsi);
+    setSelectedKabupaten('0');
+    set_kabupaten_id('0');
+    setWilKabupaten('Klik Disini');
+    setSelectedKecamatan('0');
+    setWilKecamatan('Klik Disini');
+    setkecamatanSearchTerm('Dummy');
     updateAlamatLengkap();
   };
 
@@ -89,6 +94,11 @@ const SignUpForm: FC = () => {
     setSelectedKabupaten(kabupatenID);
     set_kabupaten_id(kabupatenID);
     setWilKabupaten(wilKabupaten);
+    setSelectedKecamatan('0');
+    if(kabupatenID != '0'){
+      setWilKecamatan('Klik Disini');
+      setkecamatanSearchTerm(''); 
+    }
     updateAlamatLengkap();
   };
 
@@ -100,8 +110,12 @@ const SignUpForm: FC = () => {
     updateAlamatLengkap();
   };
 
+  useEffect(() => {
+    updateAlamatLengkap();
+  }, [alamatJalanTempat]);
+
   const updateAlamatLengkap = () => {
-    if (alamatJalanTempat && wilKecamatan && wilKabupaten && wilProvinsi) {
+    if (alamatJalanTempat && (wilKecamatan != '' && wilKecamatan != 'Klik Disini') && (wilKabupaten != '' && wilKabupaten != 'Klik Disini') && (wilProvinsi != '' && wilProvinsi != 'Klik Disini')) {
       const alamat = `${alamatJalanTempat} ${wilKecamatan} ${wilKabupaten} ${wilProvinsi}`;
       setAlamatLengkap(alamat);
     }
@@ -137,7 +151,7 @@ const SignUpForm: FC = () => {
   
 
   const provinsiOptions = [
-    { value: '', label: 'Klik Disini' }, // Default option
+    { value: '0', label: 'Klik Disini' }, // Default option
       ...provinsi.map((item) => ({
       value: item.id,
       label: item.name.toLowerCase()
@@ -148,7 +162,7 @@ const SignUpForm: FC = () => {
   ];
 
   const kabupatenOptions = [
-    { value: '', label: 'Klik Disini' }, // Default option
+    { value: '0', label: 'Klik Disini' }, // Default option
       ...kabupaten.map((item) => ({
       value: item.id,
       label: item.name.toLowerCase()
@@ -159,7 +173,7 @@ const SignUpForm: FC = () => {
   ];
 
   const kecamatanOptions = [
-    { value: '', label: 'Klik Disini' }, // Default option
+    { value: '0', label: 'Klik Disini' }, // Default option
       ...kecamatan.map((item) => ({
       value: item.id,
       label: item.name.toLowerCase()
@@ -182,10 +196,10 @@ const SignUpForm: FC = () => {
     alamat: '',
     koordinat_lokasi: '',
     kontak: '',
-    jam_buka: null as string | null, // Update tipe data
-    jam_tutup: null as string | null, // Update tipe data
-    kapasitas: '',
-    luas_lokasi: '',
+    // jam_buka: null as string | null, // Update tipe data
+    // jam_tutup: null as string | null, // Update tipe data
+    // kapasitas: '',
+    // luas_lokasi: '',
     dokumen_pendirian: null as File | null, // Tambahkan tipe data untuk dok
   });
 
@@ -204,6 +218,28 @@ const SignUpForm: FC = () => {
         setalamatJalanTempat(e.target.value); 
         updateAlamatLengkap();
       }, 500); 
+  
+      setAlamatTimer(timer);
+    }
+  };
+
+  const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Casting target agar TypeScript mengenali properti input
+    const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+    setBankSampahData((prevData) => ({
+      ...prevData,
+      [target.name]: target.value
+    }));
+  
+    if (target.name === 'alamat') {
+      if (alamatTimer) {
+        clearTimeout(alamatTimer);
+      }
+  
+      const timer = setTimeout(() => {
+        setalamatJalanTempat(target.value);
+        updateAlamatLengkap();
+      }, 500);
   
       setAlamatTimer(timer);
     }
@@ -242,6 +278,12 @@ const SignUpForm: FC = () => {
         description: "Nama, Email, dan Password wajib diisi.",
       });
       return false;
+    } else if (selectedIndex === 1 &&  (wilProvinsi == "Klik Disini" || wilKabupaten == "Klik Disini" || wilKecamatan == "Klik Disini" || alamatJalanTempat == "")){
+      notification.error({
+        message: "Form tidak valid",
+        description: "Cek kembali isian data alamat Anda",
+      });
+      return false;
     }
     return true;
   };
@@ -250,16 +292,36 @@ const SignUpForm: FC = () => {
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!validateForm()) return;
-    setIsModalVisible(true); // Show the modal for confirmation
+    setIsModalVisible(true); 
   };
 
   // Function to handle confirmation after the modal
   const handleConfirmSignUp = async () => {
-    setIsModalVisible(false); // Hide the modal after confirmation
+    setIsModalVisible(false);
     setLoading(true);
-
+   
     try {
-      const message = await HandleSignUp(selectedIndex, formData, selectedKategori);
+
+      const dataBankSampah = new FormData();
+      dataBankSampah.append('nama',formData.nama);
+      dataBankSampah.append('email', formData.email);
+      dataBankSampah.append('password', formData.password);
+      dataBankSampah.append('nomor_kontak', formData.nomor_kontak);
+      dataBankSampah.append('kategori', selectedKategori);
+      dataBankSampah.append('nama_bank_sampah', bankSampahData.nama_bank_sampah);
+      dataBankSampah.append('tipe_bank_sampah', bankSampahData.tipe_bank_sampah);
+      dataBankSampah.append('kontak', bankSampahData.kontak);
+      dataBankSampah.append('provinsi', selectedProvinsi);
+      dataBankSampah.append('kabupaten', selectedKabupaten);
+      dataBankSampah.append('kecamatan', selectedKecamatan);
+      dataBankSampah.append('alamat', alamatJalanTempat);
+      dataBankSampah.append('koordinat_lokasi', bankSampahData.koordinat_lokasi);
+
+      if (bankSampahData.dokumen_pendirian) {
+          dataBankSampah.append('dokumen_pendirian', bankSampahData.dokumen_pendirian);
+      }
+     
+      const message = await HandleSignUp(selectedIndex, formData, selectedKategori, dataBankSampah);
 
       notification.success({
         message: "Sign Up Berhasil!",
@@ -476,7 +538,7 @@ const SignUpForm: FC = () => {
                 value={formData.nomor_kontak}
                 onChange={handleChange}
               />
-              <SelectElement
+              {/* <SelectElement
                 inputClass="mb-6"
                 forwhat="kategori" 
                 labelMessage="Pilih Kategori"
@@ -489,9 +551,7 @@ const SignUpForm: FC = () => {
                   setSelectedKategori(e.target.value);
                 }}
                 options={kategoriOptions}
-              />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              /> */}
               <InputElement
                 inputClass="mb-6"
                 forwhat="password"
@@ -502,6 +562,9 @@ const SignUpForm: FC = () => {
                 value={formData.password}
                 onChange={handleChange}
               />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              
             </div>
             
             {selectedIndex === 1 && (
@@ -574,6 +637,8 @@ const SignUpForm: FC = () => {
                   inputPlaceholder="Masukkan Alamat Jalan atau Tempat"
                   value={bankSampahData.alamat}
                   onChange={handleBankSampahChange}
+                  onInput={handleInputEvent}
+                  onPaste={handleInputEvent}
                 />
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
@@ -611,7 +676,7 @@ const SignUpForm: FC = () => {
                     onChange={handleBankSampahChange}
                   />
                 </div> */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <TimePickerElement
                       inputClass="mb-6 w-full"
                       forwhat="jam_buka"
@@ -640,8 +705,8 @@ const SignUpForm: FC = () => {
                         })
                       }
                     />
-                  </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  </div> */}
+                {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <InputElement
                   inputClass="mb-6"
                   forwhat="kapasitas"
@@ -662,7 +727,7 @@ const SignUpForm: FC = () => {
                   value={bankSampahData.luas_lokasi}
                   onChange={handleBankSampahChange}
                 />
-                </div>
+                </div> */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div {...getRootProps()} className="border-dashed border-2 border-gray-500 p-6 bg-gray-100 cursor-pointer">
                     <input {...getInputProps()} />
@@ -704,7 +769,7 @@ const SignUpForm: FC = () => {
 
             <Button
               message={loading ? "Loading..." : "Sign Up"} 
-              variant="bg-green-700 w-full hover:bg-green-900"
+              variant="bg-[#7f0353] w-full hover:bg-green-900"
               type="submit"
               disabled={loading}
             >
@@ -712,7 +777,7 @@ const SignUpForm: FC = () => {
             </Button>
           </form>
           <p className="text-slate-500 mt-4 text-center">Sudah memiliki akun? silakan&nbsp;
-            <Link to="/Login" className="text-green-700">
+            <Link to="/Login" className="text-[#7f0353]">
               <b>Login</b>
             </Link>
           </p>

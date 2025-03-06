@@ -1,0 +1,189 @@
+[
+  {
+      "productID": "P001",
+      "userID": 2,
+      "name": "Jaket Denim Vintage",
+      "images": [
+          "assets/img/produk/P001_1.jpg",
+          "assets/img/produk/P001_2.jpg",
+          "assets/img/produk/P001_3.jpg"
+      ],
+      "price": 240000,
+      "merk": "Cardinal",
+      "condition": "Hampir Baru",
+      "category": ["Jaket", "Vintage"],
+      "color": "Biru",
+      "bisaTukar": true,
+      "dikirimDari": "Jakarta",
+      "size": "XL",
+      "description": "Jaket denim vintage dengan desain klasik, bahan tebal dan nyaman dipakai. Cocok untuk gaya kasual sehari-hari.",
+      "status": 1   
+  },
+  {
+      "productID": "P002",
+      "userID": 8,
+      "name": "Kaos Band Metallica",
+      "images": [
+          "assets/img/produk/P002_1.jpg",
+          "assets/img/produk/P002_2.jpg"
+      ],
+      "price": 156000,
+      "merk": "",
+      "condition": "Layak Pakai",
+      "category": ["Kaos", "Band Merchandise"],
+      "bisaTukar": false,
+      "dikirimDari": "Surabaya",
+      "size": "L",
+      "description": "Kaos band Metallica edisi langka, bahan adem dan nyaman, cocok untuk para penggemar musik rock dan metal.",
+      "status": 1   
+  },
+  {
+      "productID": "P003",
+      "userID": 3,
+      "name": "Celana Cargo Army",
+      "images": [
+          "assets/img/produk/P003_1.jpg",
+          "assets/img/produk/P003_2.jpg"
+      ],
+      "price": 200000,
+      "merk": "Cartenz",
+      "condition": "Hampir Baru",
+      "category": ["Celana", "Outdoor"],
+      "color": "Hijau Army",
+      "bisaTukar": true,
+      "dikirimDari": "Bandung",
+      "size": "L",
+      "description": "Celana cargo army yang cocok untuk kegiatan outdoor, memiliki banyak kantong dan bahan yang kuat serta nyaman.",
+      "status": 1   
+  },
+  {
+      "productID": "P004",
+      "userID": 4,
+      "name": "Hoodie Oversized Hitam",
+      "images": [
+          "assets/img/produk/P004_1.jpg",
+          "assets/img/produk/P004_2.jpg"
+      ],
+      "price": 120000,
+      "merk": "OffWhite",
+      "condition": "Layak Pakai",
+      "category": ["Hoodie", "Casual"],
+      "color": "Hitam",
+      "bisaTukar": false,
+      "dikirimDari": "Yogyakarta",
+      "size": "XXL",
+      "description": "Hoodie oversized warna hitam, nyaman dan stylish untuk dipakai sehari-hari.",
+      "status": 1   
+  },
+  {
+      "productID": "P005",
+      "userID": 5,
+      "name": "Dress Floral Vintage",
+      "images": [
+          "assets/img/produk/P005_1.jpg",
+          "assets/img/produk/P005_2.jpg"
+      ],
+      "price": 160000,
+      "merk": "Hawaiian Blue",
+      "condition": "Seperti Baru",
+      "category": ["Dress", "Vintage"],
+      "color": "Merah",
+      "bisaTukar": true,
+      "dikirimDari": "Bali",
+      "size": "L",
+      "description": "Dress floral vintage yang cantik dan anggun, cocok untuk acara santai maupun formal.",
+      "status": 1   
+  },
+  {
+      "productID": "P006",
+      "userID": 6,
+      "name": "Sepatu Sneakers Putih",
+      "images": [
+          "assets/img/produk/P006_1.jpg",
+          "assets/img/produk/P006_2.jpg"
+      ],
+      "price": 450000,
+      "merk": "Reebok",
+      "condition": "Hampir Baru",
+      "category": ["Sepatu", "Casual"],
+      "color": "Putih",
+      "bisaTukar": false,
+      "dikirimDari": "Semarang",
+      "size": "42",
+      "description": "Sepatu sneakers putih dengan desain minimalis dan nyaman dipakai sepanjang hari.",
+      "status": 1   
+  },
+  {
+      "productID": "P007",
+      "userID": 7,
+      "name": "Topi Trucker",
+      "images": [
+          "assets/img/produk/P007_1.jpg"
+      ],
+      "price": 65000,
+      "merk": "Cardinal",
+      "condition": "Layak Pakai",
+      "category": ["Aksesoris", "Topi"],
+      "bisaTukar": true,
+      "dikirimDari": "Malang",
+      "size": "",
+      "description": "Topi trucker keren dengan desain klasik, cocok untuk gaya casual.",
+      "status": 1   
+  },
+  {
+      "productID": "P008",
+      "userID": 8,
+      "name": "Sweater Rajut Hangat",
+      "images": [
+          "assets/img/produk/P008_1.jpg",
+          "assets/img/produk/P008_2.jpg"
+      ],
+      "price": 189000,
+      "merk": "Cardinal",
+      "condition": "Seperti Baru",
+      "category": ["Sweater", "Winter Wear"],
+      "color": "Coklat",
+      "bisaTukar": true,
+      "dikirimDari": "Bandung",
+      "size": "XXL",
+      "description": "Sweater rajut hangat dan nyaman, cocok untuk musim dingin atau cuaca sejuk.",
+      "status": 1   
+  },
+  {
+      "productID": "P009",
+      "userID": 9,
+      "name": "Blazer Kantor Wanita",
+      "images": [
+          "assets/img/produk/P009_1.jpg",
+          "assets/img/produk/P009_2.jpg"
+      ],
+      "price": 180000,
+      "merk": "Vanilla",
+      "condition": "Seperti Baru",
+      "category": ["Blazer", "Formal"],
+      "color": "Abu-abu",
+      "bisaTukar": false,
+      "dikirimDari": "Jakarta",
+      "size": "S",
+      "description": "Blazer kantor wanita dengan potongan modern, cocok untuk tampil profesional.",
+      "status": 1   
+  },
+  {
+      "productID": "P010",
+      "userID": 10,
+      "name": "Celana Jogger Sport",
+      "images": [
+          "assets/img/produk/P010_1.jpg"
+      ],
+      "price": 150000,
+      "merk": "Eiger",
+      "condition": "Layak Pakai",
+      "category": ["Celana", "Sport"],
+      "color": "Hitam",
+      "bisaTukar": true,
+      "dikirimDari": "Surabaya",
+      "size": "M",
+      "description": "Celana jogger sport nyaman untuk aktivitas olahraga atau santai.",
+      "status": 1   
+  }
+]

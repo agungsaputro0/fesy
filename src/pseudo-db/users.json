@@ -1,0 +1,124 @@
+[
+  {
+    "id": 1,
+    "nama": "Agung Saputro",
+    "email": "agung.saputro@binus.ac.id",
+    "telepon": "081294599862",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 1, "label": "Kantor", "detail": "Jl. Sudirman No. 1, Jakarta", "alamatDipilih": true }
+    ],
+    "role": 1,
+    "password": "sunibian10"
+  },
+  {
+    "id": 2,
+    "nama": "Budi Santoso",
+    "email": "budi@example.com",
+    "telepon": "08123456789",
+    "fotoProfil": "assets/img/fotoProfil/FP2.jpg",
+    "alamat": [
+      { "id": 2, "label": "Rumah", "detail": "Jl. Merdeka No. 10, Jakarta", "alamatDipilih": true },
+      { "id": 3, "label": "Kantor", "detail": "Jl. Sudirman No. 45, Jakarta", "alamatDipilih": false }
+    ],
+    "role": 2,
+    "password": "sunibianBudi"
+  },
+  {
+    "id": 3,
+    "nama": "Siti Aminah",
+    "email": "siti@example.com",
+    "telepon": "08129876543",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 4, "label": "Rumah", "detail": "Jl. Diponegoro No. 5, Bandung", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "siti123"
+  },
+  {
+    "id": 4,
+    "nama": "Ahmad Fauzi",
+    "email": "ahmad@example.com",
+    "telepon": "08137654321",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 5, "label": "Rumah", "detail": "Jl. Gatot Subroto No. 8, Surabaya", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "ahmad123"
+  },
+  {
+    "id": 5,
+    "nama": "Dewi Lestari",
+    "email": "dewi@example.com",
+    "telepon": "08136547892",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 6, "label": "Rumah", "detail": "Jl. Thamrin No. 12, Yogyakarta", "alamatDipilih": true },
+      { "id": 7, "label": "Kantor", "detail": "Jl. Malioboro No. 3, Yogyakarta", "alamatDipilih": false }
+    ],
+    "role": 2,
+    "password": "dewiROX"
+  },
+  {
+    "id": 6,
+    "nama": "Rizky Pratama",
+    "email": "rizky@example.com",
+    "telepon": "08121234567",
+    "fotoProfil": "assets/img/fotoProfil/FP6.jpg",
+    "alamat": [
+      { "id": 8, "label": "Rumah", "detail": "Jl. Ahmad Yani No. 22, Medan", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "rizky123"
+  },
+  {
+    "id": 7,
+    "nama": "Lina Kusuma",
+    "email": "lina@example.com",
+    "telepon": "08127894561",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 9, "label": "Rumah", "detail": "Jl. Hayam Wuruk No. 10, Semarang", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "lina123"
+  },
+  {
+    "id": 8,
+    "nama": "Fajar Ramadhan",
+    "email": "fajar@example.com",
+    "telepon": "08136541237",
+    "fotoProfil": "assets/img/fotoProfil/FP8.jpg",
+    "alamat": [
+      { "id": 10, "label": "Rumah", "detail": "Jl. Panglima Polim No. 7, Bali", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "fajaROX"
+  },
+  {
+    "id": 9,
+    "nama": "Rina Wijaya",
+    "email": "rina@example.com",
+    "telepon": "08123984756",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 11, "label": "Rumah", "detail": "Jl. Pahlawan No. 15, Makassar", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "rina123"
+  },
+  {
+    "id": 10,
+    "nama": "Yoga Saputra",
+    "email": "yoga@example.com",
+    "telepon": "08128765432",
+    "fotoProfil": "",
+    "alamat": [
+      { "id": 12, "label": "Rumah", "detail": "Jl. Dipati Ukur No. 30, Bandung", "alamatDipilih": true }
+    ],
+    "role": 2,
+    "password": "yoga123"
+  }
+]

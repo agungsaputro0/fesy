@@ -45,20 +45,25 @@ const LoginForm: FC = () => {
 
     try {
         const user = await handleLogin(email, password); 
-        const userKategori = user.kategori;
+        const userKategori = user.user?.role;
         dispatch(loginSuccess(email));
-        notification.success({
+        if(user.success === true){
+          notification.success({
             message: "Login Berhasil!",
             description: "Selamat, Anda berhasil Login!",
-        });
-        setTimeout(() => {
-          window.location.href = userKategori === 'administrator' ? '/home' : '/portal'; 
-        }, 1000); 
-
+          });
+          setTimeout(() => {
+            window.location.href = userKategori === 1 ? '/home' : '/portal'; 
+          }, 1000); 
+        } else {
+          notification.error({
+            message: "Login Gagal!",
+            description: "Mohon maaf, Kredensial Anda tidak valid!",
+          });
+        }
     } catch (error) {
         setLoginFailed("Invalid credentials");
         dispatch(loginFailure());
-
         notification.error({
             message: "Login Gagal!",
             description: "Mohon maaf, Kredensial Anda tidak valid!",
@@ -77,8 +82,8 @@ const LoginForm: FC = () => {
   </Helmet>
   <div className="pt-24 sm:pt-24 sm:mb-20 md:pt-6 lg:pt-6 flex flex-col lg:flex-row justify-between items-center min-h-screen px-4 md:px-8">
     <div className="sm:pl-0 md:pl-0 lg:pl-10 pt-2 sm:pt-2 md:pt-16 lg:pt-6 mr-0 lg:mr-24 md:mr-0 sm:mr-0 text-center lg:text-left mb-8 lg:mb-0">
-      <h1 className="text-6xl font-bold text-white">Waste<span className="text-amber-400">Track</span></h1>
-      <h3 className="text-xl text-white">MENGUBAH SAMPAH MENJADI BERKAH</h3>
+      <h1 className="text-6xl font-bold text-[#7f0353]">FESY</h1>
+      <h3 className="text-l text-[#5c595f]">E-commerce for your <b>pre-loved</b> clothes</h3>
     </div>
 
     {/* Bagian Kanan: Panel Login */}
@@ -113,13 +118,13 @@ const LoginForm: FC = () => {
           </p>
           <Button
             type="submit"
-            variant="bg-green-700 w-full hover:bg-green-900"
+            variant="bg-[#7f0353] w-full hover:bg-green-900"
             message="Login"
             disabled={loading}
           />
         </form>
         <p className="text-slate-500 mt-4 text-center">Belum memiliki akun? silakan&nbsp;
-          <Link to="/SignUp" className="text-green-700">
+          <Link to="/SignUp" className="text-[#7f0353]">
           <b>Klik Disini</b>
           </Link>
         </p>

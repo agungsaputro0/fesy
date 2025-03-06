@@ -24,16 +24,10 @@ const HomeShell = (props: AppShellProps) => {
                     </div>
                 ) : (
                     <div className="flex flex-1">
-                        <div 
-                            className={`sidebar ${expanded ? 'sidebar-expanded' : ''} bg-transparent shadow-md h-full`}
-                            onMouseEnter={() => setExpanded(true)}
-                            onMouseLeave={() => setExpanded(false)}
-                        >
-                            <Sidebar />
-                        </div>
+                        
     
                         {/* Menambahkan class dinamis untuk konten */}
-                        <div className={`flex-1 p-6 overflow-y-auto transition-all duration-300 ${expanded ? 'content-expanded' : 'content-collapsed'}`}>
+                        <div className={`flex-1 overflow-y-auto transition-all duration-300 ${expanded ? 'content-expanded' : 'content-collapsed'}`}>
                             {props.children}
                         </div>
                     </div>

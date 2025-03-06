@@ -18,3 +18,19 @@ export const HandleResendActivation = async (
         throw error;
     }
 };
+
+export const HandleActivateAccount = async (
+    uid: string,
+    kode_aktivasi: string
+) => {
+    console.log(uid);
+    try {
+        const data = {
+            kode_aktivasi: kode_aktivasi
+        }
+        const response = await axios.post<ResendActivationResponse>(`${baseURL}/activate_account/${uid}`, data);
+        return response.data.message;
+    } catch (error) {
+        throw error;
+    }
+};

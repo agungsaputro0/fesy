@@ -147,7 +147,7 @@ export const useFetchKecamatan = (kabupatenId: string | null, searchTerm: string
   return { kecamatan, loading, error };
 }
 
-const handleSignUpUser = async (UserData: any) => {
+export const handleSignUpUser = async (UserData: any) => {
     try {
         const response = await axios.post<SignUpResponse>(`${baseURL}/user_registration`, UserData);
         return response.data.message;
@@ -156,14 +156,34 @@ const handleSignUpUser = async (UserData: any) => {
     }
 };
 
+export const handleSignUpUserBankSampah = async (formData: FormData) => {
+    try {
+      const response = await axios.post(`${baseURL}/bank_sampah_registration`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: true,  // Jika perlu cookie atau session
+      });
+      return response.data.message;
+    } catch (error: any) {
+      console.error("Error while submitting form:", error);
+      const message = error?.response?.data?.message || error.message || "Gagal mengirim data laporan pembayaran.";
+      throw new Error(message);
+    }
+  };
+
 export const HandleSignUp = async (
     selectedIndex: number | null,
     data: any,
-    selectedKategori: string
+    selectedKategori: string,
+    bankSampahData: FormData | null
 ) => {
     try {
         if (selectedIndex === 1) {
-
+          if (!bankSampahData) {
+            throw new Error("Data bank sampah tidak boleh kosong");
+          }
+          return await handleSignUpUserBankSampah(bankSampahData);
         } 
         else if (selectedIndex === 2) {
                 
@@ -172,14 +192,14 @@ export const HandleSignUp = async (
 
         } 
         else if (selectedIndex === 4) {
-            const Nasabah = {
+            const DataForSend = {
                 nama: data.nama,
                 email: data.email,
                 nomor_kontak: data.nomor_kontak,
                 password: data.password,
                 kategori: selectedKategori,
             };
-            return await handleSignUpUser(Nasabah);
+            return await handleSignUpUser(DataForSend);
         } else {
             throw new Error("Kategori tidak dipilih atau tidak valid");
         }

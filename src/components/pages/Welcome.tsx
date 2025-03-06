@@ -11,7 +11,7 @@ const Welcome = () => {
                 <Helmet>
                     <title>{appName}</title>
                 </Helmet>
-                <LandingLayouts layoutTitle="Selamat Datang di Aplikasi" layoutMessage="Mengubah Sampah menjadi Berkah" />
+                <LandingLayouts />
             </div>
         </AppShell>
     );

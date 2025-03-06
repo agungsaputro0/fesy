@@ -4,6 +4,10 @@
 @import 'slick-carousel/slick/slick.css';
 @import 'slick-carousel/slick/slick-theme.css';
 
+body {
+    overflow-x: hidden;
+  }
+
 /* global.css */
 .shadow-left-bottom {
     box-shadow: -10px 10px 15px rgba(0, 0, 0, 0.5);
@@ -26,7 +30,7 @@
     top: 64px;
     left: 0;
     z-index: 100;
-    color: rgb(31 41 55 / var(--tw-text-opacity));
+    color: #7f0353;
 }
 
 .sidebar-expanded {
@@ -34,7 +38,7 @@
 }
 
 .sidebar-menu-item {
-    color: rgb(31 41 55 / var(--tw-text-opacity));
+    color: #7f0353;
     display: flex;
     align-items: center;
     padding: 10px 20px;
@@ -86,7 +90,7 @@ aside {
 }
 
 .ant-menu {
-    color: #ffffff!important;
+    color: #7f0353!important;
     background: transparent !important;
     border: none;
 }
@@ -96,13 +100,13 @@ aside {
 }
 
 .ant-menu-item {
-    color: #ffffff!important;
+    color: #7f0353!important;
 }
 
 .ant-menu-item:hover {
     background-color: rgba(34, 31, 31, 0.5);
     font-weight: bold;
-    color: #00ff00!important;
+    color: #5c595f!important;
 }
 
 .ant-menu-item-selected {
@@ -162,13 +166,21 @@ aside {
   
   /* Gaya untuk thumb scrollbar */
   ::-webkit-scrollbar-thumb {
-    background: #008000; /* Warna thumb scrollbar */
+    background: #7f0353; /* Warna thumb scrollbar */
     border-radius: 10px; /* Membuat thumb lebih bulat */
     border: 2px solid #f1f1f1; /* Menambahkan border untuk kontras */
   }
   
   /* Gaya untuk thumb scrollbar saat di-hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #004d00; /* Warna thumb saat di-hover */
+    background: #570339; /* Warna thumb saat di-hover */
   }
   
+  .banner_image {
+    object-fit: cover;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    max-height: 80vh;
+    height: 80vh;
+  }

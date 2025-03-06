@@ -1,21 +1,14 @@
 // HomeNavbar.tsx
+import { useState, useEffect } from "react";
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { UseScroll } from '../hooks/UseScroll';
-import axios from 'axios';
 import { message } from 'antd';
-import { useDispatch } from 'react-redux';
-import { logout } from '../store/authSlice';
-
-const baseURL = import.meta.env.VITE_APP_PUBLIC_API_URL; 
-const navigation = [
-  { name: 'Dashboard', to: '/Home', current: false },
-  { name: 'Layanan Kami', to: '#', current: false },
-  { name: 'Informasi Publik', to: '#', current: false },
-];
+import useNavigation from "../hooks/useNavigation";
+import { handleLogout as logout } from '../hooks/HandleLogin';
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ');
@@ -26,26 +19,77 @@ type HomeNavbarProps = {
 };
 
 const HomeNavbar = ({ userName }: HomeNavbarProps) => {
+  const navigation = useNavigation();
   const isScrolled = UseScroll(); 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [cartCount, setCartCount] = useState<number>(0);
+
+  const handleClick = () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   
+    if (currentUser.role === 2) {
+      navigate(`/MyCart`);
+    } else {
+      navigate(`/Cart`);
+    }
+  };
+  
+  const updateCartCount = () => {
+    // Ambil user yang sedang login
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+      setCartCount(0);
+      return;
+    }
+  
+    const parsedUser = JSON.parse(currentUser);
+    const currentUserID = parsedUser?.id;
+  
+    if (!currentUserID) {
+      setCartCount(0);
+      return;
+    }
+  
+    // Ambil data keranjang dari Local Storage
+    const cartData = JSON.parse(localStorage.getItem("cartData") || "{}");
+  
+    // Ambil hanya produk dari user yang sedang login
+    const userCart = cartData[currentUserID] || [];
+  
+    // Update jumlah produk di keranjang
+    setCartCount(userCart.length);
+  };
+  
+  // Panggil saat komponen dimuat & dengarkan event "cartUpdated"
+  useEffect(() => {
+    updateCartCount();
+    
+    // Event listener untuk menangkap perubahan Local Storage secara real-time
+    const handleCartUpdate = () => updateCartCount();
+    window.addEventListener("cartUpdated", handleCartUpdate);
+  
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
+  }, []);  
+
   const handleProfileClick = () => {
-    navigate('/Profil'); 
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  
+    if (currentUser.role === 2) {
+      navigate(`/MyPage`);
+    } else {
+      navigate('/UserPage'); 
+    }
   };
 
   const handleLogout = async () => {
     try {
-      const response = await axios.delete(`${baseURL}/logout`, { withCredentials: true });
-      if (response.status === 200) {
-        message.success('Logout berhasil');
-        dispatch(logout());
-        setTimeout(() => {
-           window.location.href = '/Login';
-         }, 1000); 
-      } else {
-        console.error('Error during logout:', response.data);
-      }
+      logout();
+      message.success('Logout berhasil');
+      setTimeout(() => {
+        window.location.href = '/Login';
+      }, 1000); 
     } catch (error) {
       console.log(error);
       message.error('Terjadi kesalahan saat logout');
@@ -66,7 +110,7 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
     <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-transparent'} transition duration-300 w-full fixed z-50`}>
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="mx-auto min-w-screen px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -79,7 +123,14 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+              <div className="flex flex-1 w-[100vw] items-center justify-center sm:items-stretch sm:justify-start">
+              <Link to="/" className="flex items-center space-x-2">
+               <img
+                  src="/assets/img/fesy-full-logo.png" 
+                  alt="Fesy Logo"
+                  className="h-10 w-30"
+                />
+              </Link>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
@@ -87,7 +138,7 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
                         key={item.name}
                         to={item.to}
                         className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : isScrolled ? 'text-white hover:bg-gray-700' : 'text-white hover:bg-gray-700 hover:text-white',
+                          item.current ? 'bg-gray-900 text-[#7f0353]' : isScrolled ? 'text-[#7f0353] hover:bg-[#c2beba]' : 'text-[#7f0353] hover:bg-[#c2beba] hover:text-[#7f0353]',
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
                         >
@@ -99,11 +150,20 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <div onClick={handleClick}  className="relative p-2 text-[#7f0353] hover:text-[#5c595f]">
+                  <ShoppingCartIcon className="h-6 w-6" />
+                  {cartCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-2">
+                      {cartCount}
+                    </span>
+                  )}
+                </div>
+
                 <Menu as="div" className="relative ml-3">
                   <div>
-                  <Menu.Button className="hover:text-white hover:bg-gray-700 rounded-md px-3 py-2 text-sm font-medium text-white">
+                  <Menu.Button className="hover:text-[#7f0353] hover:bg-[#c2beba] rounded-md px-3 py-2 text-sm font-medium text-[#7f0353]">
                     <span className="sr-only">Open user menu</span>
-                    <span className={`${isScrolled ? 'text-white hover:text-gray-200' : ''} font-bold rounded-md px-3 py-2 text-sm font-medium transition-colors`}>
+                    <span className={`${isScrolled ? 'text-[#7f0353] hover:text-[#7f0353]' : ''} font-bold rounded-md px-3 py-2 text-sm font-medium transition-colors`}>
                       {formatUserName(userName)}
                     </span>
                   </Menu.Button>
@@ -129,7 +189,7 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
                                 'block px-4 py-2 text-sm w-full text-left'
                               )}
                             >
-                              Profil
+                              Halaman Saya
                             </button>
                           )}
                         </Menu.Item>
