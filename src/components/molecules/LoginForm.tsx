@@ -53,7 +53,7 @@ const LoginForm: FC = () => {
             description: "Selamat, Anda berhasil Login!",
           });
           setTimeout(() => {
-            window.location.href = userKategori === 1 ? '/home' : '/portal'; 
+            window.location.href = userKategori === 1 ? '/' : '/'; 
           }, 1000); 
         } else {
           notification.error({
