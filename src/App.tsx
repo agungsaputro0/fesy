@@ -14,8 +14,6 @@ const SignUpPage = lazy(() => import('./components/pages/SignUp'));
 const ResendActivationPage = lazy(() => import('./components/pages/ResendActivation'));
 const Users = lazy(() => import('./components/pages/Users'));
 const AddUser = lazy(() => import('./components/pages/AddUser'));
-const UpdateUser = lazy(() => import('./components/pages/UpdateUser'));
-const ActivateUser = lazy(() => import('./components/pages/ActivateUser'));
 const MarketPlace = lazy(() => import('./components/pages/Marketplace'));
 const ProductDetail = lazy(() => import('./components/pages/ProductDetailPage'));
 const CartPage = lazy(() => import('./components/pages/CartPage'));
@@ -43,8 +41,6 @@ const App = () => {
         <Route path="/Profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
         <Route path="/Users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
         <Route path="/TambahUser" element={<ProtectedRoute><AddUser /></ProtectedRoute>} />
-        <Route path="/UpdateUser/:tipe/:uid" element={<ProtectedRoute><UpdateUser /></ProtectedRoute>} />
-        <Route path="/AktivasiAkun/:uid/:email/:password" element={<RedirectIfLoggedIn><ActivateUser /></RedirectIfLoggedIn>} />
         <Route path="/Portal" element={<StakeholderRoute><Home /></StakeholderRoute>} />
         <Route path="/ProductDetail/:productId" element={<ProtectedRoute><ProductDetail /></ProtectedRoute>} />
         <Route path="/Product/:productId" element={<StakeholderRoute><ProductDetail /></StakeholderRoute>} />
