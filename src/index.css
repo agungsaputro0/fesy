@@ -4,6 +4,12 @@
 @import 'slick-carousel/slick/slick.css';
 @import 'slick-carousel/slick/slick-theme.css';
 
+html {
+    overflow: auto !important;
+    padding-right: 0px !important;
+  }
+  
+
 body {
     overflow-x: hidden;
   }

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import HomeNavbar from '../organisms/HomeNavbar';
 import { useAuth } from '../hooks/AuthContext';
+import MobileBottomNavForHome from '../organisms/MobileBottomNavForHome';
 
 type AppShellProps = {
     children: React.ReactNode;
@@ -29,6 +30,7 @@ const HomeShell = (props: AppShellProps) => {
                         <div className={`flex-1 overflow-y-auto transition-all duration-300 ${expanded ? 'content-expanded' : 'content-collapsed'}`}>
                             {props.children}
                         </div>
+                        <MobileBottomNavForHome />
                     </div>
                 )}
             </div>

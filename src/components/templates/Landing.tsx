@@ -1,5 +1,8 @@
 import Banner from "../organisms/Banner";
-
+import PopularSection from "../organisms/PopularSection";
+import OurCommitment from "../molecules/OurCommitment";
+import OurAchievements from "../molecules/Achievements";
+import TabSection from "../organisms/TabSection";
 
 const LandingLayouts = () => {
 
@@ -10,10 +13,14 @@ const LandingLayouts = () => {
       ];
 
     return (
-        <div className="pt-[65px] pb-10 flex flex-col justify-between items-center min-h-screen">
+        <div className="pt-[65px] flex flex-col justify-between items-center min-h-screen">
             <div className="w-full">
                 <div className="custom-slider-container">
                     <Banner images={images} />
+                    <PopularSection />
+                    <TabSection />
+                    <OurCommitment />
+                    <OurAchievements />
                 </div>
             </div>
         </div>

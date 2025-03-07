@@ -5,7 +5,7 @@ import usersData from "../../pseudo-db/users.json";
 import productsData from "../../pseudo-db/product.json";
 import ProductCard from "../atoms/ProductCard";
 import TambahProdukModal from "./AddProductModal";
-
+import LevelingPanel from "../atoms/LevelingPanel";
 
 type User = {
   id: number;
@@ -41,8 +41,10 @@ interface Order {
   status: "Menunggu Konfirmasi" | "Diproses" | "Dikirim" | "Selesai";
 }
 
+
 const MyPage = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [userLevel, setUserLevel] = useState<string>("Rookie");
   const [activeTab, setActiveTab] = useState("JUAL");
   const [userProducts, setUserProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -94,6 +96,25 @@ const MyPage = () => {
             console.error("Error parsing user data:", error);
         }
     }
+}, []);
+
+useEffect(() => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+    
+  const orders = allOrders.filter((order: any) => order.userID === currentUser.id);
+
+  const totalTransactions = orders.length;
+
+  if (totalTransactions >= 30) {
+    setUserLevel("Master Recycler");
+  } else if (totalTransactions >= 15) {
+    setUserLevel("Eco Warrior");
+  } else if (totalTransactions >= 5) {
+    setUserLevel("Green Enthusiast");
+  } else {
+    setUserLevel("Rookie");
+  }
 }, []);
 
   const getPrimaryAddress = () => {
@@ -192,10 +213,10 @@ const MyPage = () => {
   
 
   return (
-    <section>
-      <div className="pt-20 pl-6 pr-6 flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-4 w-full max-w-full">
-          <div style={{ padding: "20px" }}>
+    <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
+      <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
+        <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 p-6 space-y-4 w-full max-w-full">
+          <div className="p-[2px] sm:p-[20px]">
             <div className="flex justify-between items-center border-b-2 border-gray-300 pb-3">
               <h2 className="text-2xl text-[#7f0353] font-semibold">
                 <UserOutlined className="w-8 h-8" /> Tentang Saya
@@ -203,42 +224,49 @@ const MyPage = () => {
             </div>
             {user ? (
               <>
-                <div className="flex justify-center space-x-6 mt-10">
-                  <img
-                    src={user.fotoProfil}
-                    alt={user.nama}
-                    className="w-28 h-28 rounded-full border border-gray-300"
-                    onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
-                  />
-                  <div className="content-center">
-                    <h2 className="text-xl font-semibold">{user.nama}</h2>
-                    <p className="flex items-center text-gray-700">
+                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-10">
+                <img
+                  src={user.fotoProfil}
+                  alt={user.nama}
+                  className="w-24 h-24 supernarrow:w-14 supernarrow:h-14 sm:w-28 sm:h-28 rounded-full border border-gray-300 transition-all duration-300 hover:w-20 hover:h-20 sm:hover:w-32 sm:hover:h-32"
+                  onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
+                />
+
+                  <div className="min-w-0">
+                    <h2 className="text-lg sm:text-xl font-semibold truncate">
+                      {user.nama}
+                      <span className="ml-2 px-2 py-1 bg-blue-200 text-blue-800 text-xs font-semibold rounded-lg">
+                        {userLevel}
+                      </span>
+                    </h2>
+                    <p className="flex text-sm sm:text-lg items-center text-gray-700">
                       <FaPhoneAlt className="text-[#7f0353] mr-2" /> {user.telepon}
                     </p>
-                    <p className="flex items-center text-gray-700">
+                    <p className="flex text-sm sm:text-lg items-center text-gray-700">
                       <FaEnvelope className="text-[#7f0353] mr-2" /> {user.email}
                     </p>
                     {getPrimaryAddress() && (
-                      <p className="flex items-center text-gray-700">
+                      <p className="flex text-sm sm:text-lg items-center text-gray-700">
                         <FaMapMarkerAlt className="text-[#7f0353] mr-2" /> {getPrimaryAddress()?.detail}
                       </p>
                     )}
                   </div>
                 </div>
-                <div className="flex justify-center space-x-4 mt-6 align-middle">
-                  <button className="bg-[#7f0353] h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
+                <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
+                  <button className="bg-[#7f0353] text-xs sm:text-sm h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
                     Edit Profil
                   </button>
-                  <button className="bg-white border h-[35px] w-[200px] border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                  <button className="bg-white text-xs sm:text-sm border h-[35px] w-[200px] border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
                     Tambah Alamat
                   </button>
                 </div>
+                <LevelingPanel />
                 <div className="flex justify-center pt-8 space-x-6 border-b-2 border-gray-200 mb-4 relative">
                   {['JUAL', 'BELI'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`pb-2 text-lg font-semibold relative ${activeTab === tab ? "text-black" : "text-gray-400"}`}
+                      className={`pb-2 text-sm sm:text-lg font-semibold relative ${activeTab === tab ? "text-black" : "text-gray-400"}`}
                     >
                       {tab}
                       <span

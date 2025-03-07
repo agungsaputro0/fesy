@@ -50,7 +50,7 @@ const Checkout = () => {
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [grandTotal, setGrandTotal] = useState(0);
   const [checkoutCompleted, setCheckoutCompleted] = useState(false);
-  console.log(checkoutItems);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -224,7 +224,6 @@ const Checkout = () => {
             <h2 className="text-2xl font-bold mb-4">
               <ShoppingOutlined /> &nbsp; Checkout
             </h2>
-
             <AddressPanel />
 
             {Object.entries(groupedItems).map(([sellerId, { seller, products, shipping }]) => {
@@ -295,7 +294,7 @@ const Checkout = () => {
                     </p>
                   </div>
                 </div>
-
+                
                 {/* Total Harga di Bagian Bawah Sisi Kanan */}
                 <div className="p-6 flex justify-end border-t">
                   <div className="text-right">
@@ -305,13 +304,12 @@ const Checkout = () => {
               </div>
             );
           })}
-
             <VoucherPanel setSelectedVoucher={setSelectedVoucher} />
             <PaymentPanel selectedPayment={selectedPayment} setSelectedPayment={setSelectedPayment} />
 
             <div className="text-right space-y-2 w-80 ml-auto mb-5">
               <div className="flex justify-between gap-10 text-gray-600 w-full">
-                <span className="whitespace-nowrap text-sm">Subtotal untuk Produk</span>
+                <span className="whitespace-nowrap text-sm">Subtotal untuk {checkoutItems.length > 0 && (<span>{checkoutItems.length}</span>)} Produk</span>
                 <span className="font-medium text-sm">Rp {totalPrice.toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-gray-600 w-full mb-10">

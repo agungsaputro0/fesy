@@ -6,14 +6,12 @@ import { MailOutlined, PhoneOutlined } from '@ant-design/icons';
 
 const Footer: React.FC = () => {
   return (
-<footer className="mt-auto footer bg-footerblue text-white z-40">
+<footer className="mt-auto footer bg-footerblue text-white z-40 pb-8 sm:pb-8 md:pb-[0px] lg:pb-[0px]">
   <div className="bg-footeruplist py-2">
     <ul className="flex justify-center space-x-6 text-sm text-[#5c595f] mr-[10px] ml-[10px]">
     {/* <ul className="flex justify-center space-x-6 text-sm text-white sm:space-x-4 sm:flex-col xs:items-center"> */}
-      <li><a href="#" className="hover:text-[#7f0353]-300">Peta Situs</a></li>
       <li><a href="#" className="hover:text-[#7f0353]-300">Hubungi Kami</a></li>
       <li><a href="#" className="hover:text-[#7f0353]-300">Kebijakan Privasi</a></li>
-      <li><a href="#" className="hover:text-[#7f0353]-300">Syarat dan Ketentuan</a></li>
     </ul>
   </div>
 

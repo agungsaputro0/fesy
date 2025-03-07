@@ -14,6 +14,11 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      screens: {
+        'supernarrow': '330px',
+        'mediumgap': '910px', 
+        'largegap': '1150px',
+      },
     },
   },
   plugins: [],

@@ -2,13 +2,14 @@
 import { useState, useEffect } from "react";
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { UseScroll } from '../hooks/UseScroll';
 import { message } from 'antd';
 import useNavigation from "../hooks/useNavigation";
 import { handleLogout as logout } from '../hooks/HandleLogin';
+import useIsMobile from "../hooks/useMobile";
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ');
@@ -21,6 +22,7 @@ type HomeNavbarProps = {
 const HomeNavbar = ({ userName }: HomeNavbarProps) => {
   const navigation = useNavigation();
   const isScrolled = UseScroll(); 
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState<number>(0);
 
@@ -107,21 +109,12 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
   };
 
   return (
-    <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-transparent'} transition duration-300 w-full fixed z-50`}>
-      {({ open }) => (
+    <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-transparent'} border-b transition duration-300 w-full fixed z-50`}>
+      {() => (
         <>
           <div className="mx-auto min-w-screen px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <span className="absolute -inset-0.5" />
-                  <span className="sr-only">Open main menu</span>
-                  {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                  )}
-                </Disclosure.Button>
               </div>
               <div className="flex flex-1 w-[100vw] items-center justify-center sm:items-stretch sm:justify-start">
               <Link to="/" className="flex items-center space-x-2">
@@ -158,12 +151,12 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
                     </span>
                   )}
                 </div>
-
+                {!isMobile && (
                 <Menu as="div" className="relative ml-3">
                   <div>
-                  <Menu.Button className="hover:text-[#7f0353] hover:bg-[#c2beba] rounded-md px-3 py-2 text-sm font-medium text-[#7f0353]">
+                  <Menu.Button className="hover:text-[#7f0353] hover:bg-[#c2beba]  border border-[#7f0353] rounded-md px-3 py-2 text-sm font-medium text-[#7f0353]">
                     <span className="sr-only">Open user menu</span>
-                    <span className={`${isScrolled ? 'text-[#7f0353] hover:text-[#7f0353]' : ''} font-bold rounded-md px-3 py-2 text-sm font-medium transition-colors`}>
+                    <span className={`${isScrolled ? 'text-[#7f0353] hover:text-[#7f0353]' : ''} hidden sm:inline lg:inline md:inline font-bold rounded-md px-3 py-2 text-sm font-medium transition-colors`}>
                       {formatUserName(userName)}
                     </span>
                   </Menu.Button>
@@ -210,6 +203,7 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
+                )}
               </div>
             </div>
           </div>

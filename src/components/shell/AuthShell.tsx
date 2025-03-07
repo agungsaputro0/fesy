@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../organisms/Navbar";
 import Footer from "../organisms/Footer";
+import MobileBottomNav from "../organisms/MobileBottomNav";
 
 type AppShellProps = {
    children: React.ReactNode;
@@ -15,6 +16,7 @@ const AuthShell = (props: AppShellProps) => {
                 {children}
             </div>
             <Footer />
+            <MobileBottomNav />
         </main>
     )
 }

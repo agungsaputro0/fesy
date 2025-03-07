@@ -18,13 +18,13 @@ const Home = () => {
                     <div className="w-full">
                         <div className="custom-slider-container">
                             <Banner images={images} />
+                            <PopularSection />
+                            <TabSection />
+                            <OurCommitment />
+                            <OurAchievements />
                         </div>
                     </div>
                 </div>
-                <PopularSection />
-                <TabSection />
-                <OurCommitment />
-                <OurAchievements />
                 <Footer />
             </Homeshell>
     )

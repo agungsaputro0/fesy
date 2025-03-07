@@ -11,7 +11,7 @@ const Logo: React.FC = () => {
       />
       <div style={{ color: '#5c595f', marginLeft: '15px' }}>
         <h3><b><span className="text-[#7f0353]">Fesy</span></b></h3>
-        <h5>Fashion - Exclusive - Secondhand - for You</h5>
+        <h5>E-commerce for your <b>pre-loved</b> clothes</h5>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useIsMobile from "../hooks/useMobile";
 import ProductCard from "../atoms/ProductCard";
 import product from "../../pseudo-db/product.json";
 
@@ -41,16 +42,17 @@ interface Order {
   orders: OrderItem[];
 }
 
-const itemsPerPage = 8; // Jumlah produk per halaman
+const itemsPerPage = 8;
 
 const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const orders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
 
-    // Ambil daftar produk yang sudah dibeli
     const purchasedProductIDs = new Set(
       orders.flatMap((order: Order) =>
         order.orders.flatMap((seller: OrderItem) =>
@@ -59,48 +61,78 @@ const ProductList = () => {
       )
     );
 
-    // Ambil produk tambahan & yang diperbarui dari localStorage
     const additionalProducts: Product[] = JSON.parse(localStorage.getItem("additionalProducts") || "[]");
     const updatedProducts: Product[] = JSON.parse(localStorage.getItem("updatedProduct") || "[]");
 
-    // Buat Map untuk produk yang diperbarui agar bisa diakses cepat berdasarkan productID
     const updatedProductMap = new Map(updatedProducts.map((p) => [p.productID, p]));
 
-    // Ambil daftar produk yang telah dihapus dari LocalStorage
     const deletedProducts: { productId: string }[] = JSON.parse(localStorage.getItem("productDeleted") || "[]");
     const deletedProductIDs = new Set(deletedProducts.map((item) => item.productId));
 
-    // Gabungkan semua produk (dari JSON, tambahan, dan yang diperbarui)
     const combinedProducts = [...product, ...additionalProducts];
 
-    // Filter produk:
     const finalProducts = combinedProducts
       .filter((p: Product) => 
-        !purchasedProductIDs.has(p.productID) && // Produk belum dibeli
-        !deletedProductIDs.has(p.productID) // Bukan produk yang sudah dihapus
+        !purchasedProductIDs.has(p.productID) &&
+        !deletedProductIDs.has(p.productID)
       )
-      .map((p: Product) => updatedProductMap.get(p.productID) || p); // Pakai versi update jika ada
+      .map((p: Product) => updatedProductMap.get(p.productID) || p);
 
     setFilteredProducts(finalProducts);
   }, []);
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  // Ambil kategori unik dari produk
+  const uniqueCategories = Array.from(
+    new Set(filteredProducts.flatMap((p) => p.category))
+  );
 
-  const displayedProducts = filteredProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  // Produk yang ditampilkan sesuai filter kategori
+  const displayedProducts = filteredProducts
+    .filter((p) => !selectedCategory || p.category.includes(selectedCategory))
+    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const totalPages = Math.ceil(
+    filteredProducts.filter((p) => !selectedCategory || p.category.includes(selectedCategory)).length / itemsPerPage
   );
 
   return (
-    <section>
-      <div className="pt-16 flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-4 w-full max-w-full">
+    <section className="flex justify-center">
+      <div className={`${isMobile ? 'px-0' : 'px-4 ml-16'} pt-16 mb-20 transition-all w-full max-w-screen`}>
+        <div className={`${isMobile ? 'pt-6 pb-6' : 'p-6'} bg-white/90 rounded-lg shadow-lg border border-gray-400 space-y-4 w-full`}>
+
+          {/* 🔹 Pilihan Kategori */}
+          <div className="overflow-x-auto flex gap-3 border-b pb-3 px-2 sm:px-4 mr-1 ml-1">
+            <button
+              className={`px-4 py-2 rounded-full text-sm transition-all ${
+                selectedCategory === null ? "bg-[#7f0353] text-white" : "bg-gray-200"
+              }`}
+              onClick={() => setSelectedCategory(null)}
+            >
+              Semua
+            </button>
+            {uniqueCategories.map((category) => (
+              <button
+                key={category}
+                className={`px-4 py-2 rounded-full text-sm transition-all ${
+                  selectedCategory === category ? "bg-[#7f0353] text-white" : "bg-gray-200"
+                }`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
           <div className="p-4">
             {/* Grid Produk */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {displayedProducts.map((product) => (
-                <ProductCard key={product.productID} product={product} />
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-2 mediumgap:grid-cols-3 largegap:grid-cols-4 gap-4 largegap:gap-12 mediumgap:gap-12 sm:gap-12">
+              {displayedProducts.length > 0 ? (
+                displayedProducts.map((product) => (
+                  <ProductCard key={product.productID} product={product} />
+                ))
+              ) : (
+                <p className="text-center text-gray-500 w-full col-span-full">Tidak ada produk dalam kategori ini.</p>
+              )}
             </div>
 
             {/* Pagination */}
