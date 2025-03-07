@@ -6,7 +6,15 @@
     "telepon": "081294599862",
     "fotoProfil": "",
     "alamat": [
-      { "id": 1, "label": "Kantor", "detail": "Jl. Sudirman No. 1, Jakarta", "alamatDipilih": true }
+      {
+        "id": 1,
+        "label": "Kantor",
+        "detail": "Jl. Sudirman No. 1, Jakarta",
+        "kabupaten": "Jakarta Timur",
+        "provinsi": "DKI Jakarta",
+        "kodePos": "13230",
+        "alamatDipilih": true
+      }
     ],
     "role": 1,
     "password": "sunibian10"
@@ -18,8 +26,24 @@
     "telepon": "08123456789",
     "fotoProfil": "assets/img/fotoProfil/FP2.jpg",
     "alamat": [
-      { "id": 2, "label": "Rumah", "detail": "Jl. Merdeka No. 10, Jakarta", "alamatDipilih": true },
-      { "id": 3, "label": "Kantor", "detail": "Jl. Sudirman No. 45, Jakarta", "alamatDipilih": false }
+      {
+        "id": 2,
+        "label": "Rumah",
+        "detail": "Jl. Merdeka No. 10, Jakarta",
+        "kabupaten": "Jakarta Pusat",
+        "provinsi": "DKI Jakarta",
+        "kodePos": "10110",
+        "alamatDipilih": true
+      },
+      {
+        "id": 3,
+        "label": "Kantor",
+        "detail": "Jl. Sudirman No. 45, Jakarta",
+        "kabupaten": "Jakarta Selatan",
+        "provinsi": "DKI Jakarta",
+        "kodePos": "10250",
+        "alamatDipilih": false
+      }
     ],
     "role": 2,
     "password": "sunibianBudi"
@@ -31,7 +55,15 @@
     "telepon": "08129876543",
     "fotoProfil": "",
     "alamat": [
-      { "id": 4, "label": "Rumah", "detail": "Jl. Diponegoro No. 5, Bandung", "alamatDipilih": true }
+      {
+        "id": 4,
+        "label": "Rumah",
+        "detail": "Jl. Diponegoro No. 5, Bandung",
+        "kabupaten": "Bandung",
+        "provinsi": "Jawa Barat",
+        "kodePos": "40115",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "siti123"
@@ -43,7 +75,15 @@
     "telepon": "08137654321",
     "fotoProfil": "",
     "alamat": [
-      { "id": 5, "label": "Rumah", "detail": "Jl. Gatot Subroto No. 8, Surabaya", "alamatDipilih": true }
+      {
+        "id": 5,
+        "label": "Rumah",
+        "detail": "Jl. Gatot Subroto No. 8, Surabaya",
+        "kabupaten": "Surabaya",
+        "provinsi": "Jawa Timur",
+        "kodePos": "60292",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "ahmad123"
@@ -55,8 +95,24 @@
     "telepon": "08136547892",
     "fotoProfil": "",
     "alamat": [
-      { "id": 6, "label": "Rumah", "detail": "Jl. Thamrin No. 12, Yogyakarta", "alamatDipilih": true },
-      { "id": 7, "label": "Kantor", "detail": "Jl. Malioboro No. 3, Yogyakarta", "alamatDipilih": false }
+      {
+        "id": 6,
+        "label": "Rumah",
+        "detail": "Jl. Thamrin No. 12, Yogyakarta",
+        "kabupaten": "Yogyakarta",
+        "provinsi": "DI Yogyakarta",
+        "kodePos": "55212",
+        "alamatDipilih": true
+      },
+      {
+        "id": 7,
+        "label": "Kantor",
+        "detail": "Jl. Malioboro No. 3, Yogyakarta",
+        "kabupaten": "Yogyakarta",
+        "provinsi": "DI Yogyakarta",
+        "kodePos": "55213",
+        "alamatDipilih": false
+      }
     ],
     "role": 2,
     "password": "dewiROX"
@@ -68,7 +124,15 @@
     "telepon": "08121234567",
     "fotoProfil": "assets/img/fotoProfil/FP6.jpg",
     "alamat": [
-      { "id": 8, "label": "Rumah", "detail": "Jl. Ahmad Yani No. 22, Medan", "alamatDipilih": true }
+      {
+        "id": 8,
+        "label": "Rumah",
+        "detail": "Jl. Ahmad Yani No. 22, Medan",
+        "kabupaten": "Medan",
+        "provinsi": "Sumatera Utara",
+        "kodePos": "20111",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "rizky123"
@@ -80,7 +144,15 @@
     "telepon": "08127894561",
     "fotoProfil": "",
     "alamat": [
-      { "id": 9, "label": "Rumah", "detail": "Jl. Hayam Wuruk No. 10, Semarang", "alamatDipilih": true }
+      {
+        "id": 9,
+        "label": "Rumah",
+        "detail": "Jl. Hayam Wuruk No. 10, Semarang",
+        "kabupaten": "Semarang",
+        "provinsi": "Jawa Tengah",
+        "kodePos": "50123",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "lina123"
@@ -92,7 +164,15 @@
     "telepon": "08136541237",
     "fotoProfil": "assets/img/fotoProfil/FP8.jpg",
     "alamat": [
-      { "id": 10, "label": "Rumah", "detail": "Jl. Panglima Polim No. 7, Bali", "alamatDipilih": true }
+      {
+        "id": 10,
+        "label": "Rumah",
+        "detail": "Jl. Panglima Polim No. 7, Bali",
+        "kabupaten": "Denpasar",
+        "provinsi": "Bali",
+        "kodePos": "80113",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "fajaROX"
@@ -104,7 +184,15 @@
     "telepon": "08123984756",
     "fotoProfil": "",
     "alamat": [
-      { "id": 11, "label": "Rumah", "detail": "Jl. Pahlawan No. 15, Makassar", "alamatDipilih": true }
+      {
+        "id": 11,
+        "label": "Rumah",
+        "detail": "Jl. Pahlawan No. 15, Makassar",
+        "kabupaten": "Makassar",
+        "provinsi": "Sulawesi Selatan",
+        "kodePos": "90134",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "rina123"
@@ -116,7 +204,15 @@
     "telepon": "08128765432",
     "fotoProfil": "",
     "alamat": [
-      { "id": 12, "label": "Rumah", "detail": "Jl. Dipati Ukur No. 30, Bandung", "alamatDipilih": true }
+      {
+        "id": 12,
+        "label": "Rumah",
+        "detail": "Jl. Dipati Ukur No. 30, Bandung",
+        "kabupaten": "Bandung",
+        "provinsi": "Jawa Barat",
+        "kodePos": "40132",
+        "alamatDipilih": true
+      }
     ],
     "role": 2,
     "password": "yoga123"

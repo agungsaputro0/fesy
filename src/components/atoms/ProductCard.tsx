@@ -16,6 +16,7 @@ interface ProductProps {
   bisaTukar: boolean;
   userID: number;
   size: string;
+  media?: { url: string; type: string }[];
 }
 
 const ProductCard = ({ product }: { product: ProductProps }) => {
@@ -28,7 +29,7 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
     const seller = usersData.find((user) => user.id === product.userID);
     if (seller && Array.isArray(seller.alamat)) {
       const selectedAddress = seller.alamat.find(addr => addr.alamatDipilih);
-      setSellerLocation(selectedAddress ? selectedAddress.detail : seller.alamat[0]?.detail || "Alamat tidak tersedia");
+      setSellerLocation(selectedAddress ? selectedAddress.provinsi : seller.alamat[0]?.provinsi || "Alamat tidak tersedia");
     }
 
     const orders = JSON.parse(localStorage.getItem("orders") || "[]");
@@ -58,12 +59,15 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
     merk,
     condition,
     category,
-    color,
     bisaTukar,
     size,
+    media
   } = product;
 
-  const image = images.length > 0 && images[0] ? images[0] : "assets/img/produk/dummy.jpg";
+  const image = images.length > 0 
+  ? images[0] 
+  : media?.find(m => m.type.startsWith("image/"))?.url || "assets/img/produk/dummy.jpg";
+
 
   return (
     <div
@@ -85,14 +89,16 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
 
       <div className="p-2">
         <h2 className="text-sm sm:text-md lg:text-lg font-semibold leading-tight line-clamp-2 overflow-hidden text-ellipsis">
-          {merk} {name}, {color}, {size}
+          {merk} {name}, {size}
         </h2>
-        <p className="text-gray-500 mt-1 text-xs sm:text-sm">Kategori: {category.join(", ")}</p>
+        <p className="text-gray-500 mt-1 text-xs sm:text-sm truncate max-w-[200px]">
+          Kategori: {category.join(", ")}
+        </p>
        {!isMobile && (
         <p className="text-gray-700 text-xs sm:text-sm">Kondisi: {condition}</p>
        )}
         <div className={`${isMobile ? '' : 'flex items-center justify-between' }  mt-1`}>
-          <p className="text-md sm:text-lg font-bold text-[#7f0353]">Rp {price.toLocaleString("id-ID")}</p>
+          <p className="text-md mt-1 mb-1 sm:text-lg font-bold text-[#7f0353]">Rp {price.toLocaleString("id-ID")}</p>
           {bisaTukar && (
             <span className={`${isMobile ? 'w-4/5' : '' } flex items-center gap-1 bg-green-200 text-green-800 text-xs mt-1 mb-1 sm:text-sm font-semibold px-2 py-1 rounded-lg animate-pulse`}>
               <SwapOutlined className="text-sm" /> Bisa Tukar

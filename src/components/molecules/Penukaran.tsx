@@ -4,7 +4,7 @@ import { UserSwitchOutlined, MessageOutlined, ShopOutlined, ExclamationCircleOut
 import { notification, Button, Form, Input, Checkbox, Modal } from "antd";
 import productData from "../../pseudo-db/product.json";
 import usersData from "../../pseudo-db/users.json";
-
+import useIsMobile from "../hooks/useMobile";
 interface Product {
     productID: string;
     userID: number;
@@ -50,7 +50,7 @@ const Penukaran = () => {
   const [userProducts, setUserProducts] = useState<Product[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const [mainImage, setMainImage] = useState("../assets/img/produk/dummy.jpg");
-
+  const isMobile = useIsMobile();
   useEffect(() => {
     if (selectedProduct?.images[0] && !selectedProduct.images[0].startsWith("blob:")) {
         setMainImage(selectedProduct.images[0]);
@@ -195,18 +195,6 @@ const Penukaran = () => {
     }
   }
 
-  const handleChat = () => {
-    if (!currentUser) {
-      notification.error({
-        message: "Mohon maaf!",
-        description: "Silakan Login terlebih dahulu!",
-      });
-      navigate("/login");
-    } else {
-      //nothing
-    }
-};
-
   if (!selectedProduct) return <p>Produk tidak ditemukan.</p>;
 
   const seller = usersData.find((user: UserProps) => user.id === selectedProduct.userID);
@@ -217,95 +205,113 @@ const Penukaran = () => {
   
 
   return (
-    <section>
-      <div className="pt-20 pl-6 pr-6 flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-4 w-full max-w-full">
-          <div style={{ padding: "20px" }}>
-            <div className="flex justify-between items-center border-b-2 border-gray-300 pb-4 mb-4">
-              <h2 className="text-2xl text-[#7f0353] font-semibold">
-                <UserSwitchOutlined className="w-8 h-8" /> Tukar Produk
-              </h2>
-                <Button onClick={() => navigate(-1)} type="default" className="bg-[#7f0353] text-white">
-                     Kembali
-                </Button>
-            </div>
-            <div className="flex gap-4">
-            <div className="p-4 w-2/5 border rounded-lg shadow-md">
-              <div className="border p-2 rounded-md mb-4">
-              <img
-                src={mainImage.startsWith("data:image/") ? mainImage : `../${mainImage}`}
-                alt={selectedProduct.name}
-                className="w-full h-[430px] object-cover rounded-lg shadow-md"
-                onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
-              />
-              <div className="flex gap-2 mt-3 overflow-x-auto">
-              {selectedProduct.images.length > 0 ? (
-                    selectedProduct.images.map((img, index) => {
-                    const isValidImage = img && (!img.startsWith("blob:") || img.startsWith("data:image/"));
-                    const displayedImage = isValidImage ? img.startsWith("data:image/") ? img : `../${img}` : "../assets/img/produk/dummy.jpg";
-                    console.log(img);
-                    return (
-                        <img
-                        key={index}
-                        src={displayedImage}
-                        alt={`${selectedProduct.name} - ${index + 1}`}
-                        className={`w-16 h-16 object-cover rounded-md cursor-pointer transition border-2 ${
-                            mainImage === img ? "border-[#7f0353] opacity-100" : "border-gray-300 opacity-70 hover:opacity-100"
-                        }`}
-                        onClick={() => setMainImage(isValidImage ? img : "assets/img/produk/dummy.jpg")}
-                        onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
-                        />
-                    );
-                    })
-                ) : (
-                    <img
-                    src="../assets/img/produk/dummy.jpg"
-                    alt="Gambar tidak tersedia"
-                    className="w-16 h-16 object-cover rounded-md border-2 border-gray-300"
-                    />
-                )}
-                </div>
-                <h1 className="text-2xl font-bold mb-2 mt-4">{selectedProduct.merk} {selectedProduct.name}</h1>
-                <p className="text-gray-700 text-sm">Kategori: {selectedProduct.category.join(", ")}</p>
-                <p className="text-gray-700 text-sm">Ukuran: {selectedProduct.size}</p>
-                <p className="text-gray-700 text-sm">Kondisi: {selectedProduct.condition}</p>
-                <p className="text-lg font-bold text-[#7f0353]">Rp {selectedProduct.price.toLocaleString("id-ID")}</p>
-                <div className="mt-2 mb-2 p-3 bg-gray-100 rounded-md">
+    <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
+    <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
+      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 py-6 space-y-4 w-full max-w-full">
+        <div className="p-[2px] sm:p-[20px]">
+            <div className="flex flex-col sm:flex-row items-center justify-between border-b-2 border-gray-300 pb-3 mb-4">
+                    <h2 className="flex items-center text-2xl text-[#7f0353]">
+                    <UserSwitchOutlined className="w-8 h-8" /> Tukar Produk
+                        </h2>
+                        </div>
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Kiri: Detail Produk */}
+              <div className="p-4 w-full lg:w-2/5 border rounded-lg shadow-md">
+                <div className="border p-2 rounded-md mb-4">
+                  {/* Gambar Utama */}
+                  <img
+                    src={mainImage.startsWith("data:image/") ? mainImage : `../${mainImage}`}
+                    alt={selectedProduct.name}
+                    className="w-full h-[300px] sm:h-[400px] object-cover rounded-lg shadow-md"
+                    onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
+                  />
+
+                  {/* Daftar Gambar */}
+                  <div className="flex gap-2 mt-3 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300">
+                    {selectedProduct.images.length > 0 ? (
+                      selectedProduct.images.map((img, index) => {
+                        const isValidImage = img && (!img.startsWith("blob:") || img.startsWith("data:image/"));
+                        const displayedImage = isValidImage ? (img.startsWith("data:image/") ? img : `../${img}`) : "../assets/img/produk/dummy.jpg";
+
+                        return (
+                          <img
+                            key={index}
+                            src={displayedImage}
+                            alt={`${selectedProduct.name} - ${index + 1}`}
+                            className={`w-16 h-16 object-cover rounded-md cursor-pointer border-2 transition ${
+                              mainImage === img ? "border-[#7f0353] opacity-100" : "border-gray-300 opacity-70 hover:opacity-100"
+                            }`}
+                            onClick={() => setMainImage(isValidImage ? img : "../assets/img/produk/dummy.jpg")}
+                            onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
+                          />
+                        );
+                      })
+                    ) : (
+                      <img
+                        src="../assets/img/produk/dummy.jpg"
+                        alt="Gambar tidak tersedia"
+                        className="w-16 h-16 object-cover rounded-md border-2 border-gray-300"
+                      />
+                    )}
+                  </div>
+
+                  {/* Info Produk */}
+                  <h1 className="text-lg sm:text-2xl font-bold mt-4">{selectedProduct.merk} {selectedProduct.name}</h1>
+                  <p className="text-gray-700 text-xs sm:text-sm">Kategori: {selectedProduct.category.join(", ")}</p>
+                  <p className="text-gray-700 text-xs sm:text-sm">Ukuran: {selectedProduct.size}</p>
+                  <p className="text-gray-700 text-xs sm:text-sm">Kondisi: {selectedProduct.condition}</p>
+                  <p className="text-lg font-bold text-[#7f0353]">Rp {selectedProduct.price.toLocaleString("id-ID")}</p>
+
+                  {/* Deskripsi */}
+                  <div className="mt-2 p-3 bg-gray-100 rounded-md">
                     <h3 className="font-semibold">Deskripsi Produk</h3>
                     <p className="text-sm text-gray-600 mt-1">{selectedProduct.description}</p>
-                </div>
-                {seller && (
-                    <div className="mt-6 p-4 border-t border-gray-300" onClick={() => goToSellerPage(seller.id)}>
-                        <h3 className="text-lg font-semibold">Informasi Penjual</h3>
-                        <div className="flex items-center gap-4 mt-2">
-                        <img
-                            src={seller.fotoProfil ? `../${seller.fotoProfil}` : "../assets/img/fotoProfil/user.png"}
-                            onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
-                            alt={seller.nama}
-                            className="w-14 h-14 rounded-full object-cover border"
-                        />
-                        <div>
-                            <p className="font-medium">{seller.nama}</p>
-                            <p className="text-sm text-gray-600">📞 {seller.telepon}</p>
-                            <p className="text-sm text-gray-600">📍 {seller.alamat[0]?.detail || "Alamat tidak tersedia"}</p>
-                        </div>
-                        <div className="ml-auto flex flex-col gap-2">
-                         <Button onClick={() => handleChat()} type="primary" className="bg-[#5c595f] flex items-center gap-1">
-                            <MessageOutlined /> 
-                                </Button>
-                                <Button
-                                type="default"
-                                className="border-gray-400 text-gray-700 flex items-center gap-1"
-                                >
-                                <ShopOutlined /> 
-                                </Button>
-                        </div>
-                        </div>
-                    </div>
-                    )}
+                  </div>
+
+                  {/* Info Penjual */}
+                  {seller && (
+          <div className="mt-6 py-4 border-t border-gray-300" onClick={() => goToSellerPage(seller.id)}>
+            <h3 className="text-lg font-semibold">Informasi Penjual</h3>
+            <div className="sm:flex items-center gap-4 mt-2">
+              <div className="flex gap-4">
+              <img
+                src={seller.fotoProfil ? `../${seller.fotoProfil}` : "../assets/img/fotoProfil/user.png"}
+                onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
+                alt={seller.nama}
+                className="w-14 h-14 rounded-full object-cover border"
+              />
+              <div>
+                <p className="font-medium">{seller.nama}</p>
+                <p className="text-sm text-gray-600">📞 {seller.telepon}</p>
+                <p className="text-sm text-gray-600">📍 {seller.alamat[0]?.detail || "Alamat tidak tersedia"}</p>
               </div>
+              </div>
+              {isMobile ? (
+                <>
+                  <div className="ml-auto flex flex-col gap-2">
+                 
+                      <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
+                        <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                          <MessageOutlined /> Chat
+                        </button>
+                        <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                          <ShopOutlined /> Toko Pengguna
+                        </button>
+                      </div>
+                     
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
             </div>
-            <div className="p-4 w-3/5 border rounded-lg shadow-md">
+          </div>
+        )}
+                </div>
+              </div>
+
+              {/* Kanan: Pilih Barang untuk Ditukar */}
+              <div className="p-4 w-full lg:w-3/5 border rounded-lg shadow-md">
             <h3 className="text-lg font-semibold mb-2">Pilih Barang untuk Ditukar</h3>
               <div>
               <Form onFinish={handleSubmit} layout="vertical">
@@ -315,7 +321,7 @@ const Penukaran = () => {
                         {userProducts.map((p) => (
                             <label
                                 key={p.productID}
-                                className={`border p-2 rounded-md cursor-pointer flex items-center transition-all ${
+                                className={`border p-2 sm:rounded-md cursor-pointer flex items-center transition-all ${
                                     selectedProducts.includes(p.productID) ? "border-[#7f0353] bg-pink-100" : "hover:border-blue-300"
                                 }`}
                             >
@@ -352,6 +358,7 @@ const Penukaran = () => {
               </div>
             </div>
             </div>
+
           </div>
         </div>
       </div>

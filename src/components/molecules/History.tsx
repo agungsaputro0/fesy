@@ -1,17 +1,10 @@
 import { useEffect, useState } from "react";
 import { notification, Modal } from "antd";
+import { FaShoppingBag } from "react-icons/fa";
 import { HistoryOutlined, SafetyOutlined, SendOutlined } from "@ant-design/icons";
 import usersData from "../../pseudo-db/users.json";
 import productData from "../../pseudo-db/product.json";
-
-type Item = {
-  image: string;
-  name: string;
-  quantity: number;
-  price: number;
-  statusText: string;
-  isRequestedProduct?: boolean;
-};
+import useIsMobile from "../hooks/useMobile";
 
 
 type User = {
@@ -68,7 +61,7 @@ const History = () => {
   const [selectedProducts, setSelectedProducts] = useState<Record<number, Set<string>>>({});
   const [buyerCheckboxes, setBuyerCheckboxes] = useState<Record<number, boolean>>({});
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
-
+  const isMobile = useIsMobile();
 // Handler saat checkbox diklik
 const handleCheckboxChange = (
   buyerID: number, 
@@ -116,6 +109,21 @@ const handleCheckboxChange = (
     return updated;
   });
 };
+
+const getStatusColor = (status: Order["status"]) => {
+  switch (status) {
+    case "Menunggu Konfirmasi":
+      return "bg-orange-100 text-orange-600";
+    case "Diproses":
+      return "bg-blue-100 text-blue-600";
+    case "Dikirim":
+      return "bg-purple-100 text-purple-600";
+    case "Selesai":
+      return "bg-green-100 text-green-600";
+    default:
+      return "bg-gray-100 text-gray-600";
+  }
+};  
 
 const getOrderButtonText = (buyerID: number) => {
   if (!selectedProducts[buyerID] || selectedProducts[buyerID].size === 0) {
@@ -554,12 +562,12 @@ const processOrder = (buyerID: number) => {
       .filter((exchange) => exchange.id.toLowerCase().includes(searchTerm.toLowerCase()));
       
   return (
-    <section>
-      <div className="pt-20 pl-6 pr-6 flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-4 w-full max-w-full">
-          <div style={{ padding: "20px" }}>
-            <div className="flex justify-between items-center border-b-2 border-gray-300 pb-3">
-            <h2 style={{ display: "flex", fontSize: "18pt", color: "#7f0353", margin: 0 }}>
+    <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
+    <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
+      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 p-6 space-y-4 w-full max-w-full">
+        <div className="p-[2px] sm:p-[20px]">
+        <div className="flex flex-col sm:flex-row items-center justify-between border-b-2 border-gray-300 pb-3">
+        <h2 className="flex items-center text-2xl text-[#7f0353]">
               <HistoryOutlined className="w-9 h-9" />| Riwayat Transaksi
             </h2>
             </div>
@@ -587,7 +595,7 @@ const processOrder = (buyerID: number) => {
                     <input
                       type="text"
                       placeholder="Cari produk..."
-                      className="border border-gray-300 px-3 py-2 rounded-lg w-64"
+                      className="border border-gray-300 px-3 py-2 rounded-lg w-full"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -612,10 +620,10 @@ const processOrder = (buyerID: number) => {
                                 <img
                                       src={data.buyerProfilPhoto || "../assets/img/fotoProfil/user.png"}
                                       alt={data.buyerName}
-                                      className="w-6 h-6 mr-2 rounded-full object-cover border"
+                                      className="w-6 h- rounded-full object-cover border"
                                       onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
                                     />
-                            <span>Pembeli: {data.buyerName}</span>
+                            <span className="text-md sm:text-lg">{data.buyerName}</span>
                           </h3>
 
                           {/* Produk yang dibeli oleh pembeli ini */}
@@ -633,15 +641,15 @@ const processOrder = (buyerID: number) => {
                               <img
                                 src={product.images[0]}
                                 alt={product.name}
-                                className="w-16 h-16 object-cover rounded"
+                                className="h-14 w-14 sm:w-16 sm:h-16 object-cover rounded"
                               />
                               {/* Info Produk */}
                               <div className="flex flex-col w-full">
                                 {/* Nama Produk & Status */}
                                 <div className="flex justify-between items-center w-full">
-                                  <p className="text-lg font-medium">{product.name}</p>
-                                  <span className={`px-3 py-1 rounded text-sm font-semibold ${product.status === 1 ? "bg-orange-100 text-orange-600" : "bg-blue-100 text-blue-600"}`}>
-                                    {product.statusText}
+                                  <p className="text-sm sm:text-lg font-medium">{product.name}</p>
+                                  <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${product.status === 1 ? "bg-orange-100 text-orange-600" : "bg-blue-100 text-blue-600"}`}>
+                                  {isMobile ? product.statusText.split(" ")[0] : product.statusText }
                                   </span>
                                 </div>
                                 {/* Harga Produk */}
@@ -672,144 +680,106 @@ const processOrder = (buyerID: number) => {
                   ) : activeTab === "BELI" ? (
                     <>
                     {/* Tab Navigasi */}
-                    <div className="flex justify-center pt-8 space-x-6 border-b-2 border-gray-200 mb-6 relative">
-                      {["SEMUA", "MENUNGGU", "DIPROSES", "DIKIRIM", "SELESAI"].map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveTabJual(tab as "SEMUA" | "MENUNGGU" | "DIPROSES" | "DIKIRIM" | "SELESAI")}
-                          className={`pb-2 text-lg font-semibold relative ${
-                            activeTabJual === tab ? "text-black" : "text-gray-400"
-                          }`}
-                        >
-                          {tab}
-                          <span
-                            className={`absolute left-0 bottom-[-2px] h-[3px] w-full bg-black transition-all duration-300 ${
-                              activeTabJual === tab ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                    <div className="w-full overflow-y-hidden flex justify-center pb-2 overflow-x-auto border-b-2 border-gray-200 mb-6 relative">
+                      <div className="flex justify-center space-x-6 pt-8 ml-8 sm:mx-4 max-w-full">
+                        {["MENUNGGU", "DIPROSES", "DIKIRIM", "SELESAI", "SEMUA"].map((tab) => (
+                          <button
+                            key={tab}
+                            onClick={() => setActiveTabJual(tab as any)}
+                            className={`pb-2 text-xs sm:text-lg font-semibold relative whitespace-nowrap ${
+                              activeTabJual === tab ? "text-black" : "text-gray-400"
                             }`}
-                          />
-                        </button>
-                      ))}
+                          >
+                            {tab}
+                            <span
+                              className={`absolute left-0 bottom-[-2px] h-[3px] w-full bg-black transition-all duration-300 ${
+                                activeTabJual === tab ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Input Pencarian */}
                     <input
                       type="text"
-                      placeholder="Cari ID atau Nama Produk"
+                      placeholder="Cari Merk atau Nama Produk"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="w-full p-2 border rounded-md mb-4"
                     />
 
                     {/* Filter Produk Sesuai Tab */}
-                    {filteredOrders.length === 0 ? (
-                      <p className="text-center text-gray-500">Tidak ada pesanan di kategori ini.</p>
-                    ) : (
-                      <div className="space-y-4">
-                    {filteredOrders.map((order) => {
-
-                      // Kelompokkan item berdasarkan penjual
-                      const itemsBySeller = order.items.reduce((acc: any, item: any) => {
-                        // Jika penjual belum ada di dalam accumulator, buat array untuknya
-                        if (!acc[item.seller]) {
-                          acc[item.seller] = [];
-                        }
-                        // Tambahkan item ke dalam kelompok penjual
-                        acc[item.seller].push(item);
-                        return acc;
-                      }, {});
-
-                      // Hitung grand total
-                      const grandTotal = order.items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
-
-                      return (
-                        <div key={order.id} className="border p-4 rounded-lg shadow-sm">
-                          {/* Info Pesanan */}
-                          <div className="flex justify-between items-center mb-2">
-                            <p className="text-gray-700 text-sm">ID: {order.id} | {order.date}</p>
-                          </div>
-
-                          {/* Kelompokkan Produk berdasarkan Penjual */}
-                          {Object.keys(itemsBySeller).map((sellerName) => {
-                            const sellerItems = itemsBySeller[sellerName];
-
-                            return (
-                              <div key={sellerName} className="border-t pt-4">
-                                {/* Info Penjual */}
-                                <div className="mb-2">
-                                  <h3 className="text-lg font-semibold text-gray-700">Penjual: {sellerName}</h3>
-                                </div>
-
-                                {/* Daftar Produk dalam Pesanan untuk Penjual ini */}
-                                {sellerItems.map((item: Item, index: number) => (
-                                  <div key={index} className="flex border-b p-4 items-center space-x-3">
-                                    {/* Gambar Produk */}
-                                    <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-
-                                    {/* Detail Produk */}
-                                    <div className="flex-1">
-                                      <p className="text-lg font-medium">{item.name}</p>
-                                      <p className="text-gray-500 text-sm">
-                                        {item.quantity} x Rp{item.price.toLocaleString()}
-                                      </p>
-                                    </div>
-
-                                    {/* Status Produk */}
-                                    <span
-                                      className={`px-3 py-1 rounded text-sm font-semibold ${
-                                        item.statusText === "Menunggu Konfirmasi"
-                                          ? "bg-orange-100 text-orange-600"
-                                          : item.statusText === "Diproses"
-                                          ? "bg-blue-100 text-blue-600"
-                                          : item.statusText === "Siap Dikirim"
-                                          ? "bg-green-100 text-green-600"
-                                          : "bg-gray-200 text-gray-600"
-                                      }`}
-                                    >
-                                      {item.statusText}
-                                    </span>
-                                  </div>
-                                ))}
-                              </div>
-                            );
-                          })}
-
-                          {/* Total Pesanan dan Tombol Detail */}
-                          <div className="mt-2 text-right">
-                            <p className="font-semibold">
-                              Total Harga Produk:{" "}
-                              <span className="text-xl font-bold text-[#7f0353]">
-                                Rp {grandTotal.toLocaleString()}
-                              </span>
-                            </p>
-                            <button className="bg-[#7f0353] text-white h-[35px] mt-4 rounded w-[200px] text-sm font-semibold">
-                              Lihat Detail
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                    </div>
-                    )}
+                     {filteredOrders.length === 0 ? (
+                                          <p className="text-center text-gray-500 mt-4">Tidak ada pesanan di kategori ini.</p>
+                                        ) : (
+                                          <div className="space-y-6">
+                                            {filteredOrders.map((order) => (
+                                              <div 
+                                                key={order.id} 
+                                                className="border p-4 rounded-lg shadow-md transition duration-300 hover:shadow-lg bg-white flex flex-col justify-between w-full"
+                                              >
+                                                {/* Header Pesanan */}
+                                                <div>
+                                                  <div className="flex justify-between items-center mb-3 border-b pb-3">
+                                                    <p className="text-gray-700 font-bold flex text-xs sm:text-sm"><FaShoppingBag className="text-sm" />&nbsp;Belanja | {order.date}</p>
+                                                    <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${getStatusColor(order.status)}`}>
+                                                        {isMobile ? order.status.split(" ")[0] : order.status }
+                                                    </span>
+                                                  </div>
+                    
+                                                  {/* Daftar Barang */}
+                                                  <div className="space-y-3">
+                                                    {order.items?.map((item, index) => (
+                                                      <div key={index} className="flex items-center space-x-3">
+                                                        <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-lg" />
+                                                        <div className="flex flex-col">
+                                                          <p className="text-sm sm:text-base font-medium">{item.name}</p>
+                                                          <p className="text-gray-500 text-xs sm:text-sm">{item.quantity} x Rp{item.price.toLocaleString()}</p>
+                                                        </div>
+                                                      </div>
+                                                    ))}
+                                                  </div>
+                                                </div>
+                    
+                                                {/* Total & Tombol (Tetap di Bawah) */}
+                                                <div className="mt-4 text-right border-t pt-1">
+                                                  <p className="font-semibold text-sm sm:text-base">
+                                                    Total Pesanan: <span className="text-lg font-bold text-[#7f0353]">Rp {order.total.toLocaleString()}</span>
+                                                  </p>
+                                                  <button className="bg-[#7f0353] text-white h-[40px] mt-3 rounded-lg w-full sm:w-[180px] text-sm font-semibold transition duration-300 hover:bg-[#9a0465] active:scale-95">
+                                                    Lihat Detail
+                                                  </button>
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        )}
                   </>
 
                   ) : (
                     <>
                     {/* Tab Navigasi */}
-                    <div className="flex justify-center pt-8 space-x-6 border-b-2 border-gray-200 mb-6 relative">
-                      {["SEMUA", "MENUNGGU", "DIPROSES", "SELESAI"].map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveTabJual(tab as "SEMUA" | "MENUNGGU" | "DIPROSES" | "DIKIRIM" | "SELESAI")}
-                          className={`pb-2 text-lg font-semibold relative ${activeTabJual === tab ? "text-black" : "text-gray-400"}`}
-                        >
-                          {tab}
-                          <span
-                            className={`absolute left-0 bottom-[-2px] h-[3px] w-full bg-black transition-all duration-300 ${
-                              activeTabJual === tab ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                    <div className="w-full overflow-y-hidden flex justify-center pb-2 overflow-x-auto border-b-2 border-gray-200 mb-6 relative">
+                      <div className="flex justify-center space-x-6 pt-8 ml-8 sm:mx-4 max-w-full">
+                        {["MENUNGGU", "DIPROSES", "DIKIRIM", "SELESAI", "SEMUA"].map((tab) => (
+                          <button
+                            key={tab}
+                            onClick={() => setActiveTabJual(tab as any)}
+                            className={`pb-2 text-xs sm:text-lg font-semibold relative whitespace-nowrap ${
+                              activeTabJual === tab ? "text-black" : "text-gray-400"
                             }`}
-                          />
-                        </button>
-                      ))}
+                          >
+                            {tab}
+                            <span
+                              className={`absolute left-0 bottom-[-2px] h-[3px] w-full bg-black transition-all duration-300 ${
+                                activeTabJual === tab ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
                     {/* Input Pencarian */}

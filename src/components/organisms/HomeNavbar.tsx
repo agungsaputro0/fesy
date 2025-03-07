@@ -143,7 +143,7 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <div onClick={handleClick}  className="relative p-2 text-[#7f0353] hover:text-[#5c595f]">
+                <div onClick={handleClick}  className="relative p-2 mr-2 text-[#7f0353] hover:text-[#5c595f]">
                   <ShoppingCartIcon className="h-6 w-6" />
                   {cartCount > 0 && (
                     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-2">

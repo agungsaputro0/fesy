@@ -97,7 +97,7 @@ const ProductList = () => {
 
   return (
     <section className="flex justify-center">
-      <div className={`${isMobile ? 'px-0' : 'px-4 ml-16'} pt-16 mb-20 transition-all w-full max-w-screen`}>
+      <div className={`${isMobile ? 'px-0' : 'px-10 ml-16'} pt-16 mb-20 transition-all w-full max-w-screen`}>
         <div className={`${isMobile ? 'pt-6 pb-6' : 'p-6'} bg-white/90 rounded-lg shadow-lg border border-gray-400 space-y-4 w-full`}>
 
           {/* 🔹 Pilihan Kategori */}

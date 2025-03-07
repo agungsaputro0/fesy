@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Button, Radio, Input, Form, notification } from "antd";
-import { EnvironmentOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined, EditOutlined } from "@ant-design/icons";
 
 interface Address {
   id: number;
@@ -121,24 +121,27 @@ const AddressPanel = () => {
   
   return (
     <div className="mb-4 p-4 border rounded shadow">
-    <h3 className="font-semibold text-lg flex items-center gap-2 text-[#7f0353]">
+    <h3 className="font-semibold text-lg flex border-b pb-3 items-center gap-2 text-[#7f0353]">
     <EnvironmentOutlined /> Alamat Pengiriman
     </h3>
     
     {selectedAddress && (
-      <div className="grid grid-cols-[auto,1fr,auto] gap-8 items-center justify-center border-b p-3 w-full">
+      <div className="flex flex-col gap-2 justify-center border-b p-3 w-full">
       <span className="font-bold">
-      {user?.nama} ({user?.telepon})
+        {user?.nama} ({user?.telepon})
       </span>
-      <span className="text-gray-700">{formatAddress(selectedAddress)}</span>
-      <Button
-      type="primary"
-      className="bg-[#7f0353] flex items-center h-[30px]"
-      onClick={() => setIsModalOpen(true)}
-      >
-      Ubah
-      </Button>
+      <div className="flex flex-col md:flex-row md:items-center w-full gap-2">
+        <span className="text-gray-700">{formatAddress(selectedAddress)}</span>
+        <Button
+          type="primary"
+          className="bg-[#7f0353] flex items-center h-[30px] w-max"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <EditOutlined /> Ubah
+        </Button>
       </div>
+    </div>
+
     )}
     
     {/* Modal Pilih Alamat */}

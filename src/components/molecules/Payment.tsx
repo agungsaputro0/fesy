@@ -103,13 +103,15 @@ const Payment = () => {
   };
 
   return (
-    <section>
-      <div className="pt-20 pl-6 pr-6 flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-6 w-full max-w-full">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">
+    <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
+    <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
+      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 p-6 space-y-4 w-full max-w-full">
+        <div className="p-[2px] sm:p-[20px]">
+        <div className="flex flex-col sm:flex-row items-center justify-between border-b-2 border-gray-300 pb-3">
+        <h2 className="flex items-center text-2xl text-[#7f0353]">
               <CreditCardOutlined />&nbsp; Pembayaran
             </h2>
+            </div>
             <div className="mt-4 p-4 bg-gray-100 rounded-lg">
               <p className="text-gray-700">Total Pembayaran:</p>
               <p className="text-xl font-bold text-[#7f0353]">Rp{totalAmount.toLocaleString()}</p>

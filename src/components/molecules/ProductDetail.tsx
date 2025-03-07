@@ -12,11 +12,13 @@ import {
   MessageOutlined,
   ArrowLeftOutlined,
   WarningOutlined,
-  ClockCircleOutlined
+  ClockCircleOutlined,
+  PlayCircleOutlined
 } from "@ant-design/icons";
 import productsData from "../../pseudo-db/product.json";
 import usersData from "../../pseudo-db/users.json";
 import EditProductModal from "./EditProductModal";
+import useIsMobile from "../hooks/useMobile";
 
 interface ProductProps {
   productID: string;
@@ -31,6 +33,7 @@ interface ProductProps {
   dikirimDari: string;
   size: string;
   description?: string;
+  media?: { url: string; type: string }[];
 }
 
 interface UserProps {
@@ -68,7 +71,9 @@ const ProductDetail = () => {
     ...p,
     images: p.images || [],
     description: p.description || "",
+    media: p.media || [],
   }));
+  const isMobile = useIsMobile();
 
   const handleDelete = () => {
     setIsModalVisible(true);
@@ -83,10 +88,12 @@ const ProductDetail = () => {
       });
       navigate("/login");
     } else {
-      if (currentUser.role === 2) {
-        navigate(`/Seller/${sellerID}`);
-      } else {
-        navigate(`/SellerPage/${sellerID}`);
+      if(!isOwner){
+        if (currentUser.role === 2) {
+          navigate(`/Seller/${sellerID}`);
+        } else {
+          navigate(`/SellerPage/${sellerID}`);
+        }
       }
     }
   }
@@ -166,10 +173,29 @@ const ProductDetail = () => {
     product = updatedProduct;
   }
   
-
-  const [mainImage, setMainImage] = useState(
-    product?.images[0] && !product.images[0].startsWith("blob:") ? product.images[0] : "../assets/img/produk/dummy.jpg"
+  const getDefaultMedia = () => {
+    // Gabungkan images dan media menjadi satu array
+    const allMedia = [
+      ...(product?.images || []), 
+      ...(product?.media?.map(m => m.url) || [])
+    ];
+  
+    if (!allMedia.length) {
+      return "../assets/img/produk/dummy.jpg"; // Jika kosong, pakai dummy image
+    }
+  
+    // Cek apakah ada video di daftar media
+    const video = allMedia.find(media => media.startsWith("data:video/"));
+  
+    return video || allMedia[0]; // Prioritas video, jika tidak ada pakai media pertama
+  };
+  
+  // State utama untuk menampilkan gambar/video
+  const [mainImage, setMainImage] = useState(() => 
+    getDefaultMedia().startsWith("blob:") ? "../assets/img/produk/dummy.jpg" : getDefaultMedia()
   );
+  
+  
 
   if (!product) {
     return <p className="text-center text-gray-500">Produk tidak ditemukan.</p>;
@@ -328,8 +354,8 @@ const handleAjukanTukar = () => {
 };
 
   return (
-    <section className="flex justify-center pt-24 mb-20">
-      <div className="bg-white/90 rounded-lg shadow-md border border-gray-400 p-6 space-y-4 w-full max-w-6xl">
+    <section className="flex justify-center pt-20 sm:pt-24 mb-20">
+      <div className="bg-white/90 sm:rounded-lg shadow-md border border-gray-400 p-6 space-y-4 w-full max-w-6xl">
         {/* Tombol Back di atas panel */}
         <button
           onClick={() => navigate(-1)}
@@ -340,56 +366,78 @@ const handleAjukanTukar = () => {
         </button>
 
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Gambar Produk */}
+          {/* Media Produk */}
           <div className="w-full md:w-1/2">
             <div className="relative">
-              {/* Gambar utama lebih panjang */}
               {isOrdered && (
                 <div className="absolute top-2 left-2 bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded shadow-lg animate-pulse flex items-center gap-1">
                   <ClockCircleOutlined /> MENUNGGU DIPROSES
                 </div>
               )}
+              
+              {(mainImage.startsWith("data:video/") || 
+            mainImage.endsWith(".mp4") || 
+            mainImage.endsWith(".webm") || 
+            mainImage.endsWith(".ogg")) ? (
+              <video
+                src={mainImage.startsWith("data:video/") ? mainImage : `../${mainImage}`}
+                controls
+                autoPlay
+                loop
+                className="w-full h-auto max-h-[430px] object-cover rounded-lg shadow-md"
+              >
+                Browser Anda tidak mendukung video tag.
+              </video>
+            ) : (
               <img
-                src={mainImage.startsWith("data:image/") ? mainImage : `../${mainImage}`}
+                src={mainImage.startsWith("data:image/") || mainImage.startsWith("blob:") ? mainImage : `../${mainImage}`}
                 alt={product.name}
-                className="w-full h-[430px] object-cover rounded-lg shadow-md"
+                className="w-full h-auto max-h-[430px] object-cover rounded-lg shadow-md"
                 onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
               />
-
+            )}
             </div>
-
-            {/* Carousel Thumbnail */}
+          
+           {/* Carousel Thumbnail */}
             <div className="flex gap-2 mt-3 overflow-x-auto">
-  {product.images.length > 0 ? (
-    product.images.map((img, index) => {
-      const isValidImage = img && (!img.startsWith("blob:") || img.startsWith("data:image/"));
-      const displayedImage = isValidImage ? img.startsWith("data:image/") ? img : `../${img}` : "../assets/img/produk/dummy.jpg";
-
-
-      return (
-        <img
-          key={index}
-          src={displayedImage}
-          alt={`${product.name} - ${index + 1}`}
-          className={`w-16 h-16 object-cover rounded-md cursor-pointer transition border-2 ${
-            mainImage === img ? "border-[#7f0353] opacity-100" : "border-gray-300 opacity-70 hover:opacity-100"
-          }`}
-          onClick={() => setMainImage(isValidImage ? img : "assets/img/produk/dummy.jpg")}
-          onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
-        />
-      );
-    })
-  ) : (
-    <img
-      src="../assets/img/produk/dummy.jpg"
-      alt="Gambar tidak tersedia"
-      className="w-16 h-16 object-cover rounded-md border-2 border-gray-300"
-    />
-  )}
-</div>
-
+            {([...product.images, ...(product.media?.map(m => m.url) || [])].length > 0) ? (
+              [...product.images, ...(product.media?.map(m => m.url) || [])].map((media, index) => (
+                <div
+                  key={index}
+                  className="relative w-16 h-16 cursor-pointer border-2 border-gray-300 rounded-md overflow-hidden"
+                  onClick={() => setMainImage(media)}
+                >
+                  {/* Jika media adalah video */}
+                  {media.startsWith("data:video/") || media.endsWith(".mp4") || media.endsWith(".webm") || media.endsWith(".ogg") ? (
+                    <>
+                      <video
+                        src={media.startsWith("data:video/") ? media : `../${media}`}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Ikon Play */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                        <PlayCircleOutlined className="text-white text-2xl" />
+                      </div>
+                    </>
+                  ) : (
+                    <img
+                      src={media.startsWith("data:image/") || media.startsWith("blob:") ? media : `../${media}`}
+                      alt={`${product.name} - ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
+                    />
+                  )}
+                </div>
+              ))
+            ) : (
+              <img
+                src="../assets/img/produk/dummy.jpg"
+                alt="Gambar tidak tersedia"
+                className="w-16 h-16 object-cover rounded-md border-2 border-gray-300"
+              />
+            )}
           </div>
-
+          </div>
           {/* Detail Produk */}
           <div className="w-full md:w-1/2">
             <h1 className="text-2xl font-bold mb-2">{product.merk} {product.name}</h1>
@@ -509,10 +557,11 @@ const handleAjukanTukar = () => {
         </div>
          {/* Panel Penjual */}
          {seller && (
-          <div className="mt-6 p-4 border-t border-gray-300" onClick={() => goToSellerPage(seller.id)}>
+          <div className="mt-6 py-4 border-t border-gray-300" onClick={() => goToSellerPage(seller.id)}>
             <h3 className="text-lg font-semibold">Informasi Penjual</h3>
-            <div className="flex items-center gap-4 mt-2">
-            <img
+            <div className="sm:flex items-center gap-4 mt-2">
+              <div className="flex gap-4">
+              <img
                 src={seller.fotoProfil ? `../${seller.fotoProfil}` : "../assets/img/fotoProfil/user.png"}
                 onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
                 alt={seller.nama}
@@ -523,12 +572,33 @@ const handleAjukanTukar = () => {
                 <p className="text-sm text-gray-600">📞 {seller.telepon}</p>
                 <p className="text-sm text-gray-600">📍 {seller.alamat[0]?.detail || "Alamat tidak tersedia"}</p>
               </div>
+              </div>
+              {isMobile ? (
+                <>
+                  <div className="ml-auto flex flex-col gap-2">
+                  {isOwner ? (
+                    <></>
+                    ) : (
+                      <>
+                      <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
+                        <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                          <MessageOutlined /> Chat
+                        </button>
+                        <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                          <ShopOutlined /> Toko Pengguna
+                        </button>
+                      </div>
+                      </>
+                    )}
+                  </div>
+                </>
+              ) : (
               <div className="ml-auto flex flex-col gap-2">
               {isOwner ? (
                 <></>
                 ) : (
                   <>
-                    <Button onClick={() => handleChat()} type="primary" className="bg-[#5c595f] flex items-center gap-1">
+                  <Button onClick={() => handleChat()} type="primary" className="bg-[#5c595f] flex items-center gap-1">
                    <MessageOutlined /> Chat dengan Penjual
                     </Button>
                     <Button
@@ -540,6 +610,7 @@ const handleAjukanTukar = () => {
                   </>
                 )}
               </div>
+              )}
             </div>
           </div>
         )}

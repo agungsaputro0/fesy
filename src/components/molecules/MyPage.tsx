@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
+import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaShoppingBag } from "react-icons/fa";
 import { UserOutlined } from "@ant-design/icons";
 import usersData from "../../pseudo-db/users.json";
 import productsData from "../../pseudo-db/product.json";
 import ProductCard from "../atoms/ProductCard";
 import TambahProdukModal from "./AddProductModal";
 import LevelingPanel from "../atoms/LevelingPanel";
+import useIsMobile from "../hooks/useMobile";
 
 type User = {
   id: number;
@@ -49,6 +50,7 @@ const MyPage = () => {
   const [userProducts, setUserProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
@@ -284,7 +286,7 @@ useEffect(() => {
                     <input
                       type="text"
                       placeholder="Cari produk..."
-                      className="border border-gray-300 px-3 py-2 rounded-lg w-64"
+                      className="border border-gray-300 ml-4 px-3 py-2 rounded-lg w-64"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -304,23 +306,25 @@ useEffect(() => {
                     </div>
                   ) : (
                     <>
-                    <div className="flex justify-center pt-8 space-x-6 border-b-2 border-gray-200 mb-6 relative">
-                      {["SEMUA", "MENUNGGU", "DIPROSES", "DIKIRIM", "SELESAI"].map((tab) => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveTabJual(tab as any)}
-                          className={`pb-2 text-lg font-semibold relative ${
-                            activeTabJual === tab ? "text-black" : "text-gray-400"
-                          }`}
-                        >
-                          {tab}
-                          <span
-                            className={`absolute left-0 bottom-[-2px] h-[3px] w-full bg-black transition-all duration-300 ${
-                              activeTabJual === tab ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                    <div className="w-full overflow-y-hidden flex justify-center pb-2 overflow-x-auto border-b-2 border-gray-200 mb-6 relative">
+                      <div className="flex justify-center space-x-6 pt-8 ml-8 sm:mx-4 max-w-full">
+                        {["MENUNGGU", "DIPROSES", "DIKIRIM", "SELESAI", "SEMUA"].map((tab) => (
+                          <button
+                            key={tab}
+                            onClick={() => setActiveTabJual(tab as any)}
+                            className={`pb-2 text-xs sm:text-lg font-semibold relative whitespace-nowrap ${
+                              activeTabJual === tab ? "text-black" : "text-gray-400"
                             }`}
-                          />
-                        </button>
-                      ))}
+                          >
+                            {tab}
+                            <span
+                              className={`absolute left-0 bottom-[-2px] h-[3px] w-full bg-black transition-all duration-300 ${
+                                activeTabJual === tab ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                              }`}
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <input
                       type="text"
@@ -330,31 +334,43 @@ useEffect(() => {
                       className="w-full p-2 border rounded-md mb-4"
                     />
                     {filteredOrders.length === 0 ? (
-                      <p className="text-center text-gray-500">Tidak ada pesanan di kategori ini.</p>
+                      <p className="text-center text-gray-500 mt-4">Tidak ada pesanan di kategori ini.</p>
                     ) : (
-                      <div className="space-y-4">
+                      <div className="space-y-6">
                         {filteredOrders.map((order) => (
-                          <div key={order.id} className="border p-4 rounded-lg shadow-sm">
-                            <div className="flex justify-between items-center mb-2">
-                              <p className="text-gray-700 text-sm">ID: {order.id} | {order.date}</p>
-                              <span className={`px-3 py-1 rounded text-sm font-semibold ${getStatusColor(order.status)}`}>
-                                {order.status}
-                              </span>
-                            </div>
-                            {order.items?.map((item, index) => (
-                              <div key={index} className="flex border-b p-4 items-center space-x-3">
-                                <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-                                <div>
-                                  <p className="text-lg font-medium">{item.name}</p>
-                                  <p className="text-gray-500 text-sm">{item.quantity} x Rp{item.price.toLocaleString()}</p>
-                                </div>
+                          <div 
+                            key={order.id} 
+                            className="border p-4 rounded-lg shadow-md transition duration-300 hover:shadow-lg bg-white flex flex-col justify-between w-full"
+                          >
+                            {/* Header Pesanan */}
+                            <div>
+                              <div className="flex justify-between items-center mb-3 border-b pb-3">
+                                <p className="text-gray-700 font-bold flex text-xs sm:text-sm"><FaShoppingBag className="text-sm" />&nbsp;Belanja | {order.date}</p>
+                                <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${getStatusColor(order.status)}`}>
+                                    {isMobile ? order.status.split(" ")[0] : order.status }
+                                </span>
                               </div>
-                            ))}
-                            <div className="mt-2 text-right">
-                              <p className="font-semibold">
-                                Total Pesanan: <span className="text-xl font-bold text-[#7f0353]">Rp {order.total.toLocaleString()}</span>
+
+                              {/* Daftar Barang */}
+                              <div className="space-y-3">
+                                {order.items?.map((item, index) => (
+                                  <div key={index} className="flex items-center space-x-3">
+                                    <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-lg" />
+                                    <div className="flex flex-col">
+                                      <p className="text-sm sm:text-base font-medium">{item.name}</p>
+                                      <p className="text-gray-500 text-xs sm:text-sm">{item.quantity} x Rp{item.price.toLocaleString()}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Total & Tombol (Tetap di Bawah) */}
+                            <div className="mt-4 text-right border-t pt-1">
+                              <p className="font-semibold text-sm sm:text-base">
+                                Total Pesanan: <span className="text-lg font-bold text-[#7f0353]">Rp {order.total.toLocaleString()}</span>
                               </p>
-                              <button className="bg-[#7f0353] text-white h-[35px] mt-4 rounded w-[200px] text-sm font-semibold">
+                              <button className="bg-[#7f0353] text-white h-[40px] mt-3 rounded-lg w-full sm:w-[180px] text-sm font-semibold transition duration-300 hover:bg-[#9a0465] active:scale-95">
                                 Lihat Detail
                               </button>
                             </div>
@@ -362,6 +378,7 @@ useEffect(() => {
                         ))}
                       </div>
                     )}
+
                     </>
                   )}
                 </div>

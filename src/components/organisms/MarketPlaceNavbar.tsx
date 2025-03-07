@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/AuthContext";
 import { message } from "antd";
 import { handleLogout as logout } from "../hooks/HandleLogin";
+import MobileSidebar from "./MobileSidebar";
 
 function classNames(...classes: (string | boolean | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
@@ -16,6 +17,7 @@ const MarketPlaceNavbar = () => {
   const isScrolled = UseScroll();
   const { userName } = useAuth();
   const [cartCount, setCartCount] = useState<number>(0);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleProfileClick = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -62,6 +64,11 @@ const MarketPlaceNavbar = () => {
     };
   }, []);
 
+  const handleFilterChange = (filters: any) => {
+    console.log("Filters applied:", filters);
+    // Tambahkan logika untuk menerapkan filter di sini
+  };
+
   const handleLogout = async () => {
     try {
       logout();
@@ -103,12 +110,24 @@ const MarketPlaceNavbar = () => {
                     className="w-full p-2 pl-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
                   />
                   <MagnifyingGlassIcon className="absolute left-3 h-5 w-5 text-gray-400" />
-                  <FunnelIcon className="ml-3 h-6 w-6 text-white sm:hidden cursor-pointer" />
+                  <FunnelIcon
+                    className="ml-3 h-8 w-8 text-white sm:hidden cursor-pointer"
+                    onClick={() => setIsSidebarOpen(true)} // Saat di klik, tampilkan sidebar
+                  />
+                  <div onClick={handleClick} className="sm:hidden relative p-2 text-white hover:text-pink-200">
+                    <ShoppingCartIcon className="h-6 w-6" />
+                    {cartCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-2">
+                        {cartCount}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
+              <MobileSidebar onFilterChange={handleFilterChange} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
               {/* Icon Keranjang & User */}
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="hidden sm:flex absolute inset-y-0 right-0 items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 
                 {/* Icon Keranjang */}
                 

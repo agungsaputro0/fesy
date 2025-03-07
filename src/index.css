@@ -14,6 +14,11 @@ body {
     overflow-x: hidden;
   }
 
+  .ant-modal-content {
+    margin: 0 20px;
+  }
+  
+
 /* global.css */
 .shadow-left-bottom {
     box-shadow: -10px 10px 15px rgba(0, 0, 0, 0.5);

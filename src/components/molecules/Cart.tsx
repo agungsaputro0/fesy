@@ -3,6 +3,7 @@ import { Button, Input, Modal, notification } from "antd";
 import { ShoppingCartIcon, TrashIcon } from '@heroicons/react/24/outline';
 import usersData from "../../pseudo-db/users.json";
 import { useNavigate } from "react-router-dom";
+import useIsMobile from "../hooks/useMobile";
 
 const { Search } = Input;
 
@@ -25,6 +26,7 @@ const Cart = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Ambil user yang sedang login
@@ -171,39 +173,22 @@ const Cart = () => {
   
 
   return (
-    <section>
-      <div className="pt-20 pl-6 pr-6  flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-4 w-full max-w-full">
-          <div style={{ padding: "20px" }}>
+  <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
+    <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
+      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 p-6 space-y-4 w-full max-w-full">
+        <div className="p-[2px] sm:p-[20px]">
             {/* Header dengan Search Bar */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                borderBottom: "2px solid #ddd",
-                paddingBottom: "10px",
-              }}
-            >
-              <h2
-                style={{
-                  display: "flex",
-                  fontSize: "18pt",
-                  color: "#7f0353",
-                  margin: 0,
-                }}
-              >
-                <ShoppingCartIcon className="w-8 h-8"  />&nbsp;&nbsp;|  
-                Keranjang Belanja
-              </h2>
-
-              <Search
-                placeholder="Cari produk..."
-                allowClear
-                onChange={(e) => handleSearch(e.target.value)}
-                style={{ maxWidth: "300px", marginTop: "-18px" }}
-              />
-            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-between border-b-2 border-gray-300 pb-3">
+            <h2 className="flex items-center text-2xl text-[#7f0353]">
+              <ShoppingCartIcon className="w-8 h-8 mr-2" /> | Keranjang Belanja
+            </h2>
+            <Search
+              placeholder="Cari produk..."
+              allowClear
+              onChange={(e) => handleSearch(e.target.value)}
+              className="max-w-xs mt-3 sm:mt-0"
+            />
+          </div>
 
             {/* Panel Checklist Pilih Semua */}
             {filteredItems.length > 0 && (
@@ -237,24 +222,63 @@ const Cart = () => {
                         src={seller.fotoProfil || "../assets/img/fotoProfil/user.png"}
                         alt={seller.nama}
                         className="w-6 h-6 rounded-full object-cover border"
+                        onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
                       />
                       <span className="text-sm">{seller ? seller.nama : "Penjual tidak ditemukan"}</span>
                     </div>
                     {products.map((product) => (
-                      <div key={product.productID} className="grid grid-cols-6 gap-8 items-center justify-center border-b p-3 w-full">
-                        <input
-                          type="checkbox"
-                          className="h-5 w-5 accent-[#7f0353]"
-                          checked={selectedItems.includes(product.productID)} onChange={(e) => handleSelectItem(product.productID, e.target.checked)}
-                        />
-                        <img src={product.images?.[0].startsWith("data:image/") ? product.images?.[0] : `../${product.images?.[0]}`} alt={product.name} className="w-20 h-20 rounded object-cover cursor-pointer" onClick={() => redirectToDetail(product.productID)} />
-                        <span>{product.merk} {product.name}</span>
-                        <span className="text-black text-sm">Warna {product.color}, Ukuran {product.size}, Kondisi {product.condition}</span>
-                        <span className="font-bold">Rp {product.price.toLocaleString()}</span>
-                        <Button type="primary" className="ml-auto bg-[#FF0000] flex items-center" onClick={() => handleRemoveFromCart(product.productID)}>
-                          <TrashIcon className="w-5 h-5" /> Hapus
-                        </Button>
+                      <div
+                      key={product.productID}
+                      className="grid grid-cols-6 gap-8 items-center justify-center border-b p-3 w-full md:grid-cols-6 md:flex-row md:items-center"
+                    >
+                      {/* Checkbox */}
+                      <input
+                        type="checkbox"
+                        className="h-5 w-5 accent-[#7f0353] md:col-span-1"
+                        checked={selectedItems.includes(product.productID)}
+                        onChange={(e) => handleSelectItem(product.productID, e.target.checked)}
+                      />
+                    
+                      {/* Gambar Produk */}
+                      <img
+                        src={
+                          product.images?.[0].startsWith("data:image/")
+                            ? product.images?.[0]
+                            : `../${product.images?.[0]}`
+                        }
+                        alt={product.name}
+                        className="w-20 h-20 col-span-2 rounded object-cover cursor-pointer md:col-span-1"
+                        onClick={() => redirectToDetail(product.productID)}
+                      />
+                    
+                      {/* Informasi Produk */}
+                      <div className="col-span-3 flex flex-col gap-1 text-sm md:col-span-3">
+                        <span className="font-semibold">
+                          {product.merk} {product.name}
+                        </span>
+                        <span className="text-black">
+                          Ukuran {product.size}, Kondisi {product.condition}
+                        </span>
+                        <span className="font-bold text-base flex">
+                          Rp {product.price.toLocaleString()}
+                          {isMobile && (
+                            <TrashIcon className="w-6 h-6 ml-2 text-red-400" onClick={() => handleRemoveFromCart(product.productID)} />
+                          )}
+                        </span>
                       </div>
+                    
+                      {/* Tombol Hapus */}
+                      {isMobile ?? (
+                          <Button
+                            type="primary"
+                            className="bg-[#FF0000] flex items-center justify-center w-full mt-2 md:w-auto md:ml-auto"
+                            onClick={() => handleRemoveFromCart(product.productID)}
+                          >
+                            <TrashIcon className="w-5 h-5 mr-1" />
+                              <span>Hapus</span>
+                          </Button>
+                      )}
+                    </div>
                     ))}
                   </div>
                 ))}
@@ -262,14 +286,23 @@ const Cart = () => {
             )}
 
           {filteredItems.length > 0 && (
-            <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "20px" }}>
-              <h3 style={{ fontSize: "18pt", color: "#7f0353", fontWeight: "bold", margin: 0 }}>
-                Total: Rp {totalPrice.toLocaleString()}
-              </h3>
-              <Button type="primary" className="bg-[#7f0353] flex items-center w-[15vw] h-[40px]" onClick={() => handleCheckOut()}>
-                <ShoppingCartIcon className="w-5 h-5" /> | Checkout
-              </Button>
-            </div>
+            <div className="mt-5 flex flex-col items-end sm:items-center gap-4 md:flex-row md:justify-end">
+            {/* Total Harga */}
+            <h3 className="text-lg font-bold text-[#7f0353] md:text-xl">
+              Total: Rp {totalPrice.toLocaleString()}
+            </h3>
+          
+            {/* Tombol Checkout */}
+            <Button
+              type="primary"
+              className="bg-[#7f0353] flex items-center justify-center w-[120px] h-9 md:w-[15vw] md:h-[40px]"
+              onClick={() => handleCheckOut()}
+            >
+              <ShoppingCartIcon className="w-5 h-5 mr-1" />
+              Checkout
+            </Button>
+          </div>
+          
           )}
 
           </div>
