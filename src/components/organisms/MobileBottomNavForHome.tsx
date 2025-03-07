@@ -93,23 +93,23 @@ const MobileBottomNavForHome = () => {
   return (
     <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 shadow-md sm:hidden z-50">
       <div className="flex justify-around py-2">
-        <div onClick={() => goToHome()} className="flex flex-col items-center text-[#7f0353] hover:text-gray-800">
+        <div onClick={() => goToHome()} className="flex-1 flex flex-col items-center text-[#7f0353] hover:text-gray-800 text-center">
           <FaHome size={24} />
           <span className="text-xs">Beranda</span>
         </div>
-        <div onClick={() => goToMarketplace()} className="flex flex-col items-center text-[#7f0353] hover:text-gray-800">
+        <div onClick={() => goToMarketplace()} className="flex-1 flex flex-col items-center text-[#7f0353] hover:text-gray-800 text-center">
           <FaShoppingBag size={24} />
-          <span className="text-xs">Marketplace</span>
+          <span className="text-xs">Toko Online</span>
         </div>
-        <div onClick={() => goToTransaction()} className="flex flex-col items-center text-[#7f0353] hover:text-gray-800">
+        <div onClick={() => goToTransaction()} className="flex-1 flex flex-col items-center text-[#7f0353] hover:text-gray-800 text-center">
           <FaMoneyBill size={24} />
           <span className="text-xs">Transaksi</span>
         </div>
-        <div onClick={() => goToArtikel()} className="flex flex-col items-center text-[#7f0353] hover:text-gray-800">
+        <div onClick={() => goToArtikel()} className="flex-1 flex flex-col items-center text-[#7f0353] hover:text-gray-800 text-center">
           <FaNewspaper size={24} />
           <span className="text-xs">Artikel</span>
         </div>
-        <div onClick={() => goToMyPage()} className="flex flex-col items-center text-[#7f0353] hover:text-gray-800">
+        <div onClick={() => goToMyPage()} className="flex-1 flex flex-col items-center text-[#7f0353] hover:text-gray-800 text-center">
           <FaUser size={24} />
           <span className="text-xs">Akun</span>
         </div>
