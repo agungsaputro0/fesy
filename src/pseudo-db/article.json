@@ -1,0 +1,93 @@
+[
+    {
+      "id": 1,
+      "title": "Dampak Limbah Tekstil terhadap Lingkungan",
+      "description": "Limbah tekstil menjadi salah satu penyumbang pencemaran lingkungan terbesar. Pelajari bagaimana dampaknya terhadap tanah, air, dan udara.",
+      "category": ["Edukasi", "Lingkungan"],
+      "image": "assets/img/article/AR1_1.jpg",
+      "video": "assets/img/article/AR1_2.mp4",
+      "publishedAt": "2025-03-08"
+    },
+    {
+      "id": 2,
+      "title": "Cara Mengolah Limbah Tekstil Menjadi Produk Baru",
+      "description": "Pelajari cara mengubah limbah tekstil menjadi produk yang lebih bermanfaat, seperti tas, karpet, dan bahan bangunan.",
+      "category": ["Upcycling", "Lingkungan"],
+      "image": "assets/img/article/AR2_1.webp",
+      "video": null,
+      "publishedAt": "2025-02-25"
+    },
+    {
+      "id": 3,
+      "title": "Inovasi Daur Ulang Kain untuk Mengurangi Limbah",
+      "description": "Beberapa perusahaan kini mulai mendaur ulang kain menjadi bahan tekstil baru. Inovasi ini bisa menjadi solusi bagi industri fashion.",
+      "category": ["Inovasi", "Lingkungan"],
+      "image": "assets/img/article/AR3_1.jpeg",
+      "video": "assets/img/article/AR3_2.mp4",
+      "publishedAt": "2025-02-20"
+    },
+    {
+      "id": 4,
+      "title": "5 Brand Fashion yang Peduli dengan Daur Ulang Tekstil",
+      "description": "Kenali beberapa brand fashion yang mulai menerapkan konsep sustainable fashion dengan mendaur ulang limbah tekstil.",
+      "category": ["Fashion", "Lingkungan"],
+      "image": "assets/img/article/AR4_1.jpg",
+      "video": null,
+      "publishedAt": "2025-02-15"
+    },
+    {
+      "id": 5,
+      "title": "Mengenal Kain Ramah Lingkungan untuk Masa Depan",
+      "description": "Beberapa alternatif bahan kain ramah lingkungan seperti serat bambu dan kain daur ulang bisa menjadi pilihan untuk mengurangi limbah tekstil.",
+      "category": ["Sustainability", "Lingkungan"],
+      "image": "assets/img/article/AR5_1.webp",
+      "video": "assets/img/article/AR5_2.mp4",
+      "publishedAt": "2025-02-10"
+    },
+    {
+      "id": 6,
+      "title": "Menekan Limbah Tekstil dengan Gaya Hidup Minimalis",
+      "description": "Mengurangi konsumsi pakaian berlebihan bisa menjadi cara efektif untuk mengurangi limbah tekstil. Simak tipsnya di sini.",
+      "category": ["Gaya Hidup"],
+      "image": "assets/img/article/AR6_1.jpg",
+      "video": null,
+      "publishedAt": "2025-02-05"
+    },
+    {
+      "id": 7,
+      "title": "Bagaimana Proses Daur Ulang Pakaian Bekas?",
+      "description": "Pakaian bekas bisa didaur ulang menjadi kain baru atau produk lain. Simak bagaimana prosesnya dari awal hingga akhir.",
+      "category": ["Daur Ulang", "Lingkungan"],
+      "image": "assets/img/article/AR7_1.webp",
+      "video": "https://example.com/videos/proses-daur-ulang.mp4",
+      "publishedAt": "2025-01-30"
+    },
+    {
+      "id": 8,
+      "title": "Memanfaatkan Limbah Tekstil untuk Industri Kreatif",
+      "description": "Limbah tekstil bisa menjadi bahan baku untuk industri kreatif, seperti seni kolase dan aksesori fashion handmade.",
+      "category": ["Inovasi", "Lingkungan"],
+      "image": "assets/img/article/AR8_1.webp",
+      "video": null,
+      "publishedAt": "2025-01-25"
+    },
+    {
+      "id": 9,
+      "title": "Mengapa Fast Fashion Menjadi Masalah Besar?",
+      "description": "Fast fashion menyebabkan peningkatan limbah tekstil secara drastis. Cari tahu bagaimana kita bisa mengatasinya.",
+      "category": ["Edukasi", "Lingkungan"],
+      "image": "assets/img/article/AR9_1.jpg",
+      "video": "https://example.com/videos/fast-fashion.mp4",
+      "publishedAt": "2025-01-20"
+    },
+    {
+      "id": 10,
+      "title": "Komunitas Peduli Limbah Tekstil yang Harus Kamu Tahu",
+      "description": "Beberapa komunitas dan organisasi berjuang untuk mengurangi limbah tekstil. Kamu bisa bergabung dan berkontribusi juga!",
+      "category": ["Komunitas", "Lingkungan"],
+      "image": "assets/img/article/AR10_1.jpeg",
+      "video": null,
+      "publishedAt": "2025-01-15"
+    }
+  ]
+  

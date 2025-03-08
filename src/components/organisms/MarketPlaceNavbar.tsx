@@ -83,16 +83,50 @@ const MarketPlaceNavbar = () => {
   };
 
   return (
-    <Disclosure as="nav" className={`${isScrolled ? "bg-black/50" : "bg-[#7f0353] sm:bg-transparent md:bg-transparent lg:bg-transparent"} border-b transition duration-300 w-full fixed z-50`}>
+    <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-[#7f0353]'} border-b transition duration-300 w-full fixed z-50`}>
       {() => (
         <>
+        {!isScrolled && (
+            <svg
+              className="absolute top-0 right-0 w-3/5 md:w-1/2 h-full opacity-25"
+              viewBox="0 0 500 120"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Poligon kiri pertama */}
+              <polygon points="160,10 240,0 220,60 140,80" fill="white" />
+              
+              {/* Poligon kanan pertama */}
+              <polygon points="280,20 350,0 330,80 220,100" fill="white" />
+
+              {/* Poligon kiri tambahan (lebih kanan dan miring) */}
+              <polygon points="360,10 440,0 420,60 340,80" fill="white" transform="rotate(5,400,40)" />
+
+              {/* Poligon kanan tambahan (lebih kanan dan sedikit lebih besar) */}
+              <polygon points="430,15 500,0 480,80 380,100" fill="white" transform="rotate(-3,460,50)" />
+
+              {/* Beberapa lingkaran tambahan untuk variasi */}
+              <circle cx="200" cy="50" r="10" fill="white" />
+              <circle cx="300" cy="80" r="8" fill="white" />
+              <circle cx="400" cy="30" r="6" fill="white" />
+              <circle cx="460" cy="70" r="12" fill="white" />
+
+              {/* Garis diagonal tambahan */}
+              <line x1="150" y1="10" x2="500" y2="110" stroke="white" strokeWidth="2" />
+              <line x1="190" y1="0" x2="500" y2="90" stroke="white" strokeWidth="1.5" />
+
+              {/* Persegi miring tambahan */}
+              <rect x="260" y="20" width="30" height="30" fill="white" transform="rotate(20,260,20)" />
+              <rect x="370" y="40" width="25" height="25" fill="white" transform="rotate(-15,370,40)" />
+              <rect x="450" y="50" width="28" height="28" fill="white" transform="rotate(10,450,50)" />
+            </svg>
+          )}
           <div className="mx-auto sm:px-6 md-px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               
               {/* Logo (Hilang di Mobile) */}
               <div className="hidden sm:flex items-center">
                 <Link to="/" className="flex items-center space-x-2">
-                  <img src="/assets/img/fesy-full-logo.png" alt="Fesy Logo" className="h-10 w-auto" />
+                  <img src="/assets/img/fesy-full-logo-white.png" alt="Fesy Logo" className="h-10 w-auto" />
                 </Link>
               </div>
               <div className="sm:hidden items-center">
@@ -131,7 +165,7 @@ const MarketPlaceNavbar = () => {
                 
                 {/* Icon Keranjang */}
                 
-                  <div onClick={handleClick} className="relative p-2 text-[#7f0353] hover:text-[#5c595f]">
+                  <div onClick={handleClick} className="relative p-2 text-white hover:text-pink-200">
                     <ShoppingCartIcon className="h-6 w-6" />
                     {cartCount > 0 && (
                       <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full px-2">
@@ -144,9 +178,9 @@ const MarketPlaceNavbar = () => {
                 {/* Dropdown Akun */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="text-[#7f0353] border border-[#7f0353] relative flex rounded-md text-sm hover:bg-[#c2beba] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:text-[#7f0353] focus:ring-offset-gray-800">
+                    <Menu.Button className="text-white border border-white relative flex rounded-md text-sm hover:bg-[#c2beba] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:text-white focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
-                      <span className={`${isScrolled ? "text-[#7f0353] hover:text-gray-200" : ""} hidden sm:inline lg:inline md:inline font-bold rounded-md px-3 py-2 text-sm font-medium transition-colors`}>
+                      <span className={`${isScrolled ? "text-white hover:text-gray-200" : ""} hidden sm:inline lg:inline md:inline font-bold rounded-md px-3 py-2 text-sm font-medium transition-colors`}>
                         {userName ? userName : "Sign Up | Log In"}
                       </span>
                     </Menu.Button>

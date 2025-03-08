@@ -19,6 +19,16 @@ import productsData from "../../pseudo-db/product.json";
 import usersData from "../../pseudo-db/users.json";
 import EditProductModal from "./EditProductModal";
 import useIsMobile from "../hooks/useMobile";
+import ProductCard from "../atoms/ProductCardForRecommendation";
+
+interface Order {
+  id: string;
+  date: string;
+  items: { productID: string; name: string; price: number; quantity: number; image: string, statusText: string, seller: string, isRequestedProduct?: boolean }[];
+  total: number;
+  status: "Menunggu Konfirmasi" | "Diproses" | "Dikirim" | "Selesai";
+  productOwner?: string;
+}
 
 interface ProductProps {
   productID: string;
@@ -65,6 +75,7 @@ const ProductDetail = () => {
   const currentUser = localStorage.getItem("currentUser");
   const parsedUser = currentUser ? JSON.parse(currentUser) : null;
   const currentUserID = parsedUser?.id;
+  const [similarProducts, setSimilarProducts] = useState<ProductProps[]>([]);
   const { productId } = useParams();
   const navigate = useNavigate();
   const products: ProductProps[] = (productsData as unknown as ProductProps[]).map((p) => ({
@@ -353,6 +364,75 @@ const handleAjukanTukar = () => {
     }
 };
 
+useEffect(() => {
+  if (!productId) return;
+
+  // Cari produk yang sedang dibahas di products terlebih dahulu
+  let product = products.find((p) => p.productID === productId);
+
+  // Jika produk tidak ditemukan di products, cari di additionalProducts
+  if (!product) {
+    const additionalProducts: ProductProps[] = JSON.parse(localStorage.getItem("additionalProducts") || "[]");
+    product = additionalProducts.find((p) => p.productID === productId);
+
+    // Jika produk ditemukan di additionalProducts, cek apakah ada pembaruan di updatedProducts
+    if (product) {
+      const updatedProducts: ProductProps[] = JSON.parse(localStorage.getItem("updatedProduct") || "[]");
+      const updatedProduct = updatedProducts.find((p) => p.productID === productId);
+
+      // Jika produk ada di updatedProducts, gunakan yang terbaru
+      if (updatedProduct) {
+        product = updatedProduct;
+      }
+    }
+  }
+
+  // Jika produk masih belum ditemukan, keluar dari fungsi
+  if (!product) return;
+
+  // Ambil kategori dari produk yang sedang dibahas
+  const productCategories = product.category;
+
+  // Ambil data orders dari LocalStorage
+  const orders: Order[] = JSON.parse(localStorage.getItem("orders") || "[]");
+
+  // Ambil daftar ID produk yang sudah dibeli
+  const purchasedProductIDs = new Set(
+    (orders || []).flatMap((order: Order) => 
+      (order.items || []).flatMap((item) =>
+        item.productID ? item.productID : []
+      )
+    )
+  );
+
+  // Ambil produk tambahan dan yang diperbarui dari LocalStorage
+  const additionalProducts: ProductProps[] = JSON.parse(localStorage.getItem("additionalProducts") || "[]");
+  const updatedProducts: ProductProps[] = JSON.parse(localStorage.getItem("updatedProduct") || "[]");
+
+  // Memetakan ID produk ke produk terbaru (jika ada pembaruan)
+  const updatedProductMap = new Map(updatedProducts.map((p) => [p.productID, p]));
+
+  // Ambil data produk yang sudah dihapus
+  const deletedProducts: { productId: string }[] = JSON.parse(localStorage.getItem("productDeleted") || "[]");
+  const deletedProductIDs = new Set(deletedProducts.map((item) => item.productId));
+
+  // Gabungkan produk dari produk utama (product), produk tambahan (additionalProducts), dan produk yang diperbarui (updatedProducts)
+  const combinedProducts = [...products, ...additionalProducts];
+
+  // Filter produk berdasarkan kriteria
+  const similarProducts = combinedProducts
+    .filter((p: ProductProps) =>
+      p.productID !== product.productID && // Pastikan produk yang sama tidak termasuk
+      !purchasedProductIDs.has(p.productID) &&
+      !deletedProductIDs.has(p.productID) &&
+      p.category.some((category) => productCategories.includes(category)) // Cek kategori yang sama
+    )
+    .map((p: ProductProps) => updatedProductMap.get(p.productID) || p);
+
+  setSimilarProducts(similarProducts); // Menampilkan produk yang memiliki kategori serupa
+
+}, [productId, products]);
+
   return (
     <section className="flex justify-center pt-20 sm:pt-24 mb-20">
       <div className="bg-white/90 sm:rounded-lg shadow-md border border-gray-400 p-6 space-y-4 w-full max-w-6xl">
@@ -557,7 +637,7 @@ const handleAjukanTukar = () => {
         </div>
          {/* Panel Penjual */}
          {seller && (
-          <div className="mt-6 py-4 border-t border-gray-300" onClick={() => goToSellerPage(seller.id)}>
+          <div className="mt-6 py-4 border-t border-gray-300 border-b" onClick={() => goToSellerPage(seller.id)}>
             <h3 className="text-lg font-semibold">Informasi Penjual</h3>
             <div className="sm:flex items-center gap-4 mt-2">
               <div className="flex gap-4">
@@ -614,6 +694,27 @@ const handleAjukanTukar = () => {
             </div>
           </div>
         )}
+         <div className="flex justify-center border-b-2 border-gray-200 mb-4 relative">
+          <div className="py-4 w-full">
+            <h3 className="text-xl font-semibold mb-4">Produk Serupa</h3>
+            {similarProducts.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {similarProducts.map((product) => (
+                  <div
+                    key={product.productID}
+                    className="transform transition-transform duration-300 hover:scale-105 cursor-pointer"
+                  >
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500 w-full">
+                Tidak ada produk dalam kategori ini.
+              </p>
+            )}
+          </div>
+        </div>
         <Modal
         title={[
                   <div className="flex gap-2 mb-5 pb-4 border-b">

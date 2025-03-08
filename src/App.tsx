@@ -24,6 +24,7 @@ const OrderHistory = lazy(() => import('./components/pages/OrderHistory'));
 const MyPage = lazy(() => import('./components/pages/MyPages'));
 const Seller = lazy(() => import('./components/pages/SellerPage'));
 const Penukaran = lazy(() => import('./components/pages/PenukaranPage'));
+const Article = lazy(() => import('./components/pages/Article'));
 
 const App = () => {
   return (
@@ -59,6 +60,9 @@ const App = () => {
         <Route path="/Seller/:sellerID" element={<StakeholderRoute><Seller /></StakeholderRoute>} />
         <Route path="/Exchange/:productId" element={<StakeholderRoute><Penukaran /></StakeholderRoute>} />
         <Route path="/ExchangeProduct/:productId" element={<ProtectedRoute><Penukaran /></ProtectedRoute>} />
+        <Route path="/Artikel" element={<RedirectIfLoggedIn><Article /></RedirectIfLoggedIn>} />
+        <Route path="/Article" element={<ProtectedRoute><Article /></ProtectedRoute>} />
+        <Route path="/ArticleList/" element={<StakeholderRoute><Article /></StakeholderRoute>} />
       </Routes>
     </Suspense>
   );

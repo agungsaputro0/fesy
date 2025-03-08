@@ -226,11 +226,11 @@ useEffect(() => {
             </div>
             {user ? (
               <>
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-10">
+                <div className="flex justify-center space-x-6 mt-10">
                 <img
                   src={user.fotoProfil}
                   alt={user.nama}
-                  className="w-24 h-24 supernarrow:w-14 supernarrow:h-14 sm:w-28 sm:h-28 rounded-full border border-gray-300 transition-all duration-300 hover:w-20 hover:h-20 sm:hover:w-32 sm:hover:h-32"
+                  className="w-24 h-24 supernarrow:w-16 supernarrow:h-16 sm:w-28 sm:h-28 rounded-full border border-gray-300 transition-all duration-300 hover:w-20 hover:h-20 sm:hover:w-32 sm:hover:h-32"
                   onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
                 />
 

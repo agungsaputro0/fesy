@@ -408,6 +408,36 @@ const processOrder = (buyerID: number) => {
         setOrders([]);
       }
     }, []);    
+
+    const filteredExchanges = exchanges
+    ?.map((exchange) => {
+      // Filter item dalam transaksi berdasarkan status yang dipilih
+      const filteredItems = exchange.items.filter((item) => {
+        if (activeTabJual === "SEMUA") return true;
+        return (
+          (activeTabJual === "MENUNGGU" && item.statusText === "Menunggu Konfirmasi") ||
+          (activeTabJual === "DIPROSES" && item.statusText === "Diproses") ||
+          (activeTabJual === "DIKIRIM" && item.statusText === "Siap Dikirim") ||
+          (activeTabJual === "SELESAI" && item.statusText === "Selesai")
+        );
+      });
+  
+      // Jika ada item yang cocok, simpan transaksi dengan item yang difilter
+      if (filteredItems.length > 0) {
+        return { ...exchange, items: filteredItems };
+      }
+  
+      return null; // Jika tidak ada item yang cocok, hapus transaksi ini
+    })
+    .filter((exchange): exchange is NonNullable<typeof exchange> => exchange !== null) // Hapus transaksi yang null
+    .filter((exchange) => {
+      // Pastikan hasil filter masih mempertimbangkan pencarian
+      return (
+        exchange.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        exchange.items.some((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }) ?? [];
+  
   
     const filteredOrders = orders
     ?.map((order) => {
@@ -553,13 +583,7 @@ const processOrder = (buyerID: number) => {
     }, []);    
     
 
-    const filteredExchanges = exchanges
-      ?.map((exchange) => {
-        if (activeTabJual === "SEMUA") return exchange;
-        return exchange.status.toUpperCase() === activeTabJual ? exchange : null;
-      })
-      .filter((exchange): exchange is NonNullable<typeof exchange> => exchange !== null)
-      .filter((exchange) => exchange.id.toLowerCase().includes(searchTerm.toLowerCase()));
+   
       
   return (
     <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
@@ -793,78 +817,71 @@ const processOrder = (buyerID: number) => {
 
                     {/* List Transaksi Tukar-Menukar */}
                     {filteredExchanges.length === 0 ? (
-                      <p className="text-center text-gray-500">Tidak ada transaksi di kategori ini.</p>
-                    ) : (
-                      <div className="space-y-4">
-                        {filteredExchanges.map((exchange) => {
-
+                    <p className="text-center text-gray-500">Tidak ada transaksi di kategori ini.</p>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-4">
+                      {filteredExchanges.map((exchange) => {
                         return (
                           <div key={exchange.id} className="border p-4 rounded-lg shadow-sm">
+                            {/* Header */}
                             <div className="flex justify-between items-center mb-2">
-                              <p className="text-gray-700 text-sm">
+                              <p className="text-gray-700 text-sm truncate">
                                 ID: {exchange.id} | {exchange.date}
                               </p>
                             </div>
 
-                            {/* Tampilkan Nama Pemilik Produk */}
-                           
-                  <div className="bg-gray-200 p-3 rounded font-bold flex items-center gap-3">
-                      <img
-                        src={exchange.productOwner && typeof exchange.productOwner === "object" 
-                          ? exchange.productOwner.fotoProfil 
-                          : "../assets/img/fotoProfil/user.png"}
-                        alt={exchange.productOwner && typeof exchange.productOwner === "object" 
-                          ? exchange.productOwner.nama 
-                          : "Tidak diketahui"}
-                        className="w-6 h-6 rounded-full object-cover border"
-                        onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
-                      />
-                      <span className="text-sm">{exchange.productOwner && typeof exchange.productOwner === "object" 
-                      ? exchange.productOwner.nama 
-                      : "Tidak diketahui"}</span>
-                    </div>
+                            {/* Pemilik Produk */}
+                            <div className="bg-gray-200 p-3 rounded font-bold flex items-center gap-3">
+                              <img
+                                src={exchange.productOwner?.fotoProfil || "../assets/img/fotoProfil/user.png"}
+                                alt={exchange.productOwner?.nama || "Tidak diketahui"}
+                                className="w-8 h-8 rounded-full object-cover border"
+                                onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
+                              />
+                              <span className="text-sm truncate">{exchange.productOwner?.nama || "Tidak diketahui"}</span>
+                            </div>
 
-
-                            {/* Tampilkan produk yang diminta */}
+                            {/* Produk yang diminta */}
                             <div className="mb-2">
                               {exchange.items.filter((item) => item.isRequestedProduct).map((item, index) => (
                                 <div key={index} className="flex border-b p-4 items-center space-x-3">
                                   <img
-                                    src={item.image[0] || "/placeholder.jpg"}
+                                    src={item.image[0] || "../assets/img/produk/dummy.jpg"}
                                     alt={item.name}
                                     className="w-12 h-12 object-cover rounded"
                                     onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
                                   />
                                   <div className="flex-1">
-                                    <p className="text-lg font-medium">{item.name}</p>
+                                    <p className="text-sm sm:text-lg font-medium break-words">{item.name}</p>
                                   </div>
-                                  <span className="px-3 py-1 rounded text-sm font-semibold bg-orange-100 text-orange-600">
-                                    {item.statusText}
+                                  <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${item.statusText === "Menunggu Konfirmasi" ? "bg-orange-100 text-orange-600" : "bg-blue-100 text-blue-600"}`}>
+                                    {isMobile ? item.statusText.split(" ")[0] : item.statusText }
                                   </span>
                                 </div>
                               ))}
                             </div>
 
-                            {/* Tampilkan produk yang ditawarkan */}
+                            {/* Produk yang ditawarkan */}
                             <div className="mb-2">
                               <p className="font-semibold text-gray-800">Produk Ditawarkan:</p>
                               {exchange.items.filter((item) => !item.isRequestedProduct).map((item, index) => (
                                 <div key={index} className="flex border-b p-4 items-center space-x-3">
                                   <img
-                                    src={item.image[0] || "/placeholder.jpg"}
+                                    src={item.image[0] || "../assets/img/produk/dummy.jpg"}
                                     alt={item.name}
                                     className="w-12 h-12 object-cover rounded"
                                     onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")}
                                   />
                                   <div className="flex-1">
-                                    <p className="text-lg font-medium">{item.name}</p>
+                                    <p className="text-sm sm:text-lg font-medium break-words">{item.name}</p>
                                   </div>
                                 </div>
                               ))}
                             </div>
 
-                            <div className="mt-2 text-right">
-                              <button className="bg-[#7f0353] text-white h-[35px] mt-4 rounded w-[200px] text-sm font-semibold">
+                            {/* Tombol Aksi */}
+                            <div className="mt-2 text-center float-right">
+                              <button className="bg-[#7f0353] text-white h-[35px] rounded w-[100px] sm:w-[200px] text-sm font-semibold">
                                 Lihat Detail
                               </button>
                             </div>
@@ -873,7 +890,6 @@ const processOrder = (buyerID: number) => {
                       })}
                     </div>
                   )}
-
                   </>
                   )}
                 </div>

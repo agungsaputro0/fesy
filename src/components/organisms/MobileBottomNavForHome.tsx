@@ -65,9 +65,9 @@ const MobileBottomNavForHome = () => {
           navigate("/login");
         } else {
           if (currentUser.role === 2) {
-            navigate(`/Article`);
+            navigate(`/ArticleList`);
           } else {
-            navigate(`/ArticleLib`);
+            navigate(`/Article`);
           }
         }
       }

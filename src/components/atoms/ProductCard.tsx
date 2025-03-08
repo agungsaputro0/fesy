@@ -81,12 +81,12 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
       )}
 
       <img 
-        src={image} 
+        src={image.startsWith("data:image/") || image.startsWith("blob:") ? image : `../${image}`} 
         alt={name} 
         onError={(e) => (e.currentTarget.src = "../assets/img/produk/dummy.jpg")} 
         className="w-full h-40 sm:h-48 lg:h-52 object-cover rounded-t-lg transition-all"
       />
-
+    
       <div className="p-2">
         <h2 className="text-sm sm:text-md lg:text-lg font-semibold leading-tight line-clamp-2 overflow-hidden text-ellipsis">
           {merk} {name}, {size}
@@ -99,8 +99,12 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
        )}
         <div className={`${isMobile ? '' : 'flex items-center justify-between' }  mt-1`}>
           <p className="text-md mt-1 mb-1 sm:text-lg font-bold text-[#7f0353]">Rp {price.toLocaleString("id-ID")}</p>
-          {bisaTukar && (
+          {bisaTukar ? (
             <span className={`${isMobile ? 'w-4/5' : '' } flex items-center gap-1 bg-green-200 text-green-800 text-xs mt-1 mb-1 sm:text-sm font-semibold px-2 py-1 rounded-lg animate-pulse`}>
+              <SwapOutlined className="text-sm" /> Bisa Tukar
+            </span>
+          ) : (
+            <span className={`${isMobile ? 'w-4/5' : '' } flex items-center gap-1 text-transparent  text-xs mt-1 mb-1 sm:text-sm font-semibold px-2 py-1 rounded-lg`}>
               <SwapOutlined className="text-sm" /> Bisa Tukar
             </span>
           )}

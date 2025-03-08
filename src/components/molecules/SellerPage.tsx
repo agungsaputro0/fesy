@@ -116,34 +116,36 @@ const SellerPage = () => {
 
   
   return (
-    <section>
-      <div className="pt-20 pl-6 pr-6 flex justify-center mb-20" style={{ paddingLeft: "80px" }}>
-        <div className="bg-white/90 rounded-lg shadow-left-bottom border border-gray-400 p-6 space-y-4 w-full max-w-full">
-          <div style={{ padding: "20px" }}>
-            <div className="flex justify-start items-center border-b-2 border-gray-300 pb-3">
-              <h2 className="text-2xl text-[#7f0353] font-semibold">
-              <ArrowLeftOutlined onClick={() => navigate(-1)} className="w-8 h-8" /> <UserOutlined className="w-8 h-8" /> Halaman Penjual
-              </h2>
-            </div>
+    <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
+    <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
+      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 py-6 space-y-4 w-full max-w-full">
+        <div className="p-[2px] sm:p-[20px]">
+            <div className="flex flex-col sm:flex-row items-center justify-between border-b-2 border-gray-300 pb-3 mb-4">
+                    <h2 className="flex items-center text-2xl text-[#7f0353]">
+                    <ArrowLeftOutlined onClick={() => navigate(-1)} className="w-8 h-8" /> <UserOutlined className="w-8 h-8" /> Halaman Penjual
+                        </h2>
+                        </div>
             {user ? ( 
               <>
                 <div className="flex justify-center space-x-6 mt-10">
-                  <img
-                    src={`../${user.fotoProfil}`}
-                    alt={user.nama}
-                    className="w-28 h-28 rounded-full border border-gray-300"
-                    onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
-                  />
-                  <div className="content-center">
-                    <h2 className="text-xl font-semibold">{user.nama}</h2>
-                    <p className="flex items-center text-gray-700">
+                <img
+                  src={user.fotoProfil}
+                  alt={user.nama}
+                  className="w-24 h-24 supernarrow:w-16 supernarrow:h-16 sm:w-28 sm:h-28 rounded-full border border-gray-300 transition-all duration-300 hover:w-20 hover:h-20 sm:hover:w-32 sm:hover:h-32"
+                  onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
+                />
+                  <div className="min-w-0">
+                    <h2 className="text-lg sm:text-xl font-semibold truncate">
+                      {user.nama}
+                    </h2>
+                    <p className="flex text-sm sm:text-lg items-center text-gray-700">
                       <FaPhoneAlt className="text-[#7f0353] mr-2" /> {user.telepon}
                     </p>
-                    <p className="flex items-center text-gray-700">
+                    <p className="flex text-sm sm:text-lg items-center text-gray-700">
                       <FaEnvelope className="text-[#7f0353] mr-2" /> {user.email}
                     </p>
                     {getPrimaryAddress() && (
-                      <p className="flex items-center text-gray-700">
+                      <p className="flex text-sm sm:text-lg items-center text-gray-700">
                         <FaMapMarkerAlt className="text-[#7f0353] mr-2" /> {getPrimaryAddress()?.detail}
                       </p>
                     )}
@@ -153,19 +155,19 @@ const SellerPage = () => {
                 
 
                
-                  <div className="mb-4 mt-20 border-b pb-4 flex justify-between items-center">
-                    <input
-                      type="text"
-                      placeholder="Cari produk..."
-                      className="border border-gray-300 px-3 py-2 rounded-lg w-64"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  </div>
+                <div className="mb-4 mt-10 sm:mt-20 mx-4 border-b pb-4 flex flex-col sm:flex-row justify-between items-center">
+                  <input
+                    type="text"
+                    placeholder="Cari produk..."
+                    className="border border-gray-300 px-3 py-2 rounded-lg w-full sm:w-64"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
               
-
-                <div className="mt-4">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                
+                <div className="mt-4 mx-4">
+                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                           <ProductCard key={product.productID} product={product} />

@@ -5,6 +5,7 @@ import OurAchievements from "../molecules/Achievements";
 import TabSection from "../organisms/TabSection";
 import Banner from "../organisms/Banner";
 import Footer from "../organisms/Footer";
+import DashboardPanel from "../atoms/DashboardPanel";
 
 const Home = () => {
     const images = [
@@ -17,6 +18,7 @@ const Home = () => {
                 <div className="pt-[65px] pb-10 flex flex-col justify-between items-center min-h-screen">
                     <div className="w-full">
                         <div className="custom-slider-container">
+                            <DashboardPanel />
                             <Banner images={images} />
                             <PopularSection />
                             <TabSection />

@@ -44,7 +44,7 @@ const OurAchievements = () => {
       {/* Tombol Responsif */}
       <Button
         type="primary"
-        className="mt-8 bg-[#7f0353] border-none hover:bg-[#5e023f] px-6 py-2 text-lg rounded-lg transition-all duration-300"
+        className="mt-8 bg-[#7f0353] border-none hover:bg-[#5e023f] px-6 py-4 text-md rounded-lg transition-all duration-300"
       >
         Selengkapnya
       </Button>
