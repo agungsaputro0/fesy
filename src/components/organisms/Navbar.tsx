@@ -2,11 +2,13 @@ import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { UseScroll } from '../hooks/UseScroll';
 import { Link } from 'react-router-dom'; 
+import useIsMobile from '../hooks/useMobile';
+import { notification } from "antd";
 
 const navigation = [
   { name: 'Beranda', to: '/Welcome', current: false },
-  { name: 'Artikel', to: '#', current: false },
-  { name: 'Marketplace', to: '/Marketplace', current: false },
+  { name: 'Artikel', to: '/login', current: false },
+  { name: 'Marketplace', to: '/login', current: false },
 ];
 
 function classNames(...classes: string[]): string {
@@ -15,6 +17,13 @@ function classNames(...classes: string[]): string {
 
 const Navbar = () => {
   const isScrolled = UseScroll();
+  const isMobile = useIsMobile();
+
+  const showNotification = (page: String) => {
+    if(page !== 'Beranda'){
+      notification.info({message: "Hai Sahabat Fesy",  description: "Silakan Login terlebih dahulu ya!",})
+    }
+  };
 
   return (
     <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-[#7f0353]'} border-b transition duration-300 w-full fixed z-50`}>
@@ -69,6 +78,7 @@ const Navbar = () => {
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
                       <Link
+                        onClick={() => showNotification(item.name)}
                         key={item.name}
                         to={item.to}  
                         className={classNames(
@@ -84,6 +94,7 @@ const Navbar = () => {
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {/* Profile dropdown */}
+                {!isMobile && (
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="text-white border border-white relative flex rounded-md text-sm hover:bg-[#c2beba] focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:text-white focus:ring-offset-gray-800">
@@ -117,6 +128,7 @@ const Navbar = () => {
                     </Menu.Items>
                   </Transition>
                 </Menu>
+                )}
               </div>
             </div>
           </div>

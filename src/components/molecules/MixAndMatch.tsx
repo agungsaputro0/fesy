@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Carousel } from "antd";
-import { useNavigate } from "react-router-dom";
+import { removeBackground } from "@imgly/background-removal";
+import { useParams } from "react-router-dom";
+import productsData from "../../pseudo-db/product.json";
 
 interface ProductProps {
   productID: string;
@@ -18,37 +19,90 @@ interface ProductProps {
   media?: { url: string; type: string }[];
 }
 
-const MixAndMatch: React.FC<{ product: ProductProps; relatedProducts: ProductProps[] }> = ({ product, relatedProducts }) => {
-  const navigate = useNavigate();
-  const [selectedProduct, setSelectedProduct] = useState<ProductProps | null>(relatedProducts[0] || null);
+const BackgroundRemover: React.FC = () => {
+  const [originalImage, setOriginalImage] = useState<string | null>(null);
+  const [processedImage, setProcessedImage] = useState<string | null>(null);
+  const { productId } = useParams();
+ // const navigate = useNavigate();
+  const products: ProductProps[] = (productsData as unknown as ProductProps[]).map((p) => ({
+    ...p,
+    images: p.images || [],
+    description: p.description || "",
+    media: p.media || [],
+  }));
+
+  let product = products.find((p) => p.productID === productId);
+  
+    if (!product) {
+      const additionalProducts = JSON.parse(localStorage.getItem("additionalProducts") || "[]");
+      product = additionalProducts.find((p: ProductProps) => p.productID === productId);
+    }
+  
+    const updatedProducts: ProductProps[] = JSON.parse(localStorage.getItem("updatedProduct") || "[]");
+    const updatedProduct = updatedProducts.find((p) => p.productID === productId);
+    
+    if (updatedProduct) {
+      product = updatedProduct;
+    }
+    
+    // const getDefaultMedia = () => {
+    //   // Gabungkan images dan media menjadi satu array
+    //   const allMedia = [
+    //     ...(product?.images || []), 
+    //     ...(product?.media?.map(m => m.url) || [])
+    //   ];
+    
+    //   if (!allMedia.length) {
+    //     return "../assets/img/produk/dummy.jpg"; // Jika kosong, pakai dummy image
+    //   }
+    
+    //   // Cek apakah ada video di daftar media
+    //   const video = allMedia.find(media => media.startsWith("data:video/"));
+    
+    //   return video || allMedia[0]; // Prioritas video, jika tidak ada pakai media pertama
+    // };
+    
+    // State utama untuk menampilkan gambar/video
+    // const [mainImage, setMainImage] = useState(() => 
+    //   getDefaultMedia().startsWith("blob:") ? "../assets/img/produk/dummy.jpg" : getDefaultMedia()
+    // );
+    
+    
+  
+    if (!product) {
+      return <p className="text-center text-gray-500">Produk tidak ditemukan.</p>;
+    }
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+
+    const file = event.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
+    setOriginalImage(imageUrl);
+
+    const imageBitmap = await createImageBitmap(file);
+
+    try {
+      const removedBackground: Blob = await removeBackground(imageBitmap, {
+        output: { format: "image/png" }, // ✅ Format harus di dalam objek output
+      });
+
+      const processedUrl = URL.createObjectURL(removedBackground);
+      setProcessedImage(processedUrl);
+    } catch (error) {
+      console.error("Error removing background:", error);
+    }
+  };
 
   return (
-    <div className="flex flex-col items-center w-full min-h-screen bg-gray-100 p-8">
-      <h1 className="text-2xl font-bold mb-6">Mix and Match</h1>
-      <div className="relative w-64 h-64 mb-4">
-        <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain" />
-        {selectedProduct && (
-          <img src={selectedProduct.images[0]} alt={selectedProduct.name} className="absolute top-0 left-0 w-full h-full object-contain opacity-80" />
-        )}
+    <div className="p-4 flex flex-col items-center gap-4">
+      <input type="file" accept="image/*" onChange={handleImageUpload} />
+      <div className="flex gap-4">
+        {originalImage && <img src={originalImage} alt="Original" className="w-40 border" />}
+        {processedImage && <img src={processedImage} alt="Processed" className="w-40 border bg-gray-200" />}
       </div>
-
-      <Carousel
-        dots={false}
-        infinite
-        slidesToShow={3}
-        centerMode
-        afterChange={(index) => setSelectedProduct(relatedProducts[index])}
-      >
-        {relatedProducts.map((related) => (
-          <div key={related.productID} className="p-2 flex justify-center">
-            <img src={related.images[0]} alt={related.name} className="w-32 h-32 cursor-pointer object-contain" />
-          </div>
-        ))}
-      </Carousel>
-      
-      <button onClick={() => navigate(-1)} className="mt-6 px-4 py-2 bg-blue-500 text-white rounded">Kembali</button>
     </div>
   );
 };
 
-export default MixAndMatch;
+export default BackgroundRemover;

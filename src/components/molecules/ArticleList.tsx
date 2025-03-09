@@ -1,12 +1,14 @@
 import { useState } from "react";
 import articles from "../../pseudo-db/article.json";
 import { BookOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const ArticleList = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const articlesPerPage = 5;
+  const navigate = useNavigate();
 
   const allCategories = [
     "All",
@@ -94,7 +96,7 @@ const ArticleList = () => {
                         : article.description}
                     </p>
                     {article.description.length > 100 && (
-                      <button className="text-blue-600 mt-2" onClick={() => alert('Baca selengkapnya')}>
+                      <button className="text-blue-600 mt-2" onClick={() => navigate(`/ReadArticle/${article.id}`)}>
                         Baca Selengkapnya
                       </button>
                     )}

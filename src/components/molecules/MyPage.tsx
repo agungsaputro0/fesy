@@ -256,7 +256,7 @@ useEffect(() => {
                 </div>
                 <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
                   <button className="bg-[#7f0353] text-xs sm:text-sm h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
-                    Edit Profil
+                    Personalisasi
                   </button>
                   <button className="bg-white text-xs sm:text-sm border h-[35px] w-[200px] border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
                     Tambah Alamat

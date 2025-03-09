@@ -25,6 +25,7 @@ const MyPage = lazy(() => import('./components/pages/MyPages'));
 const Seller = lazy(() => import('./components/pages/SellerPage'));
 const Penukaran = lazy(() => import('./components/pages/PenukaranPage'));
 const Article = lazy(() => import('./components/pages/Article'));
+const ReadArticle = lazy(() => import('./components/pages/ReadArticle'));
 
 const App = () => {
   return (
@@ -63,6 +64,7 @@ const App = () => {
         <Route path="/Artikel" element={<RedirectIfLoggedIn><Article /></RedirectIfLoggedIn>} />
         <Route path="/Article" element={<ProtectedRoute><Article /></ProtectedRoute>} />
         <Route path="/ArticleList/" element={<StakeholderRoute><Article /></StakeholderRoute>} />
+        <Route path="/ReadArticle/:id" element={<StakeholderRoute><ReadArticle /></StakeholderRoute>} />
       </Routes>
     </Suspense>
   );
