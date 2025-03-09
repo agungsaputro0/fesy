@@ -141,6 +141,9 @@ const DailyReward: React.FC<DailyRewardProps> = ({ onClaim }) => {
             <p className="mt-6 mx-12 bg-[#7f0353] text-white text-sm align-center font-semibold px-2 py-1 rounded-full">
               Total Koin: <span className="text-lg sm:text-xl font-bold text-yellow-300">{coins}</span>
             </p>
+            <p className="mt-2 mx-12 text-[#7f0353] text-md align-center font-semibold px-2 py-1 rounded-full">
+              Dapatkan Fesy Coin setiap hari!
+            </p>
           </div>
         </div>
       )}

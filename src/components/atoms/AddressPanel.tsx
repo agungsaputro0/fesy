@@ -122,7 +122,7 @@ const AddressPanel = () => {
   return (
     <div className="mb-4 p-4 border rounded shadow">
     <h3 className="font-semibold text-lg flex border-b pb-3 items-center gap-2 text-[#7f0353]">
-    <EnvironmentOutlined /> Alamat Pengiriman
+    <EnvironmentOutlined /> Alamat Anda
     </h3>
     
     {selectedAddress && (
@@ -233,7 +233,7 @@ const AddressPanel = () => {
       </Form.Item>
       <div className="flex gap-2">
       <Button onClick={() => setShowNewAddressForm(false)} className="bg-gray-300 text-black w-full">
-      Batal Tambah Alamat
+      Batal
       </Button>
       <Button type="primary" htmlType="submit" className="bg-[#7f0353] text-white w-full">
       Tambah Alamat

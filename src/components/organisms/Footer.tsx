@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
     </ul>
   </div>
 
-  <div className="container mt-2  py-4 flex flex-col lg:flex-row lg:justify-between md:flex-row md:justify-between text-[#5c595f]">
+  <div className="container mt-2 py-4 flex flex-col lg:flex-row lg:justify-between md:flex-row md:justify-between text-[#5c595f]">
     <div className="footer-left mb-8 lg:text-left md:text-left ml-5 sm:ml-5 mt-[2px]">
       <Logo />
       <FooterInfo />

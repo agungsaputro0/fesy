@@ -109,7 +109,7 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
   };
 
   return (
-    <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-[#7f0353]'} border-b transition duration-300 w-full fixed z-50`}>
+    <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-fesypurple'} border-b transition duration-300 w-full fixed z-50`}>
       {() => (
         <>
      {!isScrolled && (

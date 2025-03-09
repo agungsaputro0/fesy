@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ReadOutlined, HeartOutlined, HeartFilled, CommentOutlined, ShareAltOutlined, SendOutlined } from "@ant-design/icons";
+import { ReadOutlined, HeartOutlined, HeartFilled, CommentOutlined, ShareAltOutlined, SendOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import articles from "../../pseudo-db/article.json";
+import { useNavigate } from "react-router-dom";
 
 interface Article {
   id: number;
@@ -28,6 +29,7 @@ const BacaArtikel = () => {
   const currentUser = localStorage.getItem("currentUser");
   const parsedUser = currentUser ? JSON.parse(currentUser) : null;
   const currenUserName = parsedUser?.nama;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const foundArticle = articles.find((a) => a.id.toString() === id) || null;
@@ -62,6 +64,12 @@ const BacaArtikel = () => {
       <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 p-6 pb-20 space-y-4 w-full max-w-full">
         <div className="border-b-2 border-gray-300 pb-3">
           <h2 className="flex items-center text-2xl text-[#7f0353]">
+          <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-2 text-gray-700 hover:text-[#7f0353] transition-all duration-200"
+            >
+              <ArrowLeftOutlined className="text-xl" /><span className="mt-[-5px]">|</span>&nbsp;
+            </button>
             <ReadOutlined />&nbsp;Baca Artikel
           </h2>
         </div>

@@ -15,7 +15,7 @@ const Home = () => {
       ];
     return (
             <Homeshell>
-                <div className="pt-[65px] pb-10 flex flex-col justify-between items-center min-h-screen">
+                <div className="pt-[65px] flex flex-col justify-between items-center min-h-screen">
                     <div className="w-full">
                         <div className="custom-slider-container">
                             <DashboardPanel />

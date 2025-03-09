@@ -61,7 +61,7 @@ const ArticleList = () => {
             <div className="mt-6 space-y-6">
               {displayedArticles.map((article) => (
                 <div key={article.id} className="flex flex-col md:flex-row items-center bg-white p-4 border rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer">
-                  <div className="md:w-1/3 w-full flex justify-center gap-4">
+                  <div className="md:w-1/4 w-full flex justify-center gap-4">
                     {article.image && (
                       <div className="relative w-full h-40 md:h-48 overflow-hidden rounded-lg">
                         <img
@@ -71,16 +71,8 @@ const ArticleList = () => {
                         />
                       </div>
                     )}
-                    {article.video && (
-                      <div className="relative w-full h-40 md:h-48 rounded-lg overflow-hidden">
-                        <video controls className="w-full h-full object-cover rounded-lg">
-                          <source src={article.video} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
-                    )}
                   </div>
-                  <div className="md:w-2/3 w-full md:pl-6 mt-4 md:mt-0">
+                  <div className="md:w-3/4 w-full md:pl-6 mt-4 md:mt-0">
                     <h3 className="text-lg font-semibold text-[#7f0353]">{article.title}</h3>
                     <p className="text-sm text-gray-600">{article.publishedAt}</p>
                     <div className="flex flex-wrap gap-2 mt-2">

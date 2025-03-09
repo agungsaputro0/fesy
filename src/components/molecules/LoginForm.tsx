@@ -3,8 +3,8 @@ import InputElement from "../atoms/InputElement";
 import Button from "../atoms/Button";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { notification, Spin } from "antd";
-import { LoadingOutlined } from '@ant-design/icons'; 
+import { notification, Spin, Modal, Button as AntButton } from "antd";
+import { LoadingOutlined, CheckCircleOutlined } from '@ant-design/icons'; 
 import { handleLogin } from "../hooks/HandleLogin";
 import { useDispatch } from 'react-redux'; 
 import { loginStart, loginSuccess, loginFailure } from "../store/authSlice";
@@ -16,6 +16,19 @@ const LoginForm: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch(); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     if (usernameRef.current) {
@@ -123,8 +136,8 @@ const LoginForm: FC = () => {
             disabled={loading}
           />
         </form>
-        <p className="text-slate-500 mt-4 text-center">Belum memiliki akun? silakan&nbsp;
-          <Link to="/SignUp" className="text-[#7f0353]">
+        <p className="text-slate-500 mt-4 text-center">Untuk Akun Login, silakan&nbsp;
+          <Link onClick={() => showModal()} to="#" className="text-[#7f0353]">
           <b>Klik Disini</b>
           </Link>
         </p>
@@ -137,6 +150,28 @@ const LoginForm: FC = () => {
           <p className="text-red-500 mt-4 text-center">{loginFailed}</p>
         )}
       </div>
+      <Modal
+      title={
+        <div className="flex items-center gap-2 text-[#7f0353] pb-2 border-b">
+          <CheckCircleOutlined className="text-lg" /> Petunjuk Akun Login
+        </div>
+      }
+      open={isModalOpen}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={[
+        <AntButton className="bg-[#7f0353] text-white hover:bg-[#5a023b]" key="ok" type="primary" onClick={handleOk}>
+          Mengerti
+        </AntButton>
+      ]}
+    >
+      <p className="mb-2">Gunakan akun berikut untuk login:</p>
+      <div className="bg-gray-100 p-3 rounded-lg text-sm">
+        <p><b>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> fajar@example.com</p>
+        <p><b>Password&nbsp;&nbsp;:</b> fajaROX</p>
+      </div>
+      <p className="mt-4 text-gray-800">Setelah login, Anda dapat mengakses fitur lengkap kami.</p>
+    </Modal>
 
       {/* Bagian Gambar */}
       <div className="w-full md:w-1/2 mt-4 md:mt-0">

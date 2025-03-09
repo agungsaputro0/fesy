@@ -7,6 +7,8 @@ import ProductCard from "../atoms/ProductCard";
 import TambahProdukModal from "./AddProductModal";
 import LevelingPanel from "../atoms/LevelingPanel";
 import useIsMobile from "../hooks/useMobile";
+import { useNavigate } from "react-router-dom";
+
 
 type User = {
   id: number;
@@ -18,6 +20,16 @@ type User = {
   role: number;
   password: string;
 };
+
+interface Address {
+  id: number;
+  label: string;
+  provinsi: string;
+  kabupaten: string; // Menampung data Kabupaten atau Kota
+  detail: string;
+  kodePos: string;
+  alamatDipilih: boolean;
+}
 
 type Product = {
   productID: string;
@@ -51,7 +63,8 @@ const MyPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useIsMobile();
-
+  const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
@@ -101,7 +114,6 @@ const MyPage = () => {
 }, []);
 
 useEffect(() => {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const allOrders = JSON.parse(localStorage.getItem("orders") || "[]");
     
   const orders = allOrders.filter((order: any) => order.userID === currentUser.id);
@@ -119,10 +131,10 @@ useEffect(() => {
   }
 }, []);
 
-  const getPrimaryAddress = () => {
-    if (!user || user.alamat.length === 0) return null;
-    return user.alamat.find((addr) => addr.alamatDipilih) || user.alamat[0];
-  };
+const getPrimaryAddress = () => {
+  if (!currentUser || currentUser.alamat.length === 0) return null;
+  return currentUser.alamat.find((addr: Address) => addr.alamatDipilih) || currentUser.alamat[0];
+};
 
   const filteredProducts = userProducts.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -212,6 +224,10 @@ useEffect(() => {
         order.items.some((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
       return matchesTab && matchesSearch;
     }) ?? [];
+
+    const goToPersonalization = () => {
+      navigate(`/Personalization`);
+    }
   
 
   return (
@@ -255,7 +271,7 @@ useEffect(() => {
                   </div>
                 </div>
                 <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
-                  <button className="bg-[#7f0353] text-xs sm:text-sm h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
+                  <button onClick={() => goToPersonalization()} className="bg-[#7f0353] text-xs sm:text-sm h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
                     Personalisasi
                   </button>
                   <button className="bg-white text-xs sm:text-sm border h-[35px] w-[200px] border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">

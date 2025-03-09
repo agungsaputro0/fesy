@@ -32,7 +32,7 @@ const BackgroundRemover: React.FC = () => {
   }));
 
   let product = products.find((p) => p.productID === productId);
-  
+  console.log(product);
     if (!product) {
       const additionalProducts = JSON.parse(localStorage.getItem("additionalProducts") || "[]");
       product = additionalProducts.find((p: ProductProps) => p.productID === productId);
@@ -44,29 +44,6 @@ const BackgroundRemover: React.FC = () => {
     if (updatedProduct) {
       product = updatedProduct;
     }
-    
-    // const getDefaultMedia = () => {
-    //   // Gabungkan images dan media menjadi satu array
-    //   const allMedia = [
-    //     ...(product?.images || []), 
-    //     ...(product?.media?.map(m => m.url) || [])
-    //   ];
-    
-    //   if (!allMedia.length) {
-    //     return "../assets/img/produk/dummy.jpg"; // Jika kosong, pakai dummy image
-    //   }
-    
-    //   // Cek apakah ada video di daftar media
-    //   const video = allMedia.find(media => media.startsWith("data:video/"));
-    
-    //   return video || allMedia[0]; // Prioritas video, jika tidak ada pakai media pertama
-    // };
-    
-    // State utama untuk menampilkan gambar/video
-    // const [mainImage, setMainImage] = useState(() => 
-    //   getDefaultMedia().startsWith("blob:") ? "../assets/img/produk/dummy.jpg" : getDefaultMedia()
-    // );
-    
     
   
     if (!product) {
@@ -96,6 +73,7 @@ const BackgroundRemover: React.FC = () => {
 
   return (
     <div className="p-4 flex flex-col items-center gap-4">
+      <h2>COBAA</h2>
       <input type="file" accept="image/*" onChange={handleImageUpload} />
       <div className="flex gap-4">
         {originalImage && <img src={originalImage} alt="Original" className="w-40 border" />}

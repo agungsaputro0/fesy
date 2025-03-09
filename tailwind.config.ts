@@ -9,6 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        fesypurple: "#7f0353",
+        fesygreen: "#1B5E20",
+        fesyteal: "#014d4e",
         footerblue: "#f5f2ee",
         footeruplist: "#cec4ba",
         background: "var(--background)",
