@@ -25,24 +25,35 @@ const TransactionDetail = () => {
   useEffect(() => {
     // Ambil data orders dari LocalStorage
     const ordersData = localStorage.getItem("orders");
-    let allOrders: any[] = [];
+    let allOrders: any[] = [...ordersDummyData]; // Default ke dummy data
+  
     if (ordersData) {
-      const parsedOrders = JSON.parse(ordersData);
-      allOrders = Array.isArray(parsedOrders) ? parsedOrders : [parsedOrders];
-      allOrders = [...allOrders, ...ordersDummyData];
-
-      // Cari order berdasarkan orderID
-      const foundOrder = allOrders.find((o: any) => o.orderID === orderID);
-      if (foundOrder) {
-        setOrder(foundOrder);
-      } else {
-        message.error("Order tidak ditemukan!");
+      try {
+        const parsedOrders = JSON.parse(ordersData);
+        if (Array.isArray(parsedOrders)) {
+          allOrders = [...parsedOrders, ...ordersDummyData];
+        } else {
+          allOrders = [parsedOrders, ...ordersDummyData];
+        }
+      } catch (error) {
+        console.error("Error parsing orders:", error);
+        message.error("Terjadi kesalahan saat membaca data order.");
+        return;
       }
     } else {
-      message.warning("Data orders tidak tersedia!");
+      message.warning("Data orders tidak tersedia! Menggunakan data dummy.");
+    }
+  
+    // Cari order berdasarkan orderID
+    const foundOrder = allOrders.find((o: any) => o.orderID === orderID);
+    if (foundOrder) {
+      setOrder(foundOrder);
+    } else {
+      message.error("Order tidak ditemukan!");
+      return;
     }
   }, [orderID]);
-
+  
   if (!order) {
     return <Text>Memuat data transaksi...</Text>;
   }
