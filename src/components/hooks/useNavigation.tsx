@@ -11,7 +11,7 @@ const useNavigation = () => {
         { name: "Toko Online", to: "/FesMarketplace", current: false },
       ]
     : [
-        { name: "Beranda", to: "/Home", current: false },
+        { name: "Beranda", to: "/Portal", current: false },
         { name: "Transaksi", to: "/MyHistory", current: false },
         { name: "Artikel", to: "/ArticleList", current: false },
         { name: "Toko Online", to: "/Market", current: false },

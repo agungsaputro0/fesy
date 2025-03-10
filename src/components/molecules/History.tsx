@@ -5,6 +5,7 @@ import { HistoryOutlined, SafetyOutlined, SendOutlined } from "@ant-design/icons
 import usersData from "../../pseudo-db/users.json";
 import productData from "../../pseudo-db/product.json";
 import useIsMobile from "../hooks/useMobile";
+import { useNavigate } from "react-router-dom";
 
 
 type User = {
@@ -62,6 +63,7 @@ const History = () => {
   const [buyerCheckboxes, setBuyerCheckboxes] = useState<Record<number, boolean>>({});
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 // Handler saat checkbox diklik
 const handleCheckboxChange = (
   buyerID: number, 
@@ -109,6 +111,13 @@ const handleCheckboxChange = (
     return updated;
   });
 }; 
+
+const seeDetailTransaction = (orderID: String) => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  if (currentUser.role === 2) {
+    navigate(`/DetailTransaction/${orderID}`);
+  } 
+};
 
 const getOrderButtonText = (buyerID: number) => {
   if (!selectedProducts[buyerID] || selectedProducts[buyerID].size === 0) {
@@ -803,7 +812,7 @@ const processOrder = (buyerID: number) => {
                                                       item.statusText === "Diproses" ? "bg-blue-100 text-blue-600" :
                                                       item.statusText === "Dikirim" ? "bg-teal-100 text-teal-600" :
                                                       "bg-green-100 text-green-600"}`}>
-                                                    {item.statusText}
+                                                    {item.statusText.split(" ")[0]}
                                                   </span>
                                                 </div>                                                
                                                 ))}
@@ -815,7 +824,7 @@ const processOrder = (buyerID: number) => {
                                                   <p className="font-semibold text-sm sm:text-base">
                                                     Total Pesanan: <span className="text-lg font-bold text-[#7f0353]">Rp {order.total.toLocaleString()}</span>
                                                   </p>
-                                                  <button className="bg-[#7f0353] text-white h-[40px] mt-3 rounded-lg w-full sm:w-[180px] text-sm font-semibold transition duration-300 hover:bg-[#9a0465] active:scale-95">
+                                                  <button onClick={() => seeDetailTransaction(order.id)} className="bg-[#7f0353] text-white h-[40px] mt-3 rounded-lg w-full sm:w-[180px] text-sm font-semibold transition duration-300 hover:bg-[#9a0465] active:scale-95">
                                                     Lihat Detail
                                                   </button>
                                                 </div>

@@ -123,7 +123,7 @@ const Sidebar: React.FC<{ onFilterChange: (filters: any) => void }> = ({ onFilte
       }}
     >
       <Menu mode="inline" style={{ textAlign: 'center' }}>
-        <Menu.Item key="1" icon={<HomeOutlined />} onClick={() => navigate('/Home')}>
+        <Menu.Item key="1" icon={<HomeOutlined />} onClick={() => navigate('/Portal')}>
           {!collapsed && 'Beranda'}
         </Menu.Item>
         {collapsed && <Menu.Item icon={<FilterOutlined />} />}
