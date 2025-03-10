@@ -383,13 +383,15 @@ const processOrder = (buyerID: number) => {
       const currentUserID = parsedUser.id;
     
       const savedOrders = localStorage.getItem("orders");
-      if (!savedOrders) return;
-      let allOrders: any[] = [];
+      let allOrders: any[] = [...ordersDummyData]; // Default ke dummy data
     
       try {
-        const parsedOrders = JSON.parse(savedOrders);
-        allOrders = Array.isArray(parsedOrders) ? parsedOrders : [parsedOrders];
-        allOrders = [...allOrders, ...ordersDummyData];
+        if (savedOrders) {
+          const parsedOrders = JSON.parse(savedOrders);
+          if (Array.isArray(parsedOrders)) {
+            allOrders = [...parsedOrders, ...ordersDummyData]; // Gabungkan dengan dummy data
+          }
+        }
     
         const userOrders = allOrders
           .filter((order: any) => order.userID === currentUserID)
@@ -402,16 +404,15 @@ const processOrder = (buyerID: number) => {
                 date: new Date(order.orderDate).toLocaleDateString("id-ID"),
                 items: [],
                 total: order.grandTotal,
-                status: "Menunggu Konfirmasi", // Default awal
+                status: "Menunggu Konfirmasi",
               };
             }
-            
+    
             let productStatuses: number[] = []; // Menyimpan semua status produk
-            
+    
             order.orders.forEach((o: any) => {
-              // Mengakses seller untuk setiap order
               const sellerName = o.seller?.nama;
-            
+    
               o.products.forEach((product: any) => {
                 acc[orderId].items.push({
                   name: product.name,
@@ -419,27 +420,28 @@ const processOrder = (buyerID: number) => {
                   quantity: 1,
                   image: product.images[0],
                   statusText:
-                  product.status === 1 ? "Menunggu Konfirmasi" :
-                  product.status === 2 ? "Diproses" :
-                  product.status === 3 ? "Dikirim" :
-                    "Selesai", 
-                  seller: sellerName, // Menambahkan nama seller pada produk
+                    product.status === 1
+                      ? "Menunggu Konfirmasi"
+                      : product.status === 2
+                      ? "Diproses"
+                      : product.status === 3
+                      ? "Dikirim"
+                      : "Selesai",
+                  seller: sellerName,
                 });
-            
-                // Simpan semua status produk dalam satu array
+    
                 productStatuses.push(product.status);
               });
             });
-            
     
-            // Menentukan status order berdasarkan status produk di dalamnya
+            // Tentukan status order berdasarkan status produk di dalamnya
             if (productStatuses.includes(1)) {
               acc[orderId].status = "Menunggu Konfirmasi";
             } else if (productStatuses.includes(2)) {
               acc[orderId].status = "Diproses";
             } else if (productStatuses.includes(3)) {
               acc[orderId].status = "Dikirim";
-            } else if (productStatuses.every(status => status === 4)) {
+            } else if (productStatuses.every((status) => status === 4)) {
               acc[orderId].status = "Selesai";
             }
     
@@ -449,9 +451,34 @@ const processOrder = (buyerID: number) => {
         setOrders(Object.values(userOrders));
       } catch (error) {
         console.error("Error parsing orders:", error);
-        setOrders([]);
+        setOrders(
+          ordersDummyData.map((order) => ({
+            id: order.orderID ?? `ORD-${Math.random().toString(36).substr(2, 9)}`,
+            date: new Date(order.orderDate).toLocaleDateString("id-ID"),
+            total: order.grandTotal,
+            status: "Menunggu Konfirmasi",
+            items: order.orders.flatMap((o) =>
+              o.products.map((product) => ({
+                name: product.name,
+                price: product.price,
+                quantity: 1,
+                image: product.images[0],
+                statusText:
+                  product.status === 1
+                    ? "Menunggu Konfirmasi"
+                    : product.status === 2
+                    ? "Diproses"
+                    : product.status === 3
+                    ? "Dikirim"
+                    : "Selesai",
+                seller: o.seller?.nama,
+              }))
+            ),
+          }))
+        );
       }
-    }, []);    
+    }, []);
+    
 
     const filteredExchanges = exchanges
     ?.map((exchange) => {
