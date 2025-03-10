@@ -46,7 +46,7 @@
       }
     ],
     "role": 2,
-    "password": "sunibianBudi"
+    "password": "budiROX"
   },
   {
     "id": 3,
@@ -66,7 +66,7 @@
       }
     ],
     "role": 2,
-    "password": "siti123"
+    "password": "sitiROX"
   },
   {
     "id": 4,
@@ -86,7 +86,7 @@
       }
     ],
     "role": 2,
-    "password": "ahmad123"
+    "password": "ahmadROX"
   },
   {
     "id": 5,
@@ -135,7 +135,7 @@
       }
     ],
     "role": 2,
-    "password": "rizky123"
+    "password": "rizkyROX"
   },
   {
     "id": 7,
@@ -155,7 +155,7 @@
       }
     ],
     "role": 2,
-    "password": "lina123"
+    "password": "linaROX"
   },
   {
     "id": 8,
@@ -195,7 +195,7 @@
       }
     ],
     "role": 2,
-    "password": "rina123"
+    "password": "rinaROX"
   },
   {
     "id": 10,
@@ -215,6 +215,6 @@
       }
     ],
     "role": 2,
-    "password": "yoga123"
+    "password": "yogaROX"
   }
 ]

@@ -1,6 +1,6 @@
-import MyPage from "../molecules/MyPage";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import MyPage from "../components/molecules/MyPage";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const MyPages = () => {
     return (
             <HomeShell>

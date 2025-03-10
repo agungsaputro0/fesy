@@ -1,6 +1,6 @@
-import Penukaran from "../molecules/Penukaran";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import Penukaran from "../components/molecules/Penukaran";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const PenukaranPage = () => {
     return (
             <HomeShell>

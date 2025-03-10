@@ -1,6 +1,6 @@
-import Payment from "../molecules/Payment";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import Payment from "../components/molecules/Payment";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const PaymentPage = () => {
     return (
             <HomeShell>

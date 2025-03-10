@@ -11,12 +11,24 @@ import { loginStart, loginSuccess, loginFailure } from "../store/authSlice";
 
 const appName = import.meta.env.NEXT_PUBLIC_APP_NAME;
 
+const accountList = [
+  { email: "budi@example.com", password: "budiROX" },
+  { email: "siti@example.com", password: "sitiROX" },
+  { email: "ahmad@example.com", password: "ahmadROX" },
+  { email: "dewi@example.com", password: "dewiROX" },
+  { email: "rizky@example.com", password: "rizkyROX" },
+  { email: "lina@example.com", password: "linaROX" },
+  { email: "rina@example.com", password: "rinaROX" },
+  { email: "yoga@example.com", password: "yogaROX" },
+];
+
 const LoginForm: FC = () => {
   const [loginFailed, setLoginFailed] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const usernameRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch(); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInformationModalOpen, setIsInformationModalOpen] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -28,6 +40,18 @@ const LoginForm: FC = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const showInformationModal = () => {
+    setIsInformationModalOpen(true);
+  };
+
+  const handleInformationOk = () => {
+    setIsInformationModalOpen(false);
+  };
+
+  const handleInformationCancel = () => {
+    setIsInformationModalOpen(false);
   };
 
   useEffect(() => {
@@ -121,23 +145,20 @@ const LoginForm: FC = () => {
             inputName="password"
             inputPlaceholder="****"
           />
-          <p className="text-slate-500 mb-4">
-              <Link className="text-left" to="/ResendAktivasi">
-                 Resend Aktivasi
-              </Link>
-              <Link className="float-right" to="/LupaPassword">
-                 Lupa Password
-              </Link>
-          </p>
           <Button
             type="submit"
-            variant="bg-[#7f0353] w-full hover:bg-green-900"
+            variant="bg-[#7f0353] w-full hover:bg-green-900 mt-4"
             message="Login"
             disabled={loading}
           />
         </form>
         <p className="text-slate-500 mt-4 text-center">Untuk Akun Login, silakan&nbsp;
           <Link onClick={() => showModal()} to="#" className="text-[#7f0353]">
+          <b>Klik Disini</b>
+          </Link>
+        </p>
+        <p className="text-slate-500 mt-2 text-center">Mohon baca Informasi berikut&nbsp;
+          <Link onClick={() => showInformationModal()} to="#" className="text-[#7f0353]">
           <b>Klik Disini</b>
           </Link>
         </p>
@@ -165,12 +186,54 @@ const LoginForm: FC = () => {
         </AntButton>
       ]}
     >
-      <p className="mb-2">Gunakan akun berikut untuk login:</p>
+      <p className="mb-2">Gunakan akun berikut untuk login utama :</p>
       <div className="bg-gray-100 p-3 rounded-lg text-sm">
         <p><b>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> fajar@example.com</p>
         <p><b>Password&nbsp;&nbsp;:</b> fajaROX</p>
       </div>
-      <p className="mt-4 text-gray-800">Setelah login, Anda dapat mengakses fitur lengkap kami.</p>
+      <p className="mt-4 text-gray-800">Setelah login dengan akun tersebut, Anda dapat mengakses fitur lengkap kami.</p>
+      <p className="mt-4 text-gray-800">Khusus akun ini, akan memiliki data dummy untuk semua tingkat transaksi pembelian</p>
+      <p className="mt-4 text-gray-800">Untuk simulasi proses bisnis langsung dapat dilakukan dengan akun manapun</p>
+    </Modal>
+    <Modal
+      title={
+        <div className="flex items-center gap-2 text-[#7f0353] pb-2 border-b">
+          <CheckCircleOutlined className="text-lg" /> Informasi terkait dengan Karya Kami
+        </div>
+      }
+      open={isInformationModalOpen}
+      onOk={handleInformationOk}
+      onCancel={handleInformationCancel}
+      footer={[
+        <AntButton
+          className="bg-[#7f0353] text-white hover:bg-[#5a023b]"
+          key="ok"
+          type="primary"
+          onClick={handleInformationOk}
+        >
+          Mengerti
+        </AntButton>,
+      ]}
+    >
+      <div className="max-h-[60vh] overflow-y-auto pr-2">
+        <p className="mb-2">
+          Fesy dibangun dengan menggunakan stack utama berupa bahasa pemrograman TypeScript & JavaScript menggunakan library React JS.
+        </p>
+        <p className="mt-4 text-gray-800">Ada 15 halaman yang nantinya akan dapat diakses.</p>
+        <p className="mt-4 text-gray-800">Berikut adalah daftar Akun non-utama yang dapat digunakan untuk Login:</p>
+
+        <div className="mt-4 grid grid-cols-1 gap-3">
+          {accountList.map((account, index) => (
+            <div
+              key={index}
+              className="bg-gray-100 p-3 rounded-lg text-sm transition-all hover:bg-gray-200 cursor-pointer"
+            >
+              <p><b>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</b> {account.email}</p>
+              <p><b>Password&nbsp;&nbsp;:</b> {account.password}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </Modal>
 
       {/* Bagian Gambar */}

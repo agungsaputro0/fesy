@@ -5,22 +5,22 @@ import StakeholderRoute from './components/hooks/StakeholderRoute';
 import RedirectIfLoggedIn from './components/hooks/RedirectIfLoggedIn';
 
 
-const Welcome = lazy(() => import('./components/pages/Welcome'));
-const LoginPage = lazy(() => import('./components/pages/Login'));
-const Home = lazy(() => import('./components/pages/Home'));
-const MarketPlace = lazy(() => import('./components/pages/Marketplace'));
-const ProductDetail = lazy(() => import('./components/pages/ProductDetailPage'));
-const CartPage = lazy(() => import('./components/pages/CartPage'));
-const CheckOutPage = lazy(() => import('./components/pages/CheckOutPage'));
-const Payment = lazy(() => import('./components/pages/PaymentPage'));
-const OrderHistory = lazy(() => import('./components/pages/OrderHistory'));
-const DetailTransaction = lazy(() => import('./components/pages/TransactionDetailPage'));
-const MyPage = lazy(() => import('./components/pages/MyPages'));
-const Seller = lazy(() => import('./components/pages/SellerPage'));
-const Penukaran = lazy(() => import('./components/pages/PenukaranPage'));
-const Article = lazy(() => import('./components/pages/Article'));
-const ReadArticle = lazy(() => import('./components/pages/ReadArticle'));
-const Personalization = lazy(() => import('./components/pages/PersonalizationPage'));
+const Welcome = lazy(() => import('./pages/Welcome'));
+const LoginPage = lazy(() => import('./pages/Login'));
+const Home = lazy(() => import('./pages/Home'));
+const MarketPlace = lazy(() => import('./pages/Marketplace'));
+const ProductDetail = lazy(() => import('./pages/ProductDetailPage'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const CheckOutPage = lazy(() => import('./pages/CheckOutPage'));
+const Payment = lazy(() => import('./pages/PaymentPage'));
+const OrderHistory = lazy(() => import('./pages/OrderHistory'));
+const DetailTransaction = lazy(() => import('./pages/TransactionDetailPage'));
+const MyPage = lazy(() => import('./pages/MyPages'));
+const Seller = lazy(() => import('./pages/SellerPage'));
+const Penukaran = lazy(() => import('./pages/PenukaranPage'));
+const Article = lazy(() => import('./pages/Article')); 
+const ReadArticle = lazy(() => import('./pages/ReadArticle'));
+const Personalization = lazy(() => import('./pages/PersonalizationPage'));
 
 const App = () => {
   return (

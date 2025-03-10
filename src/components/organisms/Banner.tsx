@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import { ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { notification } from "antd";
 
 interface CarouselProps {
   images: string[];
@@ -28,15 +29,12 @@ const Banner: React.FC<CarouselProps> = ({ images, texts = defaultTexts }) => {
   const navigate = useNavigate();
 
   const goToMarketPlace = () => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
     if (!currentUser) {
-      navigate("/Marketplace");
+      notification.info({message: "Hai Sahabat Fesy",  description: "Silakan Login terlebih dahulu ya!",})
+      navigate("/Login");
     } else {
-      if (currentUser.role === 2) {
-        navigate(`/Market`);
-      } else {
-        navigate(`/FesMarketPlace`);
-      }
+      navigate(`/Market`);
     }
   }
 

@@ -74,7 +74,11 @@ const ArticleList = () => {
                   </div>
                   <div className="md:w-3/4 w-full md:pl-6 mt-4 md:mt-0">
                     <h3 className="text-lg font-semibold text-[#7f0353]">{article.title}</h3>
-                    <p className="text-sm text-gray-600">{article.publishedAt}</p>
+                    <p className="text-sm text-gray-600">{new Date(article.publishedAt).toLocaleDateString("id-ID", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric"
+                    })}</p>
                     <div className="flex flex-wrap gap-2 mt-2">
                       {article.category.map((cat, index) => (
                         <span key={`${article.id}-${index}`} className="bg-purple-200 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full">

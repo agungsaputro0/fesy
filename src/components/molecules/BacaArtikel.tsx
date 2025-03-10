@@ -20,6 +20,7 @@ const BacaArtikel = () => {
   const { id } = useParams<{ id: string }>();
   const [article, setArticle] = useState<Article | null>(null);
   const [likes, setLikes] = useState(0);
+  const [commentCount, setCommentCount] = useState(2);
   const [liked, setLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comment, setComment] = useState("");
@@ -52,6 +53,7 @@ const BacaArtikel = () => {
     if (comment.trim()) {
       setComments([...comments, { name: currenUserName, text: comment }]);
       setComment("");
+      setCommentCount((prev) => prev + 1);
     }
   };
 
@@ -116,7 +118,7 @@ const BacaArtikel = () => {
             {liked ? <HeartFilled className="text-red-500" /> : <HeartOutlined />} {likes}
           </button>
           <button onClick={() => setShowComments(!showComments)} className="flex items-center gap-1 text-lg hover:text-blue-500">
-            <CommentOutlined /> Comment
+            <CommentOutlined /> Comment {commentCount}
           </button>
           <button onClick={handleShare} className="flex items-center gap-1 text-lg hover:text-green-500">
             <ShareAltOutlined /> Share

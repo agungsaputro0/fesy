@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, CopyOutlined, CreditCardOutlined, FundProjectionScreenOutlined, SyncOutlined } from "@ant-design/icons";
 import { Card, List, Avatar, Typography, Divider, Row, Col, Tag, message, Timeline, Grid } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
+import ordersDummyData from "../../pseudo-db/orders-dummy.json";
+import RatingModal from "../atoms/RatingStar";
 
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
@@ -23,10 +25,14 @@ const TransactionDetail = () => {
   useEffect(() => {
     // Ambil data orders dari LocalStorage
     const ordersData = localStorage.getItem("orders");
+    let allOrders: any[] = [];
     if (ordersData) {
       const parsedOrders = JSON.parse(ordersData);
+      allOrders = Array.isArray(parsedOrders) ? parsedOrders : [parsedOrders];
+      allOrders = [...allOrders, ...ordersDummyData];
+
       // Cari order berdasarkan orderID
-      const foundOrder = parsedOrders.find((o: any) => o.orderID === orderID);
+      const foundOrder = allOrders.find((o: any) => o.orderID === orderID);
       if (foundOrder) {
         setOrder(foundOrder);
       } else {
@@ -189,6 +195,11 @@ const TransactionDetail = () => {
                     ))}
                     </Timeline>
                 </>
+              )}
+              {product.status === 4 && (
+                <div className="mt-4 mb-4 float-right">
+                <RatingModal orderID={`${orderID}`} />
+                </div>
               )}
             </div>
           )}

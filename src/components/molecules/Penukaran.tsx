@@ -331,7 +331,14 @@ const Penukaran = () => {
                                     onChange={() => handleSelect(p.productID)}
                                     className="mr-2"
                                 />
-                                <img src={p.images[0]} alt={p.name} className="w-16 h-16 object-cover rounded-md mr-2" />
+                                <img src={p.images[0]} alt={p.name} className="w-16 h-16 object-cover rounded-md mr-2"  onError={(e) => {
+                                  const fallbackSrc = "../" + p.images[0];
+                                  if (e.currentTarget.src !== fallbackSrc) {
+                                    e.currentTarget.src = fallbackSrc;
+                                  } else {
+                                    e.currentTarget.src = "../assets/img/produk/dummy.jpg"
+                                  }
+                                }} />
                                 <div className="flex flex-col">
                                     <p className="text-sm font-semibold">{p.name}</p>
                                     <p className="text-sm text-gray-600">Rp {p.price.toLocaleString("id-ID")}</p>

@@ -91,7 +91,7 @@ const ProductDetail = () => {
   };
 
   const goToSellerPage = (sellerID: number) => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
     if (!currentUser) {
       notification.error({
         message: "Mohon maaf!",
@@ -100,11 +100,7 @@ const ProductDetail = () => {
       navigate("/login");
     } else {
       if(!isOwner){
-        if (currentUser.role === 2) {
-          navigate(`/Seller/${sellerID}`);
-        } else {
-          navigate(`/SellerPage/${sellerID}`);
-        }
+        navigate(`/Seller/${sellerID}`);
       }
     }
   }
@@ -196,7 +192,10 @@ const ProductDetail = () => {
     }
   
     // Cek apakah ada video di daftar media
-    const video = allMedia.find(media => media.startsWith("data:video/"));
+    const video = allMedia.find(media => media.startsWith("data:video/") || 
+    media.endsWith(".mp4") || 
+    media.endsWith(".webm") || 
+    media.endsWith(".ogg"));
   
     return video || allMedia[0]; // Prioritas video, jika tidak ada pakai media pertama
   };
@@ -456,11 +455,11 @@ useEffect(() => {
               )}
               
               {(mainImage.startsWith("data:video/") || 
-            mainImage.endsWith(".mp4") || 
-            mainImage.endsWith(".webm") || 
-            mainImage.endsWith(".ogg")) ? (
+                mainImage.endsWith(".mp4") || 
+                mainImage.endsWith(".webm") || 
+                mainImage.endsWith(".ogg")) ? (
               <video
-                src={mainImage.startsWith("data:video/") ? mainImage : `../${mainImage}`}
+                src={mainImage.startsWith("data:video/")  ? mainImage : `../${mainImage}`}
                 controls
                 autoPlay
                 loop
@@ -696,7 +695,7 @@ useEffect(() => {
         )}
          <div className="flex justify-center border-b-2 border-gray-200 mb-4 relative">
           <div className="py-4 w-full">
-            <h3 className="text-xl font-semibold mb-4">Produk Serupa</h3>
+            <h3 className="text-xl font-semibold mb-4">Produk dengan kategori serupa</h3>
             {similarProducts.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {similarProducts.map((product) => (

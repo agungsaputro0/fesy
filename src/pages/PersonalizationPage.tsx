@@ -1,6 +1,6 @@
-import Personalization from "../molecules/Personalization";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import Personalization from "../components/molecules/Personalization";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const PersonalizationPage = () => {
     return (
             <HomeShell>

@@ -1,0 +1,270 @@
+[
+    {
+        "orderID": "DUMMY1",
+        "userID": 8,
+        "orders": [
+            {
+                "sellerId": "2",
+                "seller": {
+                    "id": 2,
+                    "nama": "Budi Santoso",
+                    "email": "budi@example.com",
+                    "telepon": "08123456789",
+                    "fotoProfil": "assets/img/fotoProfil/FP2.jpg",
+                    "alamat": [
+                        {
+                            "id": 2,
+                            "label": "Rumah",
+                            "detail": "Jl. Merdeka No. 10, Jakarta",
+                            "kabupaten": "Jakarta Pusat",
+                            "provinsi": "DKI Jakarta",
+                            "kodePos": "10110",
+                            "alamatDipilih": true
+                        }
+                    ],
+                    "role": 2,
+                    "password": "sunibianBudi"
+                },
+                "products": [
+                    {
+                        "productID": "P001",
+                        "userID": 2,
+                        "name": "Jaket Denim Vintage",
+                        "images": [
+                            "assets/img/produk/P001_1.jpg"
+                        ],
+                        "price": 240000,
+                        "merk": "Cardinal",
+                        "condition": "Hampir Baru",
+                        "category": ["Jaket"],
+                        "color": "Biru",
+                        "bisaTukar": true,
+                        "dikirimDari": "Jl. Merdeka No. 10, Jakarta",
+                        "size": "XL",
+                        "description": "Jaket denim vintage klasik.",
+                        "status": 1,
+                        "statusText": "Menunggu Konfirmasi"
+                    }
+                ],
+                "shipping": {
+                    "id": "next_day",
+                    "name": "Next Day",
+                    "price": 18000,
+                    "estimated_delivery": "besok"
+                },
+                "note": ""
+            }
+        ],
+        "selectedPayment": "Mandiri",
+        "totalPrice": 240000,
+        "totalShippingPrice": 18000,
+        "grandTotal": 258000,
+        "orderDate": "2025-03-10T14:03:19.351Z",
+        "sudahBayar": true
+    },
+    {
+        "orderID": "DUMMY2",
+        "userID": 8,
+        "orders": [
+            {
+                "sellerId": "4",
+                "seller": {
+                    "id": 4,
+                    "nama": "Ahmad Fauzi",
+                    "email": "ahmad@example.com",
+                    "telepon": "08137654321",
+                    "fotoProfil": "",
+                    "alamat": [
+                        {
+                            "id": 5,
+                            "label": "Rumah",
+                            "detail": "Jl. Gatot Subroto No. 8, Surabaya",
+                            "kabupaten": "Surabaya",
+                            "provinsi": "Jawa Timur",
+                            "kodePos": "60292",
+                            "alamatDipilih": true
+                        }
+                    ],
+                    "role": 2,
+                    "password": "ahmad123"
+                },
+                "products": [
+                    {
+                        "productID": "P004",
+                        "userID": 4,
+                        "name": "Hoodie Oversized Hitam",
+                        "images": [
+                            "assets/img/produk/P004_1.jpg"
+                        ],
+                        "price": 120000,
+                        "merk": "OffWhite",
+                        "condition": "Layak Pakai",
+                        "category": ["Hoodie"],
+                        "color": "Hitam",
+                        "bisaTukar": false,
+                        "dikirimDari": "Jl. Gatot Subroto No. 8, Surabaya",
+                        "size": "XXL",
+                        "description": "Hoodie oversized nyaman dan stylish.",
+                        "status": 2,
+                        "statusText": "Diproses"
+                    }
+                ],
+                "shipping": {
+                    "id": "same_day",
+                    "name": "Same Day",
+                    "price": 17500,
+                    "estimated_delivery": "hari ini"
+                },
+                "note": ""
+            }
+        ],
+        "selectedPayment": "Mandiri",
+        "totalPrice": 120000,
+        "totalShippingPrice": 17500,
+        "grandTotal": 137500,
+        "orderDate": "2025-03-10T14:10:19.351Z",
+        "sudahBayar": true
+    },
+        {
+            "orderID": "DUMMY3",
+            "userID": 8,
+            "orders": [
+                {
+                    "sellerId": "3",
+                    "seller": {
+                        "id": 3,
+                        "nama": "Siti Aisyah",
+                        "email": "siti@example.com",
+                        "telepon": "08129876543",
+                        "fotoProfil": "assets/img/fotoProfil/FP3.jpg",
+                        "alamat": [
+                            {
+                                "id": 6,
+                                "label": "Rumah",
+                                "detail": "Jl. Diponegoro No. 20, Bandung",
+                                "kabupaten": "Bandung",
+                                "provinsi": "Jawa Barat",
+                                "kodePos": "40115",
+                                "alamatDipilih": true
+                            }
+                        ],
+                        "role": 2,
+                        "password": "siti456"
+                    },
+                    "products": [
+                        {
+                            "productID": "P005",
+                            "userID": 3,
+                            "name": "Kaos Polos Putih",
+                            "images": [
+                                "assets/img/produk/P005_1.jpg",
+                                "assets/img/produk/P005_2.jpg"
+                            ],
+                            "price": 75000,
+                            "merk": "Uniqlo",
+                            "condition": "Baru",
+                            "category": [
+                                "Kaos",
+                                "Casual"
+                            ],
+                            "color": "Putih",
+                            "bisaTukar": false,
+                            "dikirimDari": "Jl. Diponegoro No. 20, Bandung",
+                            "size": "L",
+                            "description": "Kaos polos warna putih berbahan katun premium, nyaman dipakai sehari-hari.",
+                            "status": 3,
+                            "media": [],
+                            "statusText": "Dikirim"
+                        }
+                    ],
+                    "shipping": {
+                        "id": "regular",
+                        "name": "Regular",
+                        "price": 10000,
+                        "estimated_delivery": "3 hari",
+                        "guarantee": "Garansi tiba: 3 hari"
+                    },
+                    "note": ""
+                }
+            ],
+            "selectedAddress": "",
+            "selectedPayment": "BCA",
+            "totalPrice": 75000,
+            "totalShippingPrice": 10000,
+            "totalDiscount": 5000,
+            "grandTotal": 80000,
+            "orderDate": "2025-03-10T14:05:19.351Z",
+            "sudahBayar": true
+        },
+        {
+            "orderID": "DUMMY4",
+            "userID": 8,
+            "orders": [
+                {
+                    "sellerId": "5",
+                    "seller": {
+                        "id": 5,
+                        "nama": "Rizky Ramadhan",
+                        "email": "rizky@example.com",
+                        "telepon": "081211223344",
+                        "fotoProfil": "assets/img/fotoProfil/FP5.jpg",
+                        "alamat": [
+                            {
+                                "id": 7,
+                                "label": "Rumah",
+                                "detail": "Jl. Ahmad Yani No. 5, Medan",
+                                "kabupaten": "Medan",
+                                "provinsi": "Sumatera Utara",
+                                "kodePos": "20212",
+                                "alamatDipilih": true
+                            }
+                        ],
+                        "role": 2,
+                        "password": "rizky789"
+                    },
+                    "products": [
+                        {
+                            "productID": "P006",
+                            "userID": 5,
+                            "name": "Sepatu Sneakers Hitam",
+                            "images": [
+                                "assets/img/produk/P006_1.jpg",
+                                "assets/img/produk/P006_2.jpg"
+                            ],
+                            "price": 350000,
+                            "merk": "Nike",
+                            "condition": "Bekas",
+                            "category": [
+                                "Sepatu",
+                                "Casual"
+                            ],
+                            "color": "Hitam",
+                            "bisaTukar": true,
+                            "dikirimDari": "Jl. Ahmad Yani No. 5, Medan",
+                            "size": "42",
+                            "description": "Sepatu sneakers hitam bekas pakai, masih dalam kondisi baik.",
+                            "status": 4,
+                            "media": [],
+                            "statusText": "Selesai"
+                        }
+                    ],
+                    "shipping": {
+                        "id": "express",
+                        "name": "Express",
+                        "price": 20000,
+                        "estimated_delivery": "2 hari",
+                        "guarantee": "Garansi tiba: 2 hari"
+                    },
+                    "note": ""
+                }
+            ],
+            "selectedAddress": "",
+            "selectedPayment": "BNI",
+            "totalPrice": 350000,
+            "totalShippingPrice": 20000,
+            "totalDiscount": 15000,
+            "grandTotal": 355000,
+            "orderDate": "2025-03-10T14:06:19.351Z",
+            "sudahBayar": true
+        }
+]

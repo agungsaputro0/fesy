@@ -1,5 +1,5 @@
-import AppShell from "../shell/Appshell";
-import LandingLayouts from "../templates/Landing";
+import AppShell from "../components/shell/Appshell";
+import LandingLayouts from "../components/templates/Landing";
 import { Helmet } from "react-helmet";  
 
 const appName = import.meta.env.VITE_APP_NAME;  

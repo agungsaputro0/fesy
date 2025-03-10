@@ -1,6 +1,6 @@
-import SellerPage from "../molecules/SellerPage";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import SellerPage from "../components/molecules/SellerPage";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const Seller = () => {
     return (
             <HomeShell>

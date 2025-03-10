@@ -234,9 +234,10 @@ const convertBlobToBase64 = (blobUrl: string): Promise<string> => {
     {/* Kategori Utama */}
     <label>Kategori *</label>
     <Radio.Group onChange={(e) => setPrimaryCategory(e.target.value)} value={primaryCategory} className="flex flex-col">
-      <Radio value="Kemeja/Kaos">Kemeja/Kaos</Radio>
-      <Radio value="Celana">Celana</Radio>
+      <Radio value="Atasan">Atasan</Radio>
+      <Radio value="Bawahan">Bawahan</Radio>
       <Radio value="Sepatu/Sandal">Sepatu/Sandal</Radio>
+      <Radio value="Aksesoris">Aksesoris</Radio>
     </Radio.Group>
 
     {/* Kategori Kelamin */}

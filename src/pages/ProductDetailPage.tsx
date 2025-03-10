@@ -1,6 +1,6 @@
-import ProductDetail from "../molecules/ProductDetail";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import ProductDetail from "../components/molecules/ProductDetail";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const ProductDetailPage = () => {
     return (
             <HomeShell>

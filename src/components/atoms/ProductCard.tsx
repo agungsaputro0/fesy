@@ -19,6 +19,14 @@ interface ProductProps {
   media?: { url: string; type: string }[];
 }
 
+const STATUS_MAP: Record<number, string> = {
+  1: "Menunggu Konfirmasi",
+  2: "Diproses",
+  3: "Dikirim",
+  4: "Selesai",
+  5: "Dibatalkan",
+};
+
 const ProductCard = ({ product }: { product: ProductProps }) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -41,7 +49,33 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
       )
     );
     setIsPending(pendingProducts.has(product.productID));
+    console.log(pendingProducts);
   }, [product.productID, product.userID]);
+
+  const orders = JSON.parse(localStorage.getItem("orders") || "null");
+
+  const getProductStatus = (productID: string) => {
+    if (!orders) {
+      return { status: null, statusText: "Data orders tidak ditemukan" };
+    }
+
+    for (const order of orders) {
+      for (const sellerOrder of order.orders) {
+        for (const product of sellerOrder.products) {
+          if (product.productID === productID) {
+            return {
+              status: product.status,
+              statusText: STATUS_MAP[product.status] || "Status tidak diketahui",
+            };
+          }
+        }
+      }
+    }
+
+    return { status: null, statusText: "Produk tidak ditemukan" };
+  };
+
+  
 
   const handleClick = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
@@ -53,6 +87,7 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
   };
 
   const {
+    productID,
     images,
     name,
     price,
@@ -75,8 +110,8 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
       className="bg-white rounded-lg shadow-md w-full sm:w-60 lg:w-60 xl:w-64 relative mb-6 transition-transform transform hover:scale-105 hover:shadow-lg hover:border-2 hover:border-[#7f0353]"
     >
       {isPending && (
-        <div className="absolute top-2 left-2 bg-yellow-400 text-black text-xs sm:text-sm font-bold px-2 py-1 rounded shadow-lg animate-pulse flex items-center gap-1">
-          <ClockCircleOutlined /> MENUNGGU DIPROSES
+        <div className={`absolute top-2 left-2 ${getProductStatus(productID).status === 1 ? `bg-yellow-400` : getProductStatus(productID).status === 2 ? `bg-blue-400` : getProductStatus(productID).status === 3 ? `bg-purple-400` : `bg-green-400` }  text-black text-xs sm:text-sm font-bold px-2 py-1 rounded shadow-lg animate-pulse flex items-center gap-1`}>
+          <ClockCircleOutlined /> {getProductStatus(productID).statusText}
         </div>
       )}
 
@@ -88,9 +123,9 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
       />
     
       <div className="p-2">
-        <h2 className="text-sm sm:text-md lg:text-lg font-semibold leading-tight line-clamp-2 overflow-hidden text-ellipsis">
-          {merk} {name}, {size}
-        </h2>
+      <h2 className="text-sm sm:text-md lg:text-lg font-semibold leading-tight line-clamp-2 overflow-hidden text-ellipsis min-h-[2.8em]">
+        {merk} {name}, {size}
+      </h2>
         <p className="text-gray-500 mt-1 text-xs sm:text-sm truncate max-w-[200px]">
           Kategori: {category.join(", ")}
         </p>

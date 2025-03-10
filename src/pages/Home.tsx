@@ -1,11 +1,11 @@
-import Homeshell from "../shell/HomeShell";
-import PopularSection from "../organisms/PopularSection";
-import OurCommitment from "../molecules/OurCommitment";
-import OurAchievements from "../molecules/Achievements";
-import TabSection from "../organisms/TabSection";
-import Banner from "../organisms/Banner";
-import Footer from "../organisms/Footer";
-import DashboardPanel from "../atoms/DashboardPanel";
+import Homeshell from "../components/shell/HomeShell";
+import PopularSection from "../components/organisms/PopularSection";
+import OurCommitment from "../components/molecules/OurCommitment";
+import OurAchievements from "../components/molecules/Achievements";
+import TabSection from "../components/organisms/TabSection";
+import Banner from "../components/organisms/Banner";
+import Footer from "../components/organisms/Footer";
+import DashboardPanel from "../components/atoms/DashboardPanel";
 
 const Home = () => {
     const images = [

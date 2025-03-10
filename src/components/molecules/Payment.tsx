@@ -39,6 +39,9 @@ const Payment = () => {
   if (!storedDueTime) {
     storedDueTime = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     localStorage.setItem("dueTime", storedDueTime);
+  } else {
+    storedDueTime = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+    localStorage.setItem("dueTime", storedDueTime);
   }
   const [dueTime] = useState(storedDueTime);
 

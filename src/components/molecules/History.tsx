@@ -4,6 +4,7 @@ import { FaShoppingBag } from "react-icons/fa";
 import { HistoryOutlined, SafetyOutlined, SendOutlined } from "@ant-design/icons";
 import usersData from "../../pseudo-db/users.json";
 import productData from "../../pseudo-db/product.json";
+import ordersDummyData from "../../pseudo-db/orders-dummy.json";
 import useIsMobile from "../hooks/useMobile";
 import { useNavigate } from "react-router-dom";
 
@@ -383,10 +384,12 @@ const processOrder = (buyerID: number) => {
     
       const savedOrders = localStorage.getItem("orders");
       if (!savedOrders) return;
+      let allOrders: any[] = [];
     
       try {
         const parsedOrders = JSON.parse(savedOrders);
-        const allOrders = Array.isArray(parsedOrders) ? parsedOrders : [parsedOrders];
+        allOrders = Array.isArray(parsedOrders) ? parsedOrders : [parsedOrders];
+        allOrders = [...allOrders, ...ordersDummyData];
     
         const userOrders = allOrders
           .filter((order: any) => order.userID === currentUserID)

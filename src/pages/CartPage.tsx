@@ -1,6 +1,6 @@
-import Cart from "../molecules/Cart";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import Cart from "../components/molecules/Cart";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const CartPage = () => {
     return (
             <HomeShell>

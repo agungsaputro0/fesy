@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope } from "react-icons/fa";
+import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaStar } from "react-icons/fa";
 import { UserOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
 import usersData from "../../pseudo-db/users.json";
@@ -149,9 +149,11 @@ const SellerPage = () => {
                         <FaMapMarkerAlt className="text-[#7f0353] mr-2" /> {getPrimaryAddress()?.detail}
                       </p>
                     )}
+                    <p className="flex text-sm sm:text-lg items-center text-gray-700">
+                        <FaStar className="text-yellow-400 mr-2" /> 4.8 | 10 Penjualan
+                    </p>
                   </div>
                 </div>
-                
                 
 
                

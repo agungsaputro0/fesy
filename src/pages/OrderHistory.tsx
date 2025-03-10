@@ -1,6 +1,6 @@
-import History from "../molecules/History";
-import HomeTemplate from "../templates/HomeTemplate";
-import HomeShell from "../shell/HomeShell";
+import History from "../components/molecules/History";
+import HomeTemplate from "../components/templates/HomeTemplate";
+import HomeShell from "../components/shell/HomeShell";
 const OrderHistory = () => {
     return (
             <HomeShell>
