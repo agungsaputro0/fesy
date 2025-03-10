@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ReadOutlined, HeartOutlined, HeartFilled, CommentOutlined, ShareAltOutlined, SendOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import articles from "../../pseudo-db/article.json";
 import { useNavigate } from "react-router-dom";
+import { notification } from "antd";
 
 interface Article {
   id: number;
@@ -44,7 +45,7 @@ const BacaArtikel = () => {
   const handleShare = () => {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
-    alert("Link artikel telah disalin!");
+    notification.success({message:"Selamat!", description:"Link artikel telah disalin!"});
   };
 
   const handleCommentSubmit = () => {

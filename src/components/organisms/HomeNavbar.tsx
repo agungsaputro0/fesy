@@ -10,6 +10,7 @@ import { message } from 'antd';
 import useNavigation from "../hooks/useNavigation";
 import { handleLogout as logout } from '../hooks/HandleLogin';
 import useIsMobile from "../hooks/useMobile";
+import { useOrderNotifications } from "../hooks/UseOrderNotification";
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(' ');
@@ -108,6 +109,9 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
     return nameParts.length > 2 ? `${firstName} ${lastName}` : name; 
   };
 
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  const orderStats = useOrderNotifications(currentUser?.id);
+
   return (
     <Disclosure as="nav" className={`${isScrolled ? 'bg-black/50' : 'bg-fesypurple'} border-b transition duration-300 w-full fixed z-50`}>
       {() => (
@@ -158,22 +162,29 @@ const HomeNavbar = ({ userName }: HomeNavbarProps) => {
                   className="h-10 w-30"
                 />
               </Link>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.to}
-                        className={classNames(
-                          item.current ? 'bg-gray-900 text-white' : isScrolled ? 'text-white hover:bg-[#c2beba]' : 'text-white hover:bg-[#c2beba] hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
-                        )}
-                        >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
+              <div className="hidden sm:ml-6 sm:block">
+                <div className="flex space-x-4">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                      className={classNames(
+                        item.current ? 'bg-gray-900 text-white' : isScrolled ? 'text-white hover:bg-[#c2beba]' : 'text-white hover:bg-[#c2beba] hover:text-white',
+                        'relative rounded-md px-3 py-2 text-sm font-medium' // Tambahkan `relative` di sini
+                      )}
+                    >
+                      {item.name}
+
+                      {/* Badge Notifikasi */}
+                      {item.name === "Transaksi" && (orderStats.pending + orderStats.processing) > 0 && (
+                        <span className="absolute top-1 right-1 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
+                          {orderStats.pending + orderStats.processing}
+                        </span>
+                      )}
+                    </Link>
+                  ))}
                 </div>
+              </div>
               </div>
 
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">

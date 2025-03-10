@@ -108,22 +108,7 @@ const handleCheckboxChange = (
 
     return updated;
   });
-};
-
-const getStatusColor = (status: Order["status"]) => {
-  switch (status) {
-    case "Menunggu Konfirmasi":
-      return "bg-orange-100 text-orange-600";
-    case "Diproses":
-      return "bg-blue-100 text-blue-600";
-    case "Dikirim":
-      return "bg-purple-100 text-purple-600";
-    case "Selesai":
-      return "bg-green-100 text-green-600";
-    default:
-      return "bg-gray-100 text-gray-600";
-  }
-};  
+}; 
 
 const getOrderButtonText = (buyerID: number) => {
   if (!selectedProducts[buyerID] || selectedProducts[buyerID].size === 0) {
@@ -157,26 +142,33 @@ const handleBuyerCheckboxChange = (buyerID: number, isChecked: boolean) => {
     }
 
     const buyerData = filteredProducts[buyerID]; // Ambil data pembeli berdasarkan buyerID
-    const productStatuses = new Set(buyerData.products.map((p) => p.statusText));
 
-    // Hanya centang jika semua produk memiliki status yang sama
-    if (productStatuses.size === 1) {
+    // Ambil semua status produk yang dimiliki buyer
+    const productStatuses = new Set(buyerData.products.map((p) => p.status));
+
+    // Jika semua status adalah 1 atau 2, atau ada status 3 tapi mayoritas masih 1/2
+    const validStatuses = [1, 2];
+    const hasInvalidStatus = [...productStatuses].some((status) => !validStatuses.includes(status));
+
+    if (!hasInvalidStatus || (productStatuses.has(3) && productStatuses.size > 1)) {
       if (isChecked) {
         buyerData.products.forEach((product) => {
-          updated[buyerID].add(product.productID);
+          if (validStatuses.includes(product.status)) {
+            updated[buyerID].add(product.productID);
+          }
         });
       } else {
         updated[buyerID].clear();
       }
 
-      // Perbarui status checkbox pembeli hanya jika semua produk bisa dicentang
+      // Update state checkbox pembeli hanya jika produk yang bisa dipilih valid
       setBuyerCheckboxes((prev) => ({
         ...prev,
         [buyerID]: isChecked,
       }));
     } else {
-      // Jika status berbeda, batalkan perubahan checkbox buyer
-      notification.error({ message: "Kesalahan", description: "List Produk memiliki beberapa status berbeda!" });
+      // Jika ada status yang tidak valid, batalkan perubahan checkbox buyer
+      notification.error({ message: "Kesalahan", description: "List Produk memiliki beberapa status yang tidak bisa dipilih!" });
       setBuyerCheckboxes((prev) => ({
         ...prev,
         [buyerID]: false,
@@ -187,8 +179,6 @@ const handleBuyerCheckboxChange = (buyerID: number, isChecked: boolean) => {
   });
 };
 
-  
-  
 
 // Handler saat tombol "Proses Pesanan" ditekan
 const processOrder = (buyerID: number) => {
@@ -199,35 +189,65 @@ const processOrder = (buyerID: number) => {
     return;
   }
 
-  // Tampilkan konfirmasi modal sebelum memproses
+  // Cek status produk yang dipilih
+  let nextStatusText = "";
+  let confirmationMessage = "";
+
+  const ordersString = localStorage.getItem("orders");
+  if (!ordersString) {
+    notification.error({ message: "Kesalahan", description: "Data pesanan tidak ditemukan." });
+    return;
+  }
+
+  const orders = JSON.parse(ordersString);
+  let foundStatus = 0;
+
+  orders.forEach((order: any) => {
+    if (order.userID === buyerID) {
+      order.orders.forEach((orderItem: any) => {
+        orderItem.products.forEach((product: any) => {
+          if (selected.has(product.productID)) {
+            if (product.status === 1) {
+              foundStatus = 1;
+              nextStatusText = "Diproses";
+              confirmationMessage = "Yakin ingin memproses barang ini?";
+            } else if (product.status === 2) {
+              foundStatus = 2;
+              nextStatusText = "Dikirim";
+              confirmationMessage = "Yakin barang sudah siap dijemput kurir?";
+            }
+          }
+        });
+      });
+    }
+  });
+
+  if (foundStatus === 0) {
+    notification.error({ message: "Kesalahan", description: "Produk tidak valid atau sudah dikirim." });
+    return;
+  }
+
+  // Tampilkan modal sesuai status produk
   Modal.confirm({
-    title: "Yakin Proses Barang?",
-    content: "Barang yang dipilih akan diproses ke tahap berikutnya.",
-    okText: "Ya, Proses",
+    title: confirmationMessage,
+    content: `Produk yang dipilih akan berubah status menjadi "${nextStatusText}".`,
+    okText: "Ya, Lanjutkan",
     cancelText: "Batal",
     onOk: () => {
       try {
-        // Ambil data orders dari LocalStorage
-        const ordersString = localStorage.getItem("orders");
-        if (!ordersString) {
-          throw new Error("Data pesanan tidak ditemukan di LocalStorage.");
-        }
-
-        let orders = JSON.parse(ordersString);
-        if (!Array.isArray(orders)) {
-          throw new Error("Format data orders tidak valid.");
-        }
-
-        // Update pesanan yang sesuai dengan buyerID
-        orders = orders.map((order: any) => {
+        let updatedOrders = orders.map((order: any) => {
           if (order.userID === buyerID) {
             return {
               ...order,
               orders: order.orders.map((orderItem: any) => ({
                 ...orderItem,
                 products: orderItem.products.map((product: any) => {
-                  if (selected.has(product.productID) && product.status === 1) {
-                    return { ...product, status: 2, statusText: "Diproses" };
+                  if (selected.has(product.productID)) {
+                    if (product.status === 1) {
+                      return { ...product, status: 2, statusText: "Diproses" };
+                    } else if (product.status === 2) {
+                      return { ...product, status: 3, statusText: "Dikirim" };
+                    }
                   }
                   return product;
                 })
@@ -238,7 +258,7 @@ const processOrder = (buyerID: number) => {
         });
 
         // Simpan perubahan ke LocalStorage
-        localStorage.setItem("orders", JSON.stringify(orders));
+        localStorage.setItem("orders", JSON.stringify(updatedOrders));
 
         // Perbarui state agar UI berubah tanpa reload
         setSelectedProducts((prev) => ({ ...prev })); // Trigger re-render
@@ -248,8 +268,11 @@ const processOrder = (buyerID: number) => {
           window.location.reload();
         }, 500);
 
+        notification.success({
+          message: "Berhasil",
+          description: `Pesanan telah berubah status menjadi "${nextStatusText}".`
+        });
 
-        notification.success({ message: "Berhasil", description: "Pesanan telah diproses" });
       } catch (error: any) {
         console.error("Terjadi kesalahan saat memproses pesanan:", error);
         notification.error({ message: "Kesalahan", description: error.message });
@@ -257,6 +280,7 @@ const processOrder = (buyerID: number) => {
     }
   });
 };
+
 
   useEffect(() => {
     const storedUser = localStorage.getItem("currentUser");
@@ -284,7 +308,11 @@ const processOrder = (buyerID: number) => {
                     orderID: order.orderID,
                     orderDate: order.orderDate,
                     sellerName: o.seller.nama,
-                    statusText: p.status === 1 ? "Menunggu Konfirmasi" : "Diproses", // Tambahkan status teks
+                    statusText:
+                    p.status === 1 ? "Menunggu Konfirmasi" :
+                    p.status === 2 ? "Diproses" :
+                    p.status === 3 ? "Dikirim" :
+                    "Selesai",                  
                   }))
                 ),
             }))
@@ -378,7 +406,11 @@ const processOrder = (buyerID: number) => {
                   price: product.price,
                   quantity: 1,
                   image: product.images[0],
-                  statusText: product.status === 1 ? "Menunggu Konfirmasi" : "Diproses",
+                  statusText:
+                  product.status === 1 ? "Menunggu Konfirmasi" :
+                  product.status === 2 ? "Diproses" :
+                  product.status === 3 ? "Dikirim" :
+                    "Selesai", 
                   seller: sellerName, // Menambahkan nama seller pada produk
                 });
             
@@ -417,7 +449,7 @@ const processOrder = (buyerID: number) => {
         return (
           (activeTabJual === "MENUNGGU" && item.statusText === "Menunggu Konfirmasi") ||
           (activeTabJual === "DIPROSES" && item.statusText === "Diproses") ||
-          (activeTabJual === "DIKIRIM" && item.statusText === "Siap Dikirim") ||
+          (activeTabJual === "DIKIRIM" && item.statusText === "Dikirim") ||
           (activeTabJual === "SELESAI" && item.statusText === "Selesai")
         );
       });
@@ -447,7 +479,7 @@ const processOrder = (buyerID: number) => {
         return (
           (activeTabJual === "MENUNGGU" && item.statusText === "Menunggu Konfirmasi") ||
           (activeTabJual === "DIPROSES" && item.statusText === "Diproses") ||
-          (activeTabJual === "DIKIRIM" && item.statusText === "Siap Dikirim") ||
+          (activeTabJual === "DIKIRIM" && item.statusText === "Dikirim") ||
           (activeTabJual === "SELESAI" && item.statusText === "Selesai")
         );
       });
@@ -655,12 +687,14 @@ const processOrder = (buyerID: number) => {
                             {data.products.map((product, index) => (
                               <div key={index} className="border-b pb-4 flex items-center space-x-4 w-full">
                               {/* Checkbox Produk */}
-                              <input
-                                type="checkbox"
-                                className="h-4 w-4 accent-[#7f0353]"
-                                checked={selectedProducts[Number(buyerID)]?.has(product.productID) || false}
-                                onChange={(e) => handleCheckboxChange(Number(buyerID), product.productID, e.target.checked)}
-                              />
+                              {(product.status === 1 || product.status === 2) && (
+                                <input
+                                  type="checkbox"
+                                  className="h-4 w-4 accent-[#7f0353]"
+                                  checked={selectedProducts[Number(buyerID)]?.has(product.productID) || false}
+                                  onChange={(e) => handleCheckboxChange(Number(buyerID), product.productID, e.target.checked)}
+                                />
+                              )}
                               {/* Gambar produk */}
                               <img
                                 src={product.images[0]}
@@ -672,7 +706,7 @@ const processOrder = (buyerID: number) => {
                                 {/* Nama Produk & Status */}
                                 <div className="flex justify-between items-center w-full">
                                   <p className="text-sm sm:text-lg font-medium">{product.name}</p>
-                                  <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${product.status === 1 ? "bg-orange-100 text-orange-600" : "bg-blue-100 text-blue-600"}`}>
+                                  <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${product.status === 1 ? "bg-orange-100 text-orange-600" : product.status === 2 ? "bg-blue-100 text-blue-600" : product.status === 3 ? "bg-teal-100 text-teal-600" : "bg-green-100 text-green-600" }`}>
                                   {isMobile ? product.statusText.split(" ")[0] : product.statusText }
                                   </span>
                                 </div>
@@ -748,22 +782,31 @@ const processOrder = (buyerID: number) => {
                                                 <div>
                                                   <div className="flex justify-between items-center mb-3 border-b pb-3">
                                                     <p className="text-gray-700 font-bold flex text-xs sm:text-sm"><FaShoppingBag className="text-sm" />&nbsp;Belanja | {order.date}</p>
-                                                    <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${getStatusColor(order.status)}`}>
-                                                        {isMobile ? order.status.split(" ")[0] : order.status }
-                                                    </span>
                                                   </div>
                     
                                                   {/* Daftar Barang */}
                                                   <div className="space-y-3">
-                                                    {order.items?.map((item, index) => (
-                                                      <div key={index} className="flex items-center space-x-3">
-                                                        <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-lg" />
-                                                        <div className="flex flex-col">
-                                                          <p className="text-sm sm:text-base font-medium">{item.name}</p>
-                                                          <p className="text-gray-500 text-xs sm:text-sm">{item.quantity} x Rp{item.price.toLocaleString()}</p>
-                                                        </div>
-                                                      </div>
-                                                    ))}
+                                                  {order.items?.map((item, index) => (
+                                                  <div key={index} className="flex justify-between w-full items-center">
+                                                  {/* Kiri: Gambar dan Detail Produk */}
+                                                  <div className="flex items-center space-x-3">
+                                                    <img src={item.image} alt={item.name} className="w-14 h-14 object-cover rounded-lg" />
+                                                    <div className="flex flex-col">
+                                                      <p className="text-sm sm:text-base font-medium">{item.name}</p>
+                                                      <p className="text-gray-500 text-xs sm:text-sm">{item.quantity} x Rp{item.price.toLocaleString()}</p>
+                                                    </div>
+                                                  </div>
+                                                
+                                                  {/* Kanan Atas: Status */}
+                                                  <span className={`text-xs font-semibold px-2 py-1 rounded-full self-start
+                                                    ${item.statusText === "Menunggu Konfirmasi" ? "bg-orange-100 text-orange-600" :
+                                                      item.statusText === "Diproses" ? "bg-blue-100 text-blue-600" :
+                                                      item.statusText === "Dikirim" ? "bg-teal-100 text-teal-600" :
+                                                      "bg-green-100 text-green-600"}`}>
+                                                    {item.statusText}
+                                                  </span>
+                                                </div>                                                
+                                                ))}
                                                   </div>
                                                 </div>
                     

@@ -26,7 +26,6 @@ const Seller = lazy(() => import('./components/pages/SellerPage'));
 const Penukaran = lazy(() => import('./components/pages/PenukaranPage'));
 const Article = lazy(() => import('./components/pages/Article'));
 const ReadArticle = lazy(() => import('./components/pages/ReadArticle'));
-const MixAndMatch = lazy(() => import('./components/pages/MixAndMatchPage'));
 const Personalization = lazy(() => import('./components/pages/PersonalizationPage'));
 
 const App = () => {
@@ -67,7 +66,6 @@ const App = () => {
         <Route path="/Article" element={<ProtectedRoute><Article /></ProtectedRoute>} />
         <Route path="/ArticleList/" element={<StakeholderRoute><Article /></StakeholderRoute>} />
         <Route path="/ReadArticle/:id" element={<StakeholderRoute><ReadArticle /></StakeholderRoute>} />
-        <Route path="/MixAndMatch/:productId" element={<StakeholderRoute><MixAndMatch /></StakeholderRoute>} />
         <Route path="/Personalization" element={<StakeholderRoute><Personalization /></StakeholderRoute>} />
       </Routes>
     </Suspense>
