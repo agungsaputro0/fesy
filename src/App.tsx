@@ -21,7 +21,6 @@ const Penukaran = lazy(() => import('./pages/PenukaranPage'));
 const Article = lazy(() => import('./pages/Article')); 
 const ReadArticle = lazy(() => import('./pages/ReadArticle'));
 const Personalization = lazy(() => import('./pages/PersonalizationPage'));
-const HeartBeat = lazy(() => import('./pages/HeartBeat'));
 
 const App = () => {
   return (
@@ -60,7 +59,6 @@ const App = () => {
         <Route path="/ReadArticle/:id" element={<StakeholderRoute><ReadArticle /></StakeholderRoute>} />
         {/* 15. Personalisasi */}
         <Route path="/Personalization" element={<StakeholderRoute><Personalization /></StakeholderRoute>} />
-        <Route path="/HeartBeat" element={<StakeholderRoute><HeartBeat /></StakeholderRoute>} />
       </Routes>
     </Suspense>
   );
