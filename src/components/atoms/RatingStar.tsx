@@ -45,12 +45,19 @@ const RatingModal = ({ orderID }: { orderID: string }) => {
 
   return (
     <>
-      <Button type="primary" onClick={() => setIsOpen(true)} className="w-full py-2 text-lg">
+      <Button type="primary" onClick={() => setIsOpen(true)} className="bg-[#7f0353] text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-white px-4 rounded-lg hover:bg-pink-200">
         {rating > 0 ? `Edit Rating (${rating} ⭐)` : "Beri Rating"}
       </Button>
 
       <Modal
-        title={`Beri Rating untuk Order ${orderID}`}
+       title={
+        <div>
+          <h3 className="text-[#7f0353] pb-2">
+            Puas dengan Pesananmu ?
+          </h3>
+          <hr></hr>
+        </div>
+        }
         open={isOpen}
         onCancel={() => setIsOpen(false)}
         footer={null}

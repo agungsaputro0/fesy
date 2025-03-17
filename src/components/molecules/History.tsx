@@ -961,7 +961,6 @@ const processOrder = (buyerID: number) => {
                               ))}
                             </div>
 
-                            {/* Tombol Aksi */}
                             <div className="mt-2 text-center float-right">
                               <button className="bg-[#7f0353] text-white h-[35px] rounded w-[100px] sm:w-[200px] text-sm font-semibold">
                                 Lihat Detail

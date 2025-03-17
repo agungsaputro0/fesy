@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, CopyOutlined, CreditCardOutlined, FundProjectionScreenOutlined, SyncOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, CopyOutlined, CreditCardOutlined, FundProjectionScreenOutlined, RollbackOutlined, SyncOutlined } from "@ant-design/icons";
 import { Card, List, Avatar, Typography, Divider, Row, Col, Tag, message, Timeline, Grid } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
 import ordersDummyData from "../../pseudo-db/orders-dummy.json";
 import RatingModal from "../atoms/RatingStar";
+import useIsMobile from "../hooks/useMobile";
 
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
@@ -19,6 +20,7 @@ const TransactionDetail = () => {
   const { orderID } = useParams(); 
   const [order, setOrder] = useState<any | null>(null);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const screens = useBreakpoint();
   const avatarSize = screens.xs ? 48 : screens.sm ? 56 : 64;
   
@@ -69,6 +71,10 @@ const TransactionDetail = () => {
         month: "short",
     }).format(date);
     };
+
+    const isOrderCompleted = order.orders.every((orderItem: any) =>
+      orderItem.products.every((product: any) => product.status === 4)
+    );
 
   return (
     <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
@@ -183,7 +189,7 @@ const TransactionDetail = () => {
                   transition: "transform 0.2s ease, box-shadow 0.2s ease",
                   cursor: "pointer",
                 }}
-                className="hover:scale-105 hover:shadow-md"
+                className={`hover:scale-105 hover:shadow-md ${isMobile ? 'w-full text-center' : ''}`}
               >
                 {product.statusText || "Menunggu"}
               </Tag>
@@ -206,11 +212,6 @@ const TransactionDetail = () => {
                     ))}
                     </Timeline>
                 </>
-              )}
-              {product.status === 4 && (
-                <div className="mt-4 mb-4 float-right">
-                <RatingModal orderID={`${orderID}`} />
-                </div>
               )}
             </div>
           )}
@@ -269,6 +270,14 @@ const TransactionDetail = () => {
           </span>
         </div>
       </div>
+      {isOrderCompleted && (
+          <div className="flex gap-2 justify-center mt-6">
+            <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+              <RollbackOutlined /> Ajukan Retur
+            </button>
+            <RatingModal orderID={`${orderID}`} />
+          </div>
+        )}
     </div>
     </div>
     </div>
