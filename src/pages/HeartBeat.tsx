@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { 
   Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, StandardMaterial, Texture 
 } from "@babylonjs/core";
