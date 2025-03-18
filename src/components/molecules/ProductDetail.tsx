@@ -20,6 +20,7 @@ import usersData from "../../pseudo-db/users.json";
 import EditProductModal from "./EditProductModal";
 import useIsMobile from "../hooks/useMobile";
 import ProductCard from "../atoms/ProductCardForRecommendation";
+import { useChat } from "../hooks/ChatContext";
 
 interface Order {
   id: string;
@@ -28,6 +29,12 @@ interface Order {
   total: number;
   status: "Menunggu Konfirmasi" | "Diproses" | "Dikirim" | "Selesai";
   productOwner?: string;
+}
+
+interface User {
+  id: number;
+  nama: string;
+  fotoProfil: string;
 }
 
 interface ProductProps {
@@ -78,6 +85,7 @@ const ProductDetail = () => {
   const [similarProducts, setSimilarProducts] = useState<ProductProps[]>([]);
   const { productId } = useParams();
   const navigate = useNavigate();
+  const { addUserToChat, openChat, selectUser } = useChat();
   const products: ProductProps[] = (productsData as unknown as ProductProps[]).map((p) => ({
     ...p,
     images: p.images || [],
@@ -217,18 +225,50 @@ const ProductDetail = () => {
   const alamatDipilih = seller?.alamat.find((a) => a.alamatDipilih);
   product.dikirimDari = alamatDipilih ? alamatDipilih.detail : seller?.alamat[0]?.detail || "Alamat tidak tersedia";
 
-
   const handleChat = () => {
-      if (!currentUser) {
-        notification.error({
-          message: "Mohon maaf!",
-          description: "Silakan Login terlebih dahulu!",
-        });
-        navigate("/login");
-      } else {
-        //nothing
-      }
+    if (!currentUser) {
+      notification.error({
+        message: "Mohon maaf!",
+        description: "Silakan Login terlebih dahulu!",
+      });
+      navigate("/login");
+      return;
+    }
+  
+    if (!seller) return;
+  
+    // ✅ Data user yang akan ditambahkan
+    const userData = {
+      id: seller.id,
+      nama: seller.nama,
+      fotoProfil: seller.fotoProfil,
+      chatSekarang: true, // Tambahkan flag chatSekarang
+    };
+  
+    // ✅ Ambil daftar chat dari Local Storage
+    const storedChatUsers = JSON.parse(localStorage.getItem("chatUsers") || "[]");
+  
+    // ✅ Cek apakah user sudah ada di daftar chat
+    const userIndex = storedChatUsers.findIndex((user: User) => user.id === userData.id);
+  
+    if (userIndex === -1) {
+      // ✅ User belum ada, tambahkan ke daftar
+      const updatedChatUsers = [...storedChatUsers, userData];
+      localStorage.setItem("chatUsers", JSON.stringify(updatedChatUsers));
+    } else {
+      // ✅ User sudah ada, update flag chatSekarang
+      storedChatUsers[userIndex].chatSekarang = true;
+      localStorage.setItem("chatUsers", JSON.stringify(storedChatUsers));
+    }
+  
+    // ✅ Pastikan penyimpanan Local Storage selesai sebelum membuka chat
+    setTimeout(() => {
+      addUserToChat(userData); // Tambahkan user ke state chat jika belum ada
+      selectUser(userData);
+      openChat();
+    }, 100); 
   };
+
 
   const handleAddToCart = (product: ProductProps) => {
     if (!currentUser) {
@@ -636,10 +676,10 @@ useEffect(() => {
         </div>
          {/* Panel Penjual */}
          {seller && (
-          <div className="mt-6 py-4 border-t border-gray-300 border-b" onClick={() => goToSellerPage(seller.id)}>
+          <div className="mt-6 py-4 border-t border-gray-300 border-b">
             <h3 className="text-lg font-semibold">Informasi Penjual</h3>
             <div className="sm:flex items-center gap-4 mt-2">
-              <div className="flex gap-4">
+              <div className="flex gap-4" onClick={() => goToSellerPage(seller.id)}>
               <img
                 src={seller.fotoProfil ? `../${seller.fotoProfil}` : "../assets/img/fotoProfil/user.png"}
                 onError={(e) => (e.currentTarget.src = "../assets/img/fotoProfil/user.png")}
@@ -660,10 +700,10 @@ useEffect(() => {
                     ) : (
                       <>
                       <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
-                        <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                        <button onClick={() => handleChat()} className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
                           <MessageOutlined /> Chat
                         </button>
-                        <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                        <button onClick={() => goToSellerPage(seller.id)} className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
                           <ShopOutlined /> Toko Pengguna
                         </button>
                       </div>
@@ -681,6 +721,7 @@ useEffect(() => {
                    <MessageOutlined /> Chat dengan Penjual
                     </Button>
                     <Button
+                     onClick={() => goToSellerPage(seller.id)}
                       type="default"
                       className="border-gray-400 text-gray-700 flex items-center gap-1"
                     >
