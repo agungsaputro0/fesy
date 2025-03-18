@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ArrowLeftOutlined, CalendarOutlined, CheckCircleOutlined, ClockCircleOutlined, CopyOutlined, CreditCardOutlined, FundProjectionScreenOutlined, RollbackOutlined, SyncOutlined } from "@ant-design/icons";
-import { Card, List, Avatar, Typography, Divider, Row, Col, Tag, message, Timeline, Grid } from "antd";
+import { Card, List, Avatar, Typography, Divider, Row, Col, Tag, message, Timeline, Grid, notification, Modal } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
 import ordersDummyData from "../../pseudo-db/orders-dummy.json";
 import RatingModal from "../atoms/RatingStar";
@@ -72,9 +72,36 @@ const TransactionDetail = () => {
     }).format(date);
     };
 
+    const isOrderonSend = order.orders.every((orderItem: any) =>
+      orderItem.products.every((product: any) => product.status === 3)
+    );
+
     const isOrderCompleted = order.orders.every((orderItem: any) =>
       orderItem.products.every((product: any) => product.status === 4)
     );
+
+    const selesaikanPesanan = () => {
+      if (!orderID) return;
+          Modal.confirm({
+            title: "Selesaikan pesanan",
+            content: `Yakin sudah menerima produk dalam kondisi sesuai ?`,
+            okText: "Ya, Lanjutkan",
+            cancelText: "Batal",
+            onOk: () => {
+          // Ambil data dari LocalStorage
+          const existingOrders = JSON.parse(localStorage.getItem("orderSelesai") || "[]");
+
+          // Pastikan orderID belum tersimpan agar tidak duplikat
+          if (!existingOrders.includes(orderID)) {
+            existingOrders.push(orderID);
+            localStorage.setItem("orderSelesai", JSON.stringify(existingOrders));
+            notification.success({message: "Selamat", description: "Pesanan berhasil diselesaikan"});
+          } else {
+            notification.info({message: "Informasi", description: "Pesanan sudah diselesaikan"});
+          }
+        }
+      });
+    }
 
   return (
     <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
@@ -197,7 +224,7 @@ const TransactionDetail = () => {
             </List.Item>
 
               {/* Timeline Tracking khusus untuk produk dengan status 3 */}
-              {product.status === 3 && (
+              {(product.status === 3 || product.status === 4) && (
                 <>
                   <Text strong className="block mt-2 mb-4 text-lg">Tracking Pengiriman:</Text>
                   <Timeline className="pl-4">
@@ -270,6 +297,13 @@ const TransactionDetail = () => {
           </span>
         </div>
       </div>
+      {isOrderonSend && (
+          <div className="flex gap-2 justify-center mt-6">
+            <button onClick={() => selesaikanPesanan()} className="bg-[#7f0353] text-xs sm:text-sm border h-[35px] w-full border-[#7f0353] text-white px-4 rounded-lg hover:bg-pink-200">
+              Pesanan Selesai ?
+            </button>
+          </div>
+        )}
       {isOrderCompleted && (
           <div className="flex gap-2 justify-center mt-6">
             <button className="bg-white text-xs sm:text-sm border h-[35px] w-1/2 border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">

@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
-import { Modal, Button, Rate, message } from "antd";
+import { Modal, Button, Rate, message, Input } from "antd";
 import { SmileOutlined, MehOutlined, FrownOutlined } from "@ant-design/icons";
+
+const { TextArea } = Input;
 
 const RatingModal = ({ orderID }: { orderID: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
+  const [review, setReview] = useState<string>("");
 
   useEffect(() => {
     const savedRatings = localStorage.getItem("ratings");
     if (savedRatings) {
       const ratings = JSON.parse(savedRatings);
       if (ratings[orderID]) {
-        setRating(ratings[orderID]);
+        setRating(ratings[orderID].rating);
+        setReview(ratings[orderID].review || "");
       }
     }
   }, [orderID]);
@@ -19,10 +23,10 @@ const RatingModal = ({ orderID }: { orderID: string }) => {
   const handleSubmit = () => {
     const savedRatings = localStorage.getItem("ratings");
     const ratings = savedRatings ? JSON.parse(savedRatings) : {};
-    ratings[orderID] = rating;
+    ratings[orderID] = { rating, review };
     localStorage.setItem("ratings", JSON.stringify(ratings));
 
-    message.success(`Rating untuk order ${orderID} berhasil disimpan!`);
+    message.success(`Rating dan review untuk order ${orderID} berhasil disimpan!`);
     setIsOpen(false);
   };
 
@@ -33,10 +37,10 @@ const RatingModal = ({ orderID }: { orderID: string }) => {
     localStorage.setItem("ratings", JSON.stringify(ratings));
 
     setRating(0);
-    message.success("Rating telah dihapus!");
+    setReview("");
+    message.success("Rating dan review telah dihapus!");
   };
 
-  // Pilihan emoji berdasarkan rating
   const getReaction = (rate: number) => {
     if (rate >= 4) return <SmileOutlined className="text-green-500 text-3xl" />;
     if (rate >= 2) return <MehOutlined className="text-yellow-500 text-3xl" />;
@@ -50,14 +54,7 @@ const RatingModal = ({ orderID }: { orderID: string }) => {
       </Button>
 
       <Modal
-       title={
-        <div>
-          <h3 className="text-[#7f0353] pb-2">
-            Puas dengan Pesananmu ?
-          </h3>
-          <hr></hr>
-        </div>
-        }
+        title={<h3 className="text-[#7f0353] pb-2">Puas dengan Pesananmu?</h3>}
         open={isOpen}
         onCancel={() => setIsOpen(false)}
         footer={null}
@@ -65,20 +62,19 @@ const RatingModal = ({ orderID }: { orderID: string }) => {
         className="text-center"
       >
         <div className="flex flex-col items-center py-6 space-y-4">
-          {/* Animasi rating */}
           <div className="transition-transform duration-300 transform hover:scale-110">
             {getReaction(rating)}
           </div>
 
-          {/* Komponen rating */}
           <Rate allowHalf value={rating} onChange={setRating} className="text-3xl" />
 
-          {/* Deskripsi interaktif */}
-          <p className="text-gray-600 text-lg">
-            {rating > 0
-              ? `Anda memberi rating ${rating} ⭐`
-              : "Silakan beri rating untuk order ini"}
-          </p>
+          <TextArea
+            rows={4}
+            placeholder="Tambahkan review kamu di sini..."
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
+            className="w-full p-2 border rounded"
+          />
 
           <div className="flex justify-center space-x-4">
             <Button key="cancel" onClick={() => setIsOpen(false)}>
@@ -86,7 +82,7 @@ const RatingModal = ({ orderID }: { orderID: string }) => {
             </Button>
             {rating > 0 && (
               <Button key="reset" onClick={handleReset} danger>
-                Reset Rating
+                Reset
               </Button>
             )}
             <Button
