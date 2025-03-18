@@ -159,7 +159,7 @@ const SellerPage = () => {
   return (
     <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
     <div className="bg-white/90 sm:rounded-lg shadow-lg border sm:border-gray-400  w-full">
-      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 py-6 space-y-4 w-full max-w-full">
+      <div className="bg-white/90 sm:rounded-lg shadow-left-bottom sm:border border-gray-400 p-6 space-y-4 w-full max-w-full">
         <div className="p-[2px] sm:p-[20px]">
             <div className="flex flex-col sm:flex-row items-center justify-between border-b-2 border-gray-300 pb-3 mb-4">
                     <h2 className="flex items-center text-2xl text-[#7f0353]">
