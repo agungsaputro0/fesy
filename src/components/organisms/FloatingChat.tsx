@@ -12,14 +12,10 @@ interface User {
 
 const users: User[] = [
   { id: 1, nama: "Agung Saputro", fotoProfil: "assets/img/fotoProfil/user.png" },
-  { id: 2, nama: "Budi Santoso", fotoProfil: "assets/img/fotoProfil/FP2.jpg" },
-  { id: 3, nama: "Siti Aminah", fotoProfil: "assets/img/fotoProfil/user.png" },
 ];
 
 const dummyMessages = {
   1: ["Halo, bagaimana kabarmu?", "Apakah jaketnya masih ada ?"],
-  2: ["Hai, saya ingin bertanya tentang produk anda", "Berapa harganya?"],
-  3: ["Selamat pagi!", "Kalau mau tukar, produk apa yang anda inginkan ?"],
 };
 
 const FloatingChat = () => {
