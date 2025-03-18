@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaStar } from "react-icons/fa";
-import { UserOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { UserOutlined, ArrowLeftOutlined, CopyOutlined, ShareAltOutlined, DownloadOutlined, WarningOutlined } from "@ant-design/icons";
 import { useParams, useNavigate } from "react-router-dom";
+import { Modal, Button, notification } from "antd";
+import { QRCodeCanvas } from "qrcode.react";
 import usersData from "../../pseudo-db/users.json";
 import productsData from "../../pseudo-db/product.json";
 import ProductCard from "../atoms/ProductCardForSellerPage";
@@ -37,6 +39,9 @@ const SellerPage = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userProducts, setUserProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const qrRef = useRef<HTMLCanvasElement | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
     if (!sellerID) return;
@@ -114,6 +119,42 @@ const SellerPage = () => {
     product.merk.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const profileUrl = `https://fesy-git-main-agung-saputros-projects.vercel.app/Seller/${sellerID}`; 
+      const copyToClipboard = () => {
+        navigator.clipboard.writeText(profileUrl);
+        setCopied(true);
+        notification.success({message:"Selamat", description:"Link profil berhasil disalin!"});
+        setTimeout(() => setCopied(false), 2000);
+      };
+    
+      const shareProfile = async () => {
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: "Bagikan Profil",
+              text: "Lihat profil saya di Fesy!",
+              url: profileUrl,
+            });
+             notification.success({message:"Selamat", description:"Berhasil dibagikan!"});
+          } catch (error) {
+             notification.error({message:"Mohon Maaf", description:"Gagal membagikan."});
+          }
+        } else {
+          notification.warning({message:"Mohon maaf", description:"Fitur berbagi tidak didukung di perangkat ini."});
+        }
+      };
+    
+      const downloadQRCode = () => {
+        if (qrRef.current) {
+          const canvas = qrRef.current;
+          const link = document.createElement("a");
+          link.href = canvas.toDataURL("image/png");
+          link.download = "QR_Profile.png";
+          link.click();
+          notification.success({message:"Selamat", description:"QR Code berhasil diunduh!"});
+        }
+      };
+
   
   return (
     <section className="pt-20 sm:px-4 md:px-10 lg:px-20 flex justify-center mb-20">
@@ -154,9 +195,53 @@ const SellerPage = () => {
                     </p>
                   </div>
                 </div>
-                
-
-               
+                <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
+                                  <button  className="bg-[#7f0353] text-xs sm:text-sm h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
+                                    <WarningOutlined /> Laporkan Akun ini
+                                  </button>
+                                  <button onClick={() => setIsModalVisible(true)} className="bg-white text-xs sm:text-sm border h-[35px] w-[200px] border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
+                                    <ShareAltOutlined /> Bagikan Toko ini
+                                  </button>
+                                </div>
+                                <Modal
+                  title="Bagikan Toko ini"
+                  open={isModalVisible}
+                  onCancel={() => setIsModalVisible(false)}
+                  footer={null}
+                  centered
+                  className="animate-fade-in"
+                >
+                  <div className="flex justify-center mb-4">
+                    <QRCodeCanvas value={profileUrl} size={150} ref={qrRef} className="shadow-lg rounded-lg" />
+                  </div>
+                  <div className="space-y-3">
+                    <Button 
+                      type="primary" 
+                      block 
+                      icon={<CopyOutlined />} 
+                      onClick={copyToClipboard}
+                      className="transition-transform duration-200 active:scale-95"
+                    >
+                      {copied ? "Tersalin!" : "Copy Link"}
+                    </Button>
+                    <Button 
+                      block 
+                      icon={<ShareAltOutlined />} 
+                      onClick={shareProfile}
+                      className="hover:bg-gray-100 transition-transform duration-200 active:scale-95"
+                    >
+                      Bagikan
+                    </Button>
+                    <Button 
+                      block 
+                      icon={<DownloadOutlined />} 
+                      onClick={downloadQRCode}
+                      className="hover:bg-gray-100 transition-transform duration-200 active:scale-95"
+                    >
+                      Unduh QR Code
+                    </Button>
+                  </div>
+                </Modal>
                 <div className="mb-4 mt-10 sm:mt-20 mx-4 border-b pb-4 flex flex-col sm:flex-row justify-between items-center">
                   <input
                     type="text"

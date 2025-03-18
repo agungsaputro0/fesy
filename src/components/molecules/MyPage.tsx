@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaShoppingBag } from "react-icons/fa";
-import { UserOutlined, CopyOutlined, ShareAltOutlined, DownloadOutlined } from "@ant-design/icons";
+import { UserOutlined, CopyOutlined, ShareAltOutlined, DownloadOutlined, IdcardOutlined } from "@ant-design/icons";
 import usersData from "../../pseudo-db/users.json";
 import productsData from "../../pseudo-db/product.json";
 import ProductCard from "../atoms/ProductCard";
@@ -314,10 +314,10 @@ const getPrimaryAddress = () => {
                 </div>
                 <div className="flex justify-center space-x-4 mt-6 mb-6 align-middle">
                   <button onClick={() => goToPersonalization()} className="bg-[#7f0353] text-xs sm:text-sm h-[35px] w-[200px] text-white px-4 rounded-lg hover:bg-pink-700">
-                    Personalisasi
+                    <IdcardOutlined /> Personalisasi
                   </button>
                   <button onClick={() => setIsModalVisible(true)} className="bg-white text-xs sm:text-sm border h-[35px] w-[200px] border-[#7f0353] text-[#7f0353] px-4 rounded-lg hover:bg-pink-200">
-                    Bagikan Profil
+                    <ShareAltOutlined /> Bagikan Profil
                   </button>
                 </div>
                 <Modal
