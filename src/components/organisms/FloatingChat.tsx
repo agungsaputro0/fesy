@@ -10,18 +10,26 @@ interface User {
   chatSekarang?: boolean;
 }
 
+interface Message {
+  text: string;
+  timestamp: string;
+}
+
 const users: User[] = [
   { id: 1, nama: "Agung Saputro", fotoProfil: "assets/img/fotoProfil/user.png" },
 ];
 
-const dummyMessages = {
-  1: ["Halo, bagaimana kabarmu?", "Apakah jaketnya masih ada ?"],
+const dummyMessages: { [key: number]: Message[] } = {
+  1: [
+    { text: "Halo, bagaimana kabarmu?", timestamp: "10:30 AM" },
+    { text: "Apakah jaketnya masih ada?", timestamp: "10:32 AM" },
+  ],
 };
 
 const FloatingChat = () => {
   const { isOpen, openChat, closeChat } = useChat();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [messages, setMessages] = useState<{ [key: number]: string[] }>(
+  const [messages, setMessages] = useState<{ [key: number]: Message[] }>(
     JSON.parse(localStorage.getItem("chatMessages") || JSON.stringify(dummyMessages))
   );
   const [input, setInput] = useState("");
@@ -31,14 +39,10 @@ const FloatingChat = () => {
 
   const [chatUsers, setChatUsers] = useState<User[]>(() => {
     const savedUsers = JSON.parse(localStorage.getItem("chatUsers") || "[]");
-  
     const mergedUsers = [...users, ...savedUsers.filter((u: User) => !users.some((du) => du.id === u.id))];
-  
-    localStorage.setItem("chatUsers", JSON.stringify(mergedUsers)); // Simpan kembali
-  
+    localStorage.setItem("chatUsers", JSON.stringify(mergedUsers));
     return mergedUsers;
   });
-  
 
   useEffect(() => {
     localStorage.setItem("chatMessages", JSON.stringify(messages));
@@ -94,10 +98,14 @@ const FloatingChat = () => {
 
   const sendMessage = () => {
     if (input.trim() !== "" && selectedUser) {
+      const timestamp = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
       addUserToChat(selectedUser);
       setMessages({
         ...messages,
-        [selectedUser.id]: [...(messages[selectedUser.id] || []), `Me: ${input}`],
+        [selectedUser.id]: [
+          ...(messages[selectedUser.id] || []),
+          { text: `Me: ${input}`, timestamp },
+        ],
       });
       setInput("");
     }
@@ -140,7 +148,11 @@ const FloatingChat = () => {
                         setSelectedUser(user);
                       }}
                     >
-                      <img src={user.fotoProfil} alt={user.nama} className="w-10 h-10 rounded-full mr-2 border" onError={(e) => {
+                      <img
+                        src={user.fotoProfil}
+                        alt={user.nama}
+                        className="w-10 h-10 rounded-full mr-2 border"
+                        onError={(e) => {
                             const imgElement = e.currentTarget;
                             if (!imgElement.dataset.fallback) {
                             imgElement.dataset.fallback = "true";
@@ -148,7 +160,8 @@ const FloatingChat = () => {
                             } else {
                             imgElement.src = "../assets/img/fotoProfil/user.png"; // Fallback terakhir jika kedua path gagal
                             }
-                        }} />
+                        }}
+                      />
                       {user.nama}
                     </div>
                   ))}
@@ -157,43 +170,52 @@ const FloatingChat = () => {
           ) : (
             <div className="flex flex-col h-full">
               <div className="flex items-center justify-between border-b pb-2 mb-2">
-              <button
-                className="text-[#7f0353] font-semibold"
-                onClick={() => {
+                <button
+                  className="text-[#7f0353] font-semibold"
+                  onClick={() => {
                     setSelectedUser(null);
-                    setChatUsers(JSON.parse(localStorage.getItem("chatUsers") || "[]")); // ⬅️ Update state chatUsers
-                }}
+                    setChatUsers(JSON.parse(localStorage.getItem("chatUsers") || "[]"));
+                  }}
                 >
-                <ArrowLeftOutlined />
+                  <ArrowLeftOutlined />
                 </button>
                 <h3 className="text-md font-bold flex">
-                <img
-                        src={selectedUser.fotoProfil}
-                        alt={selectedUser.nama}
-                        className="w-6 h-6 rounded-full mr-2 border"
-                        onError={(e) => {
-                            const imgElement = e.currentTarget;
-                            if (!imgElement.dataset.fallback) {
-                            imgElement.dataset.fallback = "true";
-                            imgElement.src = `../${selectedUser.fotoProfil}`;
-                            } else {
-                            imgElement.src = "../assets/img/fotoProfil/user.png"; // Fallback terakhir jika kedua path gagal
-                            }
-                        }}
-                        />
+                  <img
+                    src={selectedUser.fotoProfil}
+                    alt={selectedUser.nama}
+                    className="w-6 h-6 rounded-full mr-2 border"
+                    onError={(e) => {
+                        const imgElement = e.currentTarget;
+                        if (!imgElement.dataset.fallback) {
+                        imgElement.dataset.fallback = "true";
+                        imgElement.src = `../${selectedUser.fotoProfil}`;
+                        } else {
+                        imgElement.src = "../assets/img/fotoProfil/user.png"; // Fallback terakhir jika kedua path gagal
+                        }
+                    }}
+                  />
                   {selectedUser.nama}
                 </h3>
               </div>
               <div className="flex-1 overflow-y-auto border-b pb-2 flex flex-col px-2">
                 {messages[selectedUser.id]?.map((msg, index) => (
-                  <div key={index} className={`p-2 my-1 max-w-[75%] relative rounded-lg ${msg.startsWith("Me:") ? "bg-[#7f0353] text-white self-end ml-auto rounded-br-none" : "bg-gray-200 text-black self-start rounded-bl-none"}`}>
-                    {msg.replace("Me: ", "")}
+                  <div key={index} className={`p-2 my-1 max-w-[75%] relative rounded-lg ${msg.text.startsWith("Me:") ? "bg-[#7f0353] text-white self-end ml-auto rounded-br-none" : "bg-gray-200 text-black self-start rounded-bl-none"}`}>
+                    <div>{msg.text.replace("Me: ", "")}</div>
+                    <span className="block text-xs text-gray-500 text-right">{msg.timestamp}</span>
                   </div>
                 ))}
               </div>
               <div className="flex mt-2">
-                <input type="text" value={input} onChange={(e) => setInput(e.target.value)} className="flex-1 border rounded p-2" placeholder="Ketik pesan..." />
-                <button onClick={sendMessage} className="bg-[#7f0353] text-white p-2 rounded ml-2 hover:bg-blue-600">➤</button>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  className="flex-1 border rounded p-2"
+                  placeholder="Ketik pesan..."
+                />
+                <button onClick={sendMessage} className="bg-[#7f0353] text-white p-2 rounded ml-2 hover:bg-blue-600">
+                  ➤
+                </button>
               </div>
             </div>
           )}
