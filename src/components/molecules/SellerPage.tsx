@@ -242,7 +242,7 @@ const SellerPage = () => {
                     </Button>
                   </div>
                 </Modal>
-                <div className="mb-4 mt-10 sm:mt-20 mx-4 border-b pb-4 flex flex-col sm:flex-row justify-between items-center">
+                <div className="mb-4 mt-10 sm:mt-20 border-b pb-4 flex flex-col sm:flex-row justify-between items-center">
                   <input
                     type="text"
                     placeholder="Cari produk..."
@@ -253,7 +253,7 @@ const SellerPage = () => {
                 </div>
               
                 
-                <div className="mt-4 mx-4">
+                <div className="mt-4">
                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                       {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
