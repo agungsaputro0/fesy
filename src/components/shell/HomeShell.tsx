@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import HomeNavbar from '../organisms/HomeNavbar';
 import { useAuth } from '../hooks/AuthContext';
-import FloatingChat from '../organisms/FloatingChat';
 import MobileBottomNavForHome from '../organisms/MobileBottomNavForHome';
 
 type AppShellProps = {

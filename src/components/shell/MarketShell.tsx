@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import MarketPlaceNavbar from '../organisms/MarketPlaceNavbar';
 import Sidebar from '../organisms/Sidebar';
 import { useAuth } from '../hooks/AuthContext';
-import FloatingChat from '../organisms/FloatingChat';
 import Footer from '../organisms/Footer';
 import MobileBottomNav from '../organisms/MobileBottomNav';
 import MobileBottomNavForHome from '../organisms/MobileBottomNavForHome';
