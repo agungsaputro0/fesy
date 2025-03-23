@@ -47,7 +47,6 @@ const MarketShell = (props: AppShellProps) => {
             </div>
         )}
         </div>
-        <FloatingChat />
         <Footer />
         {!currentUser ? (
             <MobileBottomNav />

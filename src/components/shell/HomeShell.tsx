@@ -31,7 +31,6 @@ const HomeShell = (props: AppShellProps) => {
                         <div className={`flex-1 overflow-y-auto transition-all duration-300 ${expanded ? 'content-expanded' : 'content-collapsed'}`}>
                             {props.children}
                         </div>
-                        <FloatingChat />
                         <MobileBottomNavForHome />
                     </div>
                 )}
